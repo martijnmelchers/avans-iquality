@@ -10,7 +10,7 @@ namespace IQuality.Models.Chat
 
         // Initiator started the chat with the participator
         public string InitiatorId { get; set; }
-        public string ParticipatorId { get; set; }
+        public List<string> ParticipatorIds { get; set; }
 
         public List<BaseMessage> Messages { get; set; }
     }
