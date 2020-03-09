@@ -1,12 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using IQuality.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Raven.Client.Documents;
@@ -29,11 +35,11 @@ namespace IQuality.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
+            
             var documentStore = new DocumentStore
             {
                 Urls = new[]
-               {
+                {
                     Configuration["Raven:Url"]
                 },
                 Database = Configuration["Raven:Name"],
@@ -48,7 +54,7 @@ namespace IQuality.Api
                     }
                 }
             }.Initialize();
-            
+
             // Setup RavenDB session and authorization
             services
                 .AddSingleton(documentStore)
@@ -56,7 +62,83 @@ namespace IQuality.Api
                 .AddRavenDbAsyncSession()
                 .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddRavenDbIdentityStores<ApplicationUser>();
-            
+
+            services
+                .AddAuthentication(o =>
+                {
+                    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                }).AddJwtBearer(o =>
+                {
+                    o.RequireHttpsMetadata = false;
+                    o.SaveToken = true;
+                    o.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidAudience = Configuration["Jwt:AudienceId"],
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:AudienceSecret"]))
+                    };
+                });
+            //
+            //     services.AddAuthentication(options =>
+            //     {
+            //         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //     }).AddJwtBearer(o =>
+            //     {
+            //         o.TokenValidationParameters = new TokenValidationParameters
+            //         {
+            //             ValidateIssuer = true,
+            //             ValidateAudience = true,
+            //             ValidateLifetime = true,
+            //             ValidateIssuerSigningKey = true,
+            //             ValidIssuer = Configuration["Jwt:Issuer"],
+            //             ValidAudience = Configuration["Jwt:AudienceId"],
+            //             IssuerSigningKey =
+            //                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:AudienceSecret"]))
+            //         };
+            //
+            //         o.Events = new JwtBearerEvents
+            //         {
+            //             OnMessageReceived = context =>
+            //             {
+            //                 var accessToken = context.Request.Query["access_token"];
+            //
+            //                 var path = context.HttpContext.Request.Path;
+            //
+            //                 if (string.IsNullOrWhiteSpace(accessToken)) return Task.CompletedTask;
+            //
+            //                 // SignalR chat hub correct token
+            //                 if (path.StartsWithSegments("/chatHub"))
+            //                     context.Token = accessToken;
+            //
+            //                 return Task.CompletedTask;
+            //             },
+            //             OnAuthenticationFailed = context =>
+            //             {
+            //                 context.HttpContext.Items.Add("token_error", true);
+            //                 return Task.CompletedTask;
+            //             },
+            //             OnChallenge = context =>
+            //             {
+            //                 context.HandleResponse();
+            //                 if (context.HttpContext.Items.All(t => t.Key.ToString() != "token_error"))
+            //                     return Task.CompletedTask;
+            //
+            //                 context.Response.StatusCode = 401;
+            //                 context.Response.ContentType = "application/json";
+            //                 context.Response.WriteAsync(JsonConvert.SerializeObject(new
+            //                     { key = "UnknownToken", message = "Invalid token provided." })).Wait();
+            //                 return Task.CompletedTask;
+            //
+            //             }
+            //         };
+            //     });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
