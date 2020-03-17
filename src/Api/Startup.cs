@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using IQuality.Api.Extensions;
 using IQuality.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -24,18 +25,20 @@ namespace IQuality.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         private IConfiguration Configuration { get; }
+        private IHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            
+
             var documentStore = new DocumentStore
             {
                 Urls = new[]
@@ -55,6 +58,8 @@ namespace IQuality.Api
                 }
             }.Initialize();
 
+            services.AddDependencies(Environment);
+            
             // Setup RavenDB session and authorization
             services
                 .AddSingleton(documentStore)
@@ -154,10 +159,7 @@ namespace IQuality.Api
             app.UseAuthorization();
             app.UseAuthentication();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 

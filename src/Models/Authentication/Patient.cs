@@ -12,7 +12,9 @@ namespace IQuality.Models
         public PatientSettings Settings { get; set; }
 
         // Contains the measurements
-        public List<WeightMeasurement> Weight { get; set; }
-        public List<BloodSugarMeasurement> BloodSugar { get; set; }
+        public List<Measurement> Weight { get; set; }
+        public List<Measurement> BloodSugar { get; set; }
+        public List<Measurement> BloodPressure { get; set; }
+        public List<Measurement> Cholesterol { get; set; }
     }
 }

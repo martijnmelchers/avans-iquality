@@ -2,10 +2,11 @@
 
 namespace IQuality.Models.Goals
 {
-    public abstract class BaseGoal : IAggregateRoot
+    public class Goal : IAggregateRoot
     {
         public string Id { get; private set; }
-        public string Title { get; set; }
+        public GoalType Type { get; set; }
+        public string Name { get; set; }
         public Interval Reminders { get; set; }
     }
 }
