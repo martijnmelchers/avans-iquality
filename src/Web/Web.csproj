@@ -10,4 +10,10 @@
     <PackageReference Include="RavenDB.Identity" Version="7.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="src\app\areas\admin" />
+    <Folder Include="src\app\areas\doctor" />
+    <Folder Include="src\app\areas\main" />
+  </ItemGroup>
+
 </Project>

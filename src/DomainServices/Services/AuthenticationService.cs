@@ -7,12 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Models;
+using IQuality.Models.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace IQuality.DomainServices.Services
 {
+    [Injectable]
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IConfiguration _config;
