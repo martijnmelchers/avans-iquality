@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using IQuality.Api.Extensions;
+using IQuality.DomainServices.Interfaces.Repositories;
+using IQuality.DomainServices.Repositories;
 using IQuality.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -59,6 +61,7 @@ namespace IQuality.Api
             }.Initialize();
 
             services.AddDependencies(Environment);
+            services.AddScoped<IBuddyGroupRepository, BuddyGroupRepository>();
             
             // Setup RavenDB session and authorization
             services
