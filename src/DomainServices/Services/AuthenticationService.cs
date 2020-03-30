@@ -44,7 +44,7 @@ namespace IQuality.DomainServices.Services
             return (await _userManager.CheckPasswordAsync(applicationUser, password), applicationUser);
         }
 
-        public async Task<ApplicationUser> Register(ApplicationUser user)
+        public async Task<ApplicationUser> Register(ApplicationUser user, string password)
         {
             var applicationUser = await _userManager.FindByEmailAsync(user.Email);
 
@@ -75,7 +75,7 @@ namespace IQuality.DomainServices.Services
             return jwtToken;
         }
 
-        private List<Claim> GetValidClaims(ApplicationUser user)
+        private static List<Claim> GetValidClaims(ApplicationUser user)
         {
             var options = new IdentityOptions();
             var claims = new List<Claim>

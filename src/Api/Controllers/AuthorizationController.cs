@@ -40,7 +40,12 @@ namespace IQuality.Api.Controllers
         [HttpPost, Route("register/buddy/{invite}"), AllowAnonymous]
         public async Task<IActionResult> RegisterAsBuddy([FromRoute] string inviteToken, [FromBody] BuddyRegister register)
         {
-            await _authorizationService.Register(register.Email, register.Password);
+            await _authorizationService.Register(new ApplicationUser
+            {
+                Email = register.Email,
+                Address =  register.Address,
+                Name = register.FullName,
+            }, register.Password);
 
             return Ok();
         }
