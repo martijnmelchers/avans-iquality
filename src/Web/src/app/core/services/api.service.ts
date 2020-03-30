@@ -56,6 +56,8 @@ export class ApiService {
   public async get<T>(url: string, parameters: any = null, requestOptions: RequestOptions = {}): Promise<T> {
     if (!requestOptions.disableRequestLoader) this._requestService.requestStart();
 
+    if (requestOptions.disableAuthentication) requestOptions.headers['disableAuthentication'] = 'true';
+
     return await this._http.get<T>(`${requestOptions.removeEndpoint ? '' : this.endpoint}${url}`, {
       responseType: requestOptions.responseType,
       params: parameters,
@@ -74,6 +76,8 @@ export class ApiService {
    */
   public async post<T>(url: string, body: object | string, parameters: any = null, requestOptions: RequestOptions = {}): Promise<T> {
     if (!requestOptions.disableRequestLoader) this._requestService.requestStart();
+
+    if (requestOptions.disableAuthentication) requestOptions.headers['disableAuthentication'] = 'true';
 
     return await this._http.post<T>(`${requestOptions.removeEndpoint ? '' : this.endpoint}${url}`, body, {
       responseType: requestOptions.responseType,
@@ -94,6 +98,8 @@ export class ApiService {
   public async put<T>(url: string, body: object | string, parameters: any = null, requestOptions: RequestOptions = {}): Promise<T> {
     if (!requestOptions.disableRequestLoader) this._requestService.requestStart();
 
+    if (requestOptions.disableAuthentication) requestOptions.headers['disableAuthentication'] = 'true';
+
     return await this._http.put<T>(`${requestOptions.removeEndpoint ? '' : this.endpoint}${url}`, body, {
       responseType: requestOptions.responseType,
       params: parameters,
@@ -113,6 +119,8 @@ export class ApiService {
   public async patch<T>(url: string, body: object | string, parameters: any = null, requestOptions: RequestOptions = {}): Promise<T> {
     if (!requestOptions.disableRequestLoader) this._requestService.requestStart();
 
+    if (requestOptions.disableAuthentication) requestOptions.headers['disableAuthentication'] = 'true';
+
     return await this._http.patch<T>(`${requestOptions.removeEndpoint ? '' : this.endpoint}${url}`, body, {
       responseType: requestOptions.responseType,
       params: parameters,
@@ -130,6 +138,8 @@ export class ApiService {
    */
   public async delete<T>(url: string, parameters: any = null, requestOptions: RequestOptions = {}): Promise<T> {
     if (!requestOptions.disableRequestLoader) this._requestService.requestStart();
+
+    if (requestOptions.disableAuthentication) requestOptions.headers['disableAuthentication'] = 'true';
 
     return await this._http.delete<T>(`${requestOptions.removeEndpoint ? '' : this.endpoint}${url}`, {
       responseType: requestOptions.responseType,

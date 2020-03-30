@@ -1,0 +1,11 @@
+.send, .accept {
+  display: flex;
+  justify-content: start;
+  flex-flow:column;
+  width: 300px;
+  height: 300px;
+}
+
+#copyText {
+  margin-bottom: 10px;
+}

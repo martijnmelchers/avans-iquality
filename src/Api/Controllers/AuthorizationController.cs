@@ -2,6 +2,7 @@
 using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Models;
+using IQuality.Models.Authentication;
 using IQuality.Models.Forms;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,17 +31,51 @@ namespace IQuality.Api.Controllers
         public async Task<IActionResult> Login([FromBody] Login login)
         {
             var (success, user) = await _authorizationService.Login(login.Email, login.Password);
-            
+
             if (!success)
                 return Unauthorized("Invalid password and/or username");
 
             return Ok(_authorizationService.GenerateToken(user));
         }
 
-        [HttpPost, Route("register"), AllowAnonymous]
-        public async Task<IActionResult> Register()
+        [HttpPost, Route("register/buddy/{inviteToken}"), AllowAnonymous]
+        public async Task<IActionResult> RegisterAsBuddy(string inviteToken, [FromBody] BuddyRegister register)
         {
-            return BadRequest();
+            await _authorizationService.Register(new ApplicationUser
+            {
+                UserName = register.Email,
+                Email = register.Email,
+                Address =  register.Address,
+                Name = register.Name,
+            }, register.Password);
+
+            return Ok();
+        }
+
+        [HttpPost, Route("register/patient"), AllowAnonymous]
+        public async Task<IActionResult> RegisterAsPatient()
+        {
+            return Ok();
+        }
+
+        [HttpPost, Route("register/doctor"), AllowAnonymous]
+        public async Task<IActionResult> RegisterAsDoctor()
+        {
+            return Ok();
+        }
+
+        [HttpPost, Route("invite"), Authorize]
+        public async Task<IActionResult> CreateInvite()
+        {
+            _authorizationService.CreateInvite(HttpContext.User.GetUserId());
+            return Ok();
+        }
+
+        [HttpPost, Route("invite/respond")]
+        public async Task<IActionResult> RespondInvite([FromBody] bool accepted)
+        {
+
+            return Ok();
         }
     }
 }

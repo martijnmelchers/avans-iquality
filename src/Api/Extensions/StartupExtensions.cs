@@ -2,6 +2,7 @@
 using System.Linq;
 using IQuality.DomainServices.Services;
 using IQuality.Infrastructure.Database;
+using IQuality.Infrastructure.Database.Repositories;
 using IQuality.Models.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,7 +16,7 @@ namespace IQuality.Api.Extensions
             // This automatically registers all services/repositories/etc.. All you need to do is add [Injectable] above your class
             // It finds the classes with assembly so for each project you need to add a .Concat()... with ANY class out of that project.
             foreach (var type in typeof(AuthenticationService).Assembly.GetExportedTypes()
-                .Concat(typeof(DatabaseExtensions).Assembly.GetExportedTypes()))
+                .Concat(typeof(InviteRepository).Assembly.GetExportedTypes()))
 
 
             {

@@ -59,7 +59,7 @@ namespace IQuality.Api
             }.Initialize();
 
             services.AddDependencies(Environment);
-            
+
             // Setup RavenDB session and authorization
             services
                 .AddSingleton(documentStore)
@@ -154,7 +154,14 @@ namespace IQuality.Api
                 app.UseDeveloperExceptionPage();
             }
 
+
             app.UseRouting();
+
+            app.UseCors(c =>
+                c.AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowAnyOrigin()
+            );
 
             app.UseAuthorization();
             app.UseAuthentication();

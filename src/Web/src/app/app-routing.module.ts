@@ -7,6 +7,13 @@ const routes: Routes = [
     path: '',
     loadChildren: () => import('./areas/main/main.module').then(m => m.MainModule)
   },
+<<<<<<< HEAD
+=======
+  {
+    path: 'authenticate',
+    loadChildren: () => import('./areas/authentication/authentication.module').then(m => m.AuthenticationModule)
+  }
+>>>>>>> feature/authentication+angular
 ];
 
 @NgModule({
