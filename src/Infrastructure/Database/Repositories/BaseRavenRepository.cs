@@ -7,8 +7,8 @@ using IQuality.Models.Interfaces;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
-
 namespace IQuality.Infrastructure.Database.Repositories
+
 {
     public abstract class BaseRavenRepository<TOut, TStorage> : IBaseRavenRepository<TOut, TStorage>
         where TStorage : IAggregateRoot

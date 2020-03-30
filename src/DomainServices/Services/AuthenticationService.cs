@@ -30,6 +30,9 @@ namespace IQuality.DomainServices.Services
         {
             var applicationUser = await _userManager.FindByEmailAsync(email);
 
+            if (applicationUser == null)
+                return (false, null);
+
             // Returns whether or not the user has confirmed their email
             if (!await _userManager.IsEmailConfirmedAsync(applicationUser))
                 return (false, null);
@@ -39,6 +42,19 @@ namespace IQuality.DomainServices.Services
                 return (false, null);
 
             return (await _userManager.CheckPasswordAsync(applicationUser, password), applicationUser);
+        }
+
+        public async Task<ApplicationUser> Register(ApplicationUser user)
+        {
+            var applicationUser = await _userManager.FindByEmailAsync(user.Email);
+
+            // TODO: Implement our own exception
+            if(applicationUser != null)
+                throw new Exception("User already exists!");
+            
+            var result = await _userManager.CreateAsync(user);
+
+           
         }
 
         public string GenerateToken(ApplicationUser user)

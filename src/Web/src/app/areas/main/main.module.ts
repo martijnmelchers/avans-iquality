@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { MainRoutingModule } from './main-routing.module';
 import { HomeComponent } from './home/home.component';
-import { TableModule } from "carbon-components-angular";
+import { GridModule, TableModule, TilesModule } from "carbon-components-angular";
 
 
 @NgModule({
@@ -11,7 +11,9 @@ import { TableModule } from "carbon-components-angular";
   imports: [
     CommonModule,
     MainRoutingModule,
-    TableModule
+    TableModule,
+    GridModule,
+    TilesModule
   ]
 })
 export class MainModule { }

@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="src\app\areas\admin" />
+    <Folder Include="src\app\areas\authentication" />
     <Folder Include="src\app\areas\doctor" />
     <Folder Include="src\app\areas\main" />
   </ItemGroup>

@@ -20,6 +20,12 @@ export class RequestStatusService {
   constructor() {
     this.event = new EventEmitter();
   }
+
+  public get busy(): boolean {
+    console.log(this.activeRequests > 0);
+    return this.activeRequests > 0;
+  }
+
   /**
    * Start a new request
    */

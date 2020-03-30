@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { NgProgressModule } from "ngx-progressbar";
 import { HeaderModule, TagModule } from "carbon-components-angular";
 import { Fade20Module } from "@carbon/icons-angular/lib/fade/20";
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { Fade20Module } from "@carbon/icons-angular/lib/fade/20";
     BrowserModule,
     AppRoutingModule,
     NgProgressModule,
+    HttpClientModule,
     HeaderModule,
     Fade20Module,
     TagModule

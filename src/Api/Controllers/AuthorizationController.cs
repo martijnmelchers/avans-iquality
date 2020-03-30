@@ -37,10 +37,24 @@ namespace IQuality.Api.Controllers
             return Ok(_authorizationService.GenerateToken(user));
         }
 
-        [HttpPost, Route("register"), AllowAnonymous]
-        public async Task<IActionResult> Register()
+        [HttpPost, Route("register/buddy/{invite}"), AllowAnonymous]
+        public async Task<IActionResult> RegisterAsBuddy([FromRoute] string inviteToken, [FromBody] BuddyRegister register)
         {
-            return BadRequest();
+            await _authorizationService.Register(register.Email, register.Password);
+
+            return Ok();
+        }
+
+        [HttpPost, Route("register/patient"), AllowAnonymous]
+        public async Task<IActionResult> RegisterAsPatient()
+        {
+            return Ok();
+        }
+
+        [HttpPost, Route("register/doctor"), AllowAnonymous]
+        public async Task<IActionResult> RegisterAsDoctor()
+        {
+            return Ok();
         }
     }
 }

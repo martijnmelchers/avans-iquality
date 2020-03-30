@@ -8,3 +8,25 @@
     <ng-content></ng-content>
   </ibm-table>
 </ibm-table-container>
+
+
+<div ibmGrid>
+  <div ibmRow>
+    <div ibmCol [columnNumbers]="{ sm: 2, lg: 3}" [offsets]="{ sm: 2, lg: 9}">
+      <ibm-tile>
+      </ibm-tile>
+    </div>
+  </div>
+  <div ibmRow>
+    <div ibmCol [columnNumbers]="{ sm: 2, lg: 3 }">
+      <ibm-tile>
+      </ibm-tile>
+    </div>
+  </div>
+  <div ibmRow>
+    <div ibmCol [columnNumbers]="{ sm: 2, lg: 3}" [offsets]="{ sm: 2, lg: 9}">
+      <ibm-tile>
+      </ibm-tile>
+    </div>
+  </div>
+</div>
