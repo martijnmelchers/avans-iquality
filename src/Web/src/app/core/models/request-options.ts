@@ -2,6 +2,7 @@
 
   /** Whether or not to display the request loader */
   public disableRequestLoader?: boolean = false;
+
   /** Whether or not to fetch a local asset */
   public removeEndpoint?: boolean = false;
 
@@ -10,4 +11,6 @@
 
   /** The response type you expect back. Must either be: json, text, blob, arrayblob */
   public responseType?: any = 'json';
+
+  public disableAuthentication?: boolean = false;
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RequestStatusService } from "@IQuality/core/services/request-status.service";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ApiService } from "@IQuality/core/services/api.service";
+import { AuthenticationService } from "@IQuality/core/services/authentication.service";
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit {
   public form: FormGroup;
   public hasError: boolean = false;
 
-  constructor(private _fb: FormBuilder, private _api: ApiService) {
+  constructor(private _fb: FormBuilder, private _api: ApiService, private _auth: AuthenticationService) {
   }
 
   ngOnInit(): void {
@@ -38,8 +39,10 @@ export class LoginComponent implements OnInit {
 
   async submit() {
     try {
-      await this._api.post<string>('/authorize/login', this.form.getRawValue())
+      const token = await this._api.post<string>('/authorize/login', this.form.getRawValue(), null, { disableAuthentication: true, responseType: 'text', headers: {} });
+      this._auth.saveToken(token);
     } catch(e) {
+      console.log(e);
       this.hasError = true;
     }
   }

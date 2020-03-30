@@ -1,6 +1,6 @@
 ﻿namespace IQuality.Models.Authentication
 {
-    public enum RegistrationLinkType
+    public enum InviteType
     {
         Buddy   = 1,
         Patient = 2,

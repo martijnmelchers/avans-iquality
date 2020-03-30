@@ -6,13 +6,13 @@ using Newtonsoft.Json;
 
 namespace IQuality.Models.Authentication
 {
-    public class RegistrationLink : IAggregateRoot
+    public class Invite : IAggregateRoot
     {
         public string Id { get; set; }
         public bool Used { get; set; }
         public string ApplicationUserId { get; set; }
         
-        public RegistrationLinkType RegistrationLinkType { get; set; }
+        public InviteType InviteType { get; set; }
 
         [JsonIgnore]
         public ApplicationUser ApplicationUser { get; set; }

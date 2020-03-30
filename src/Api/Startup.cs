@@ -157,7 +157,11 @@ namespace IQuality.Api
 
             app.UseRouting();
 
-            app.UseCors(c => c.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());
+            app.UseCors(c =>
+                c.AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowAnyOrigin()
+            );
 
             app.UseAuthorization();
             app.UseAuthentication();

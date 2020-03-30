@@ -7,6 +7,6 @@ namespace IQuality.Models.Forms
         public string Email { get; set; }
         public string Password { get; set; }
         public Address Address { get; set; }
-        public FullName FullName { get; set; }
+        public FullName Name { get; set; }
     }
 }

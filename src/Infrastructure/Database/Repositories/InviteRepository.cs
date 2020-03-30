@@ -6,33 +6,34 @@ using System.Threading.Tasks;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
 using IQuality.Models.Authentication;
+using IQuality.Models.Helpers;
 using Raven.Client.Documents.Session;
 
 namespace IQuality.Infrastructure.Database.Repositories
 {
-    public class RegistrationLinkRepository : BaseRavenRepository<RegistrationLink>
+    [Injectable(interfaceType: typeof(IInviteRepository))]
+    public class InviteRepository : BaseRavenRepository<Invite>, IInviteRepository
     {
-        public RegistrationLinkRepository(IAsyncDocumentSession session) : base(session)
+        public InviteRepository(IAsyncDocumentSession session) : base(session)
         {
         }
 
-        public override async Task SaveAsync(RegistrationLink entity)
+        public override async Task SaveAsync(Invite entity)
         {
             await Session.StoreAsync(entity);
         }
 
-        public override void DeleteAsync(RegistrationLink entity)
+        public override void DeleteAsync(Invite entity)
         {
             Session.Delete(entity);
-            return;
         }
 
-        protected override async Task<List<RegistrationLink>> ConvertAsync(List<RegistrationLink> storage)
+        protected override async Task<List<Invite>> ConvertAsync(List<Invite> storage)
         {
             foreach (var registrationLink in storage)
-            {
-               registrationLink.ApplicationUser = await Session.LoadAsync<ApplicationUser>(registrationLink.ApplicationUserId);
-            }
+                registrationLink.ApplicationUser =
+                    await Session.LoadAsync<ApplicationUser>(registrationLink.ApplicationUserId);
+
             return storage;
         }
     }

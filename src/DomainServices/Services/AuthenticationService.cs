@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories;
+using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
 using IQuality.Models.Authentication;
 using IQuality.Models.Helpers;
@@ -21,13 +22,13 @@ namespace IQuality.DomainServices.Services
     {
         private readonly IConfiguration _config;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RegistrationLinkRepository _registrationLinkRepository;
+        private readonly IInviteRepository _inviteRepository;
 
-        public AuthenticationService(IConfiguration config, UserManager<ApplicationUser> userManager, RegistrationLinkRepository registrationLinkRepository)
+        public AuthenticationService(IConfiguration config, UserManager<ApplicationUser> userManager, IInviteRepository inviteRepository)
         {
             _config = config;
             _userManager = userManager;
-            _registrationLinkRepository = registrationLinkRepository;
+            _inviteRepository = inviteRepository;
         }
 
         public async Task<(bool success, ApplicationUser user)> Login(string email, string password)
@@ -56,9 +57,11 @@ namespace IQuality.DomainServices.Services
             if(applicationUser != null)
                 throw new Exception("User already exists!");
             
-            var result = await _userManager.CreateAsync(user);
-
-           
+            var result = await _userManager.CreateAsync(user, password);
+            
+            applicationUser = await _userManager.FindByEmailAsync(user.Email);
+            
+            return applicationUser;
         }
 
         public string GenerateToken(ApplicationUser user)
@@ -93,28 +96,34 @@ namespace IQuality.DomainServices.Services
 
             return claims;
         }
-
-        public async void CreateInvite(RegistrationLink link)
+        
+        public async void CreateInvite(string userId)
         {
-            await _registrationLinkRepository.SaveAsync(link);
+            var invite = new Invite
+            {
+                ApplicationUserId = userId,
+                Used = false
+            };
+            
+            await _inviteRepository.SaveAsync(invite);
         }
 
-        public async Task<RegistrationLink> GetInvite(string id)
+        public async Task<Invite> GetInvite(string id)
         {
-            return await _registrationLinkRepository.GetByIdAsync(id);
+            return await _inviteRepository.GetByIdAsync(id);
         }
 
         // Uses the invite link.
-        public async void RespondInvite(RegistrationLink link, bool accepted = true)
+        public async void RespondInvite(Invite link, bool accepted = true)
         {
             if (accepted)
             {
                 link.Used = true;
-                await _registrationLinkRepository.SaveAsync(link);
+                await _inviteRepository.SaveAsync(link);
             }
             else
             {
-                _registrationLinkRepository.DeleteAsync(link);
+                _inviteRepository.DeleteAsync(link);
             }
         }
     }

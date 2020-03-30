@@ -38,14 +38,15 @@ namespace IQuality.Api.Controllers
             return Ok(_authorizationService.GenerateToken(user));
         }
 
-        [HttpPost, Route("register/buddy/{invite}"), AllowAnonymous]
-        public async Task<IActionResult> RegisterAsBuddy([FromRoute] string inviteToken, [FromBody] BuddyRegister register)
+        [HttpPost, Route("register/buddy/{inviteToken}"), AllowAnonymous]
+        public async Task<IActionResult> RegisterAsBuddy(string inviteToken, [FromBody] BuddyRegister register)
         {
             await _authorizationService.Register(new ApplicationUser
             {
+                UserName = register.Email,
                 Email = register.Email,
                 Address =  register.Address,
-                Name = register.FullName,
+                Name = register.Name,
             }, register.Password);
 
             return Ok();
@@ -63,16 +64,10 @@ namespace IQuality.Api.Controllers
             return Ok();
         }
 
-        [HttpPost, Route("invite")]
+        [HttpPost, Route("invite"), Authorize]
         public async Task<IActionResult> CreateInvite()
         {
-            var invite = new RegistrationLink()
-            {
-                ApplicationUserId = "",
-                Used = false,
-            };
-
-            _authorizationService.CreateInvite(invite);
+            _authorizationService.CreateInvite(HttpContext.User.GetUserId());
             return Ok();
         }
 

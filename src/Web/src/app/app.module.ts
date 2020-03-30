@@ -7,6 +7,7 @@ import { NgProgressModule } from "ngx-progressbar";
 import { HeaderModule, TagModule } from "carbon-components-angular";
 import { Fade20Module } from "@carbon/icons-angular/lib/fade/20";
 import { HttpClientModule } from "@angular/common/http";
+import { JwtHelperService } from "@auth0/angular-jwt";
 
 @NgModule({
   declarations: [
