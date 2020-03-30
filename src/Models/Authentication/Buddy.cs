@@ -1,10 +1,11 @@
-﻿using System;
+﻿using IQuality.Models.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace IQuality.Models
 {
-    public class Buddy
+    public class Buddy:IAggregateRoot
     {
         public string Id { get; set; }
         public string GroupId { get; set; }
