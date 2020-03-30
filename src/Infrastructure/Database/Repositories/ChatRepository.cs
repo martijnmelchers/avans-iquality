@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models.Chat;
 using IQuality.Models.Chat.Messages;
+using IQuality.Models.Helpers;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 
 namespace IQuality.Infrastructure.Database.Repositories
 {
-    public class ChatRepository : BaseRavenRepository<BaseChat>
+    [Injectable(interfaceType: typeof(IChatRepository))]
+    public class ChatRepository : BaseRavenRepository<BaseChat>, IChatRepository
     {
         private readonly IAsyncDocumentSession _session;
 
@@ -17,9 +20,9 @@ namespace IQuality.Infrastructure.Database.Repositories
             _session = session;
         }
 
-        public List<BaseChat> GetChats()
+        public async Task<List<BaseChat>> GetChatsAsync()
         {
-            return _session.Query<BaseChat>().ToList();
+            return await _session.Query<BaseChat>().ToListAsync();
         }
         
         public override Task SaveAsync(BaseChat entity)

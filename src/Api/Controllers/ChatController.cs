@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using IQuality.Api.Extensions;
+using IQuality.DomainServices.Interfaces;
+using IQuality.DomainServices.Services;
 using IQuality.Infrastructure.Database.Repositories;
 using IQuality.Models.Chat;
 using Microsoft.AspNetCore.Mvc;
@@ -10,30 +12,28 @@ namespace IQuality.Api.Controllers
     [Route("/chats")]
     public class ChatController : RavenApiController
     {
-        private readonly ChatRepository _repository;
-        public ChatController(IAsyncDocumentSession db, ChatRepository repository) : base(db)
+        private readonly IChatService _service;
+        public ChatController(IAsyncDocumentSession db, IChatService service) : base(db)
         {
-            _repository = repository;
+            _service = service;
         }
 
         [HttpGet]
         public IActionResult GetChats()
         {
-            return Ok(_repository.GetChats());
+            return Ok(_service.GetChatsAsync());
         }
 
         [HttpPost]
         public IActionResult CreateChat([FromBody] BaseChat chat)
         {
-            return Ok(_repository.SaveAsync(chat));
+            return Ok(_service.CreateChatAsync(chat));
         }
 
-        public async Task<OkResult> DeleteChat([FromBody] string chatId)
+        public IActionResult DeleteChat([FromBody] string chatId)
         {
-            var chat = await _repository.GetByIdAsync(chatId);
-            await _repository.DeleteAsync(chat);
-            
-            return Ok();
+            _service.DeleteChatAsync(chatId);
+             return Ok();
         }
     }
 }
