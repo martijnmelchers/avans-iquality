@@ -28,8 +28,6 @@ namespace IQuality.Infrastructure.Database.Repositories
 
         public override Task DeleteAsync(Buddy entity)
         {
-            //_session.Delete(entity);
-            //return Task.CompletedTask;
             throw new NotImplementedException();
         }
 

@@ -25,8 +25,6 @@ namespace IQuality.DomainServices.Services
 
         public async Task DeleteBuddy(int id)
         {
-
-            //Buddy toBeDeletedBuddy = await _buddyGroupRepository.GetByIdAsync(id.ToString());
             await _buddyGroupRepository.Delete(id);
         }
 
