@@ -83,6 +83,12 @@ namespace IQuality.DomainServices.Services
             await _registrationLinkRepository.SaveAsync(link);
         }
 
+        public async Task<RegistrationLink> GetInvite(string id)
+        {
+            return await _registrationLinkRepository.GetByIdAsync(id);
+        }
+
+        // Uses the invite link.
         public async void RespondInvite(RegistrationLink link, bool accepted = true)
         {
             if (accepted)

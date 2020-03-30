@@ -10,5 +10,6 @@ namespace IQuality.DomainServices.Interfaces
         string GenerateToken(ApplicationUser user);
         public void CreateInvite(RegistrationLink link);
         void RespondInvite(RegistrationLink link, bool accepted = true);
+        public Task<RegistrationLink> GetInvite(string Id);
     }
 }

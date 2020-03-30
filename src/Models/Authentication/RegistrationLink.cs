@@ -11,6 +11,8 @@ namespace IQuality.Models.Authentication
         public string Id { get; set; }
         public bool Used { get; set; }
         public string ApplicationUserId { get; set; }
+        
+        public RegistrationLinkType RegistrationLinkType { get; set; }
 
         [JsonIgnore]
         public ApplicationUser ApplicationUser { get; set; }
