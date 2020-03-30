@@ -10,7 +10,7 @@ namespace IQuality.DomainServices.Interfaces.Repositories
     {
         Task<List<Buddy>> GetAll();
         Task<Buddy> GetByID(int id);
-        Task<int> AddBuddy(Buddy buddy);
+        Task<string> AddBuddy(Buddy buddy);
         Task<int> UpdateBuddy(int id, Buddy buddy);
         Task<int> DeleteBuddy(int id);
     }

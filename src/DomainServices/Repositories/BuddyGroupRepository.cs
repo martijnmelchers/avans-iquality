@@ -22,11 +22,19 @@ namespace IQuality.DomainServices.Repositories
             _session = session;
         }
 
-        public async Task<int> AddBuddy(Buddy buddy)
+        public async Task<string> AddBuddy(Buddy buddy)
         {
-            
+            Buddy buddyToBeSaved = new Buddy
+            {
+                GroupId = buddy.GroupId,
+                Name = buddy.Name,
+                PhoneNumber = buddy.PhoneNumber,
+                ImagePath = buddy.ImagePath
+            };
+
+            await _session.StoreAsync(buddyToBeSaved);
+            return buddyToBeSaved.Id;
             //var result = await iets; // session call
-            throw new NotImplementedException();
         }
 
         public async Task<int> DeleteBuddy(int id)

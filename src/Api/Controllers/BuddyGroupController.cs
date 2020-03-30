@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces.Repositories;
 using IQuality.Models;
 using Microsoft.AspNetCore.Http;
@@ -13,13 +14,13 @@ namespace IQuality.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BuddyGroupController : Controller
+    public class BuddyGroupController : RavenApiController
     {
 
         private IBuddyGroupRepository _buddyGroupRepository;
         private readonly IAsyncDocumentSession _session;
 
-        public BuddyGroupController(IBuddyGroupRepository buddyGroupRepository, IAsyncDocumentSession session)
+        public BuddyGroupController(IBuddyGroupRepository buddyGroupRepository, IAsyncDocumentSession session) : base(session)
         {
             _buddyGroupRepository = buddyGroupRepository;
             _session = session;
@@ -46,11 +47,12 @@ namespace IQuality.Api.Controllers
         }
 
         // POST: BuddyGroup/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Buddy buddy)
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Create(Buddy buddy)
         {
-            var result = _buddyGroupRepository.AddBuddy(buddy);
+            var result = await _buddyGroupRepository.AddBuddy(buddy);
 
             return StatusCode((int)HttpStatusCode.OK, result);
 
