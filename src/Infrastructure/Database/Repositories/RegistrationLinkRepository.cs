@@ -10,7 +10,7 @@ using Raven.Client.Documents.Session;
 
 namespace IQuality.Infrastructure.Database.Repositories
 {
-    class RegistrationLinkRepository : BaseRavenRepository<RegistrationLink>
+    public class RegistrationLinkRepository : BaseRavenRepository<RegistrationLink>
     {
         public RegistrationLinkRepository(IAsyncDocumentSession session) : base(session)
         {

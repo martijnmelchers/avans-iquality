@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgProgressModule } from "ngx-progressbar";
-import { HeaderModule, TagModule } from "carbon-components-angular";
+import {ButtonModule, HeaderModule, InputModule, TagModule} from "carbon-components-angular";
 import { Fade20Module } from "@carbon/icons-angular/lib/fade/20";
 import {InviteComponent} from "./areas/main/invite/invite.component";
 
@@ -20,6 +20,8 @@ import {InviteComponent} from "./areas/main/invite/invite.component";
     HeaderModule,
     Fade20Module,
     TagModule,
+    ButtonModule,
+    InputModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

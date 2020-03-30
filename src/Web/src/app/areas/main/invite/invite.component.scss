@@ -1,4 +1,4 @@
-.wrapper {
+.send, .accept {
   display: flex;
   justify-content: start;
   flex-flow:column;
@@ -6,14 +6,6 @@
   height: 300px;
 }
 
-
-.copy-text {
-  margin: 10px;
-  background-color: beige;
-  border: 0.5px solid black;
-  border-style:dotted;
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
-  user-select:all;
+#copyText {
+  margin-bottom: 10px;
 }

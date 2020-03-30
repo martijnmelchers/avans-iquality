@@ -3,7 +3,16 @@ import { Routes, RouterModule } from '@angular/router';
 import {InviteComponent} from './areas/main/invite/invite.component'
 
 const routes: Routes = [
-  {path: "invite", component: InviteComponent},
+  {
+    path: '',
+    loadChildren: () => import('./areas/main/main.module').then(m => m.MainModule)
+  },
+    {
+      path: "invite/:id", component: InviteComponent
+    },
+    {
+      path: "invite", component: InviteComponent
+    },
 ];
 
 @NgModule({
