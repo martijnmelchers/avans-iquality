@@ -8,26 +8,14 @@ import { ApiService } from 'src/app/core/services/api.service';
 })
 export class BuddygroupComponent implements OnInit {
 
-  buddies = [];
+  buddies:any;
   constructor(private api: ApiService) {
-    this.buddies = [{
-      id: 1,
-      groupId: 0,
-      name: 'Masud',
-      phoneNumber: '0031613579246',
-      imagePath: 'coole-foto-masud.jpg'
-    },
-    {
-      id: 2,
-      groupId: 0,
-      name: 'Darjush',
-      phoneNumber: '0031624680135',
-      imagePath: 'coole-foto-darjush.jpg'
-    }]
+
   }
 
-  ngOnInit(): void {
-    throw new Error("Method not implemented.");
+  async ngOnInit(): Promise<void> {
+    this.buddies = await this.api.get<string>('/api/buddygroup/index');
+    console.log(this.buddies);
   }
 }
 

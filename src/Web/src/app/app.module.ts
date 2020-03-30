@@ -8,6 +8,7 @@ import { HeaderModule, TagModule } from "carbon-components-angular";
 import { Fade20Module } from "@carbon/icons-angular/lib/fade/20";
 import { BuddygroupComponent } from './buddy/buddygroup/buddygroup.component';
 import { BuddygroupaddComponent } from './buddy/buddygroupadd/buddygroupadd.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { BuddygroupaddComponent } from './buddy/buddygroupadd/buddygroupadd.comp
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     NgProgressModule,
     HeaderModule,
     Fade20Module,
