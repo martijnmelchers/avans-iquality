@@ -10,7 +10,7 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
     {
         Task<List<Buddy>> GetAll();
         Task<Buddy> GetByID(int id);
-        Task<string> AddBuddy(Buddy buddy);
+        Task<Buddy> AddBuddy(Buddy buddy);
         Task<int> UpdateBuddy(int id, Buddy buddy);
         Task<int> DeleteBuddy(int id);
     }

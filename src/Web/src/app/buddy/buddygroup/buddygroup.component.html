@@ -1,5 +1,12 @@
-<ul>
-    <li *ngFor="let buddy of buddies">
-        {{buddy.name}}
-    </li>
-</ul>
+<a class="btn btn-primary" [routerLink]="['../../buddy/add']">Add Buddy</a>
+
+<ibm-table-container>
+    <ibm-table
+      class="data-table"
+      [skeleton]="skeletonStateTable"
+      [model]="model"
+      size="lg"
+      [showSelectionColumn]="false">
+      <ng-content></ng-content>
+    </ibm-table>
+  </ibm-table-container>

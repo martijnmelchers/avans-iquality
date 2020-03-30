@@ -21,10 +21,10 @@ namespace IQuality.Infrastructure.Database.Repositories
             _session = session;
         }
 
-        public async Task<string> AddBuddy(Buddy buddy)
+        public async Task<Buddy> AddBuddy(Buddy buddy)
         {
             await _session.StoreAsync(buddy);
-            return buddy.Id;
+            return buddy;
         }
 
         public override Task DeleteAsync(Buddy entity)

@@ -13,7 +13,7 @@ using Raven.Client.Documents.Session;
 namespace IQuality.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class BuddyGroupController : RavenApiController
     {
 

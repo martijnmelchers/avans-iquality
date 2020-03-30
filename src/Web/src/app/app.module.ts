@@ -9,6 +9,8 @@ import { Fade20Module } from "@carbon/icons-angular/lib/fade/20";
 import { BuddygroupComponent } from './buddy/buddygroup/buddygroup.component';
 import { BuddygroupaddComponent } from './buddy/buddygroupadd/buddygroupadd.component';
 import { HttpClientModule } from '@angular/common/http';
+import { TableModule } from "carbon-components-angular";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { HttpClientModule } from '@angular/common/http';
     NgProgressModule,
     HeaderModule,
     Fade20Module,
-    TagModule
+    TagModule,
+    TableModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

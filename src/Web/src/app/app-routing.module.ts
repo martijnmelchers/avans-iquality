@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { BuddygroupComponent } from '../app/buddy/buddygroup/buddygroup.component';
+import { BuddygroupaddComponent } from '../app/buddy/buddygroupadd/buddygroupadd.component';
 
 
 const routes: Routes = [
@@ -10,7 +11,9 @@ const routes: Routes = [
   },
   {
     path: 'buddy/group',component: BuddygroupComponent
-
+  },
+  {
+    path: 'buddy/add',component: BuddygroupaddComponent
   }
 ];
 
