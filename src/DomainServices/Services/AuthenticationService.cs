@@ -6,7 +6,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using IQuality.DomainServices.Interfaces;
+using IQuality.Infrastructure.Database.Repositories;
 using IQuality.Models;
+using IQuality.Models.Authentication;
 using IQuality.Models.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -19,11 +21,13 @@ namespace IQuality.DomainServices.Services
     {
         private readonly IConfiguration _config;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RegistrationLinkRepository _registrationLinkRepository;
 
-        public AuthenticationService(IConfiguration config, UserManager<ApplicationUser> userManager)
+        public AuthenticationService(IConfiguration config, UserManager<ApplicationUser> userManager, RegistrationLinkRepository registrationLinkRepository)
         {
             _config = config;
             _userManager = userManager;
+            _registrationLinkRepository = registrationLinkRepository;
         }
 
         public async Task<(bool success, ApplicationUser user)> Login(string email, string password)
@@ -88,6 +92,30 @@ namespace IQuality.DomainServices.Services
                 .Select(c => new Claim("roles", c.ClaimValue)));
 
             return claims;
+        }
+
+        public async void CreateInvite(RegistrationLink link)
+        {
+            await _registrationLinkRepository.SaveAsync(link);
+        }
+
+        public async Task<RegistrationLink> GetInvite(string id)
+        {
+            return await _registrationLinkRepository.GetByIdAsync(id);
+        }
+
+        // Uses the invite link.
+        public async void RespondInvite(RegistrationLink link, bool accepted = true)
+        {
+            if (accepted)
+            {
+                link.Used = true;
+                await _registrationLinkRepository.SaveAsync(link);
+            }
+            else
+            {
+                _registrationLinkRepository.DeleteAsync(link);
+            }
         }
     }
 }

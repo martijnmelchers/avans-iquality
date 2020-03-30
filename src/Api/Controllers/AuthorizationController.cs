@@ -2,6 +2,7 @@
 using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Models;
+using IQuality.Models.Authentication;
 using IQuality.Models.Forms;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,7 @@ namespace IQuality.Api.Controllers
         public async Task<IActionResult> Login([FromBody] Login login)
         {
             var (success, user) = await _authorizationService.Login(login.Email, login.Password);
-            
+
             if (!success)
                 return Unauthorized("Invalid password and/or username");
 
@@ -59,6 +60,26 @@ namespace IQuality.Api.Controllers
         [HttpPost, Route("register/doctor"), AllowAnonymous]
         public async Task<IActionResult> RegisterAsDoctor()
         {
+            return Ok();
+        }
+
+        [HttpPost, Route("invite")]
+        public async Task<IActionResult> CreateInvite()
+        {
+            var invite = new RegistrationLink()
+            {
+                ApplicationUserId = "",
+                Used = false,
+            };
+
+            _authorizationService.CreateInvite(invite);
+            return Ok();
+        }
+
+        [HttpPost, Route("invite/respond")]
+        public async Task<IActionResult> RespondInvite([FromBody] bool accepted)
+        {
+
             return Ok();
         }
     }
