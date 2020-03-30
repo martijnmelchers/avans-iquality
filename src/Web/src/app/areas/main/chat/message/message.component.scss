@@ -1,0 +1,27 @@
+$pad-wide: 20px;
+$color-red: #ee4035;
+$color-white: #fff;
+$title-pad: 0.25em;
+
+
+.my-message-box {
+  text-align: right;
+  margin: 1.3em 0;
+}
+
+.other-message-box {
+  text-align: left;
+  margin-bottom: 1.3em;
+}
+
+.text {
+  line-height: $title-pad + 1em;
+  display: inline-block;
+  background: $color-red;
+  color: $color-white;
+  padding: $title-pad;
+
+  border: 1px solid var(--ion-color-medium);
+  border-radius: 10px;
+  max-width: 90%;
+}

@@ -1,0 +1,21 @@
+<div style="height: 90vh; width: 30vw;">
+  <div ibmGrid>
+    <div ibmRow>
+      <div ibmCol>
+
+        <div style="background-color: #F3F3F3" ibmGrid>
+          <div ibmRow [gutter]="false" *ngFor="let message of messages">
+            <div ibmCol>
+              <app-message [message]="message"></app-message>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div ibmRow [condensed]="true">
+      twee row
+    </div>
+  </div>
+</div>
+

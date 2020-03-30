@@ -1,0 +1,15 @@
+<div class="my-message-box" *ngIf="!message.isOtherUser; else otherUser">
+  <div class="text">
+    <span>
+      {{message.string}}
+    </span>
+  </div>
+</div>
+
+<ng-template class="other-message-box" #otherUser>
+  <div class="text">
+    <span>
+        {{message.string}}
+      </span>
+  </div>
+</ng-template>
