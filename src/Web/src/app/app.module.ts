@@ -9,7 +9,7 @@ import { Fade20Module } from "@carbon/icons-angular/lib/fade/20";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -17,7 +17,7 @@ import { Fade20Module } from "@carbon/icons-angular/lib/fade/20";
     NgProgressModule,
     HeaderModule,
     Fade20Module,
-    TagModule
+    TagModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

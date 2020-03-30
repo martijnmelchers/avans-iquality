@@ -1,7 +1,6 @@
-$pad-wide: 20px;
-$color-red: #ee4035;
-$color-white: #fff;
-$title-pad: 0.25em;
+$title-pad: 0.8em;
+$my-color: #1C1C1C;
+$other-color: #EE0765;
 
 
 .my-message-box {
@@ -17,11 +16,18 @@ $title-pad: 0.25em;
 .text {
   line-height: $title-pad + 1em;
   display: inline-block;
-  background: $color-red;
-  color: $color-white;
   padding: $title-pad;
 
   border: 1px solid var(--ion-color-medium);
   border-radius: 10px;
   max-width: 90%;
+  color: white;
+
+  &.my-text {
+    background: $my-color;
+  }
+
+  &.other-text {
+    background: $other-color;
+  }
 }
