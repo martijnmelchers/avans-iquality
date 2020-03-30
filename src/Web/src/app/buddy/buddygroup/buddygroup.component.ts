@@ -18,7 +18,7 @@ export class BuddygroupComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.buddies = await this.api.get<string>('/buddygroup/index');
+    this.buddies = await this.api.get<string>('/buddygroup');
     console.log(this.buddies);
     this.loadScreen();
   }

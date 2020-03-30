@@ -20,7 +20,7 @@ export class BuddygroupaddComponent implements OnInit {
   }
 
   async onSubmit(buddyData) {
-    await this.api.post<string>('/buddygroup/create', buddyData);
+    await this.api.post<string>('/buddygroup', buddyData);
 
     this.router.navigate(['../../buddy/group']);
   }
