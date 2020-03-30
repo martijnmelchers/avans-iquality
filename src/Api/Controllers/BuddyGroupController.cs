@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using IQuality.Api.Extensions;
-using IQuality.DomainServices.Interfaces.Repositories;
+using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +35,7 @@ namespace IQuality.Api.Controllers
         }
 
         // GET: BuddyGroup/Details/5
+        [HttpGet("[action]")]
         public ActionResult Details(int id)
         {
             return View();
@@ -55,17 +56,6 @@ namespace IQuality.Api.Controllers
             var result = await _buddyGroupRepository.AddBuddy(buddy);
 
             return StatusCode((int)HttpStatusCode.OK, result);
-
-            //try
-            //{
-            //    // TODO: Add insert logic here
-
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //catch
-            //{
-            //    return View();
-            //}
         }
 
         // GET: BuddyGroup/Edit/5

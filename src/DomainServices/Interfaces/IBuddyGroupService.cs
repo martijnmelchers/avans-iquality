@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IQuality.Infrastructure.Database.Repositories.Interface
+namespace IQuality.DomainServices.Interfaces
 {
-    public interface IBuddyGroupRepository
+    public interface IBuddyGroupService
     {
-        Task<List<Buddy>> GetAll();
-        Task<Buddy> GetByID(int id);
-        Task<string> AddBuddy(Buddy buddy);
+        Task<int> AddBuddy(Buddy buddy);
         Task<int> UpdateBuddy(int id, Buddy buddy);
         Task<int> DeleteBuddy(int id);
+        Task<List<Buddy>> GetBuddies();
+        Task<Buddy> GetBuddyById(int id);
+
     }
 }

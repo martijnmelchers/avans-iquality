@@ -1,16 +1,16 @@
-﻿using IQuality.DomainServices.Interfaces.Repositories;
-using IQuality.Infrastructure.Database.Repositories;
+﻿using IQuality.Infrastructure.Database.Repositories;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IQuality.DomainServices.Repositories
+namespace IQuality.Infrastructure.Database.Repositories
 {
-    public class BuddyGroupRepository : BaseRavenRepository<Buddy>
+    public class BuddyGroupRepository : BaseRavenRepository<Buddy>,IBuddyGroupRepository
     {
         private readonly IAsyncDocumentSession _session;
  
@@ -41,8 +41,8 @@ namespace IQuality.DomainServices.Repositories
 
         public async Task<List<Buddy>> GetAll()
         {
-            //var result = await iets;
-            throw new NotImplementedException();
+            var result = await _session.Query<Buddy>().ToListAsync();
+            return result;
         }
         public async Task<int> UpdateBuddy(int id, Buddy buddy)
         {
