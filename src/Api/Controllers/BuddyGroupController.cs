@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using IQuality.Api.Extensions;
+using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
 using Microsoft.AspNetCore.Http;
@@ -17,91 +18,37 @@ namespace IQuality.Api.Controllers
     public class BuddyGroupController : RavenApiController
     {
 
-        private IBuddyGroupRepository _buddyGroupRepository;
-        private readonly IAsyncDocumentSession _session;
+        private readonly IBuddyGroupService _buddyGroupService;
 
-        public BuddyGroupController(IBuddyGroupRepository buddyGroupRepository, IAsyncDocumentSession session) : base(session)
+        public BuddyGroupController(IBuddyGroupService buddyGroupService, IAsyncDocumentSession session) : base(session)
         {
-            _buddyGroupRepository = buddyGroupRepository;
-            _session = session;
+            _buddyGroupService = buddyGroupService;
         }
 
         // GET: BuddyGroup
-        [HttpGet("[action]")]
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var result = await _buddyGroupRepository.GetAll();
-            return StatusCode((int)HttpStatusCode.OK, result);
-        }
-
-        // GET: BuddyGroup/Details/5
-        [HttpGet("[action]")]
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: BuddyGroup/Create
-        public ActionResult Create()
-        {
-            return View();
+            var result = await _buddyGroupService.GetBuddies();
+            return Ok(result);
         }
 
         // POST: BuddyGroup/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        [HttpPost("[action]")]
+        [HttpPost]
         public async Task<IActionResult> Create(Buddy buddy)
         {
-            var result = await _buddyGroupRepository.AddBuddy(buddy);
+            await _buddyGroupService.AddBuddy(buddy);
 
-            return StatusCode((int)HttpStatusCode.OK, result);
-        }
-
-        // GET: BuddyGroup/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: BuddyGroup/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: BuddyGroup/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
+            return Ok();
         }
 
         // POST: BuddyGroup/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            await _buddyGroupService.DeleteBuddy(id);
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return Ok();
         }
     }
 }

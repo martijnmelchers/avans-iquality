@@ -1,6 +1,7 @@
 ﻿using IQuality.Infrastructure.Database.Repositories;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
+using IQuality.Models.Helpers;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
@@ -10,55 +11,38 @@ using System.Threading.Tasks;
 
 namespace IQuality.Infrastructure.Database.Repositories
 {
-    public class BuddyGroupRepository : BaseRavenRepository<Buddy>,IBuddyGroupRepository
+    [Injectable(interfaceType: typeof(IBuddyGroupRepository))]
+    public class BuddyGroupRepository : BaseRavenRepository<Buddy>, IBuddyGroupRepository
     {
         private readonly IAsyncDocumentSession _session;
- 
-      
 
         public BuddyGroupRepository(IAsyncDocumentSession session):base(session)
         {
             _session = session;
         }
 
-        public async Task<Buddy> AddBuddy(Buddy buddy)
+        public async Task<List<Buddy>> GetAll()
         {
-            await _session.StoreAsync(buddy);
-            return buddy;
+            return await _session.Query<Buddy>().ToListAsync();
         }
 
         public override Task DeleteAsync(Buddy entity)
         {
-            
+            //_session.Delete(entity);
+            //return Task.CompletedTask;
             throw new NotImplementedException();
         }
 
-        public async Task<int> DeleteBuddy(int id)
+        public async Task Delete(int id)
         {
-            //var result = await iets;
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<Buddy>> GetAll()
-        {
-            var result = await _session.Query<Buddy>().ToListAsync();
-            return result;
-        }
-        public async Task<int> UpdateBuddy(int id, Buddy buddy)
-        {
-            //var result = await iets;
-            throw new NotImplementedException();
-        }
-
-        public async Task<Buddy> GetByID(int id)
-        {
-            //var result = await iets;
-            throw new NotImplementedException();
+            Buddy buddy = await _session.LoadAsync<Buddy>(id.ToString());
+            _session.Delete(buddy);
         }
 
         public override Task SaveAsync(Buddy entity)
         {
-            throw new NotImplementedException();
+            _session.StoreAsync(entity);
+            return Task.CompletedTask;
         }
 
         protected override Task<List<Buddy>> ConvertAsync(IEnumerable<Buddy> storage)

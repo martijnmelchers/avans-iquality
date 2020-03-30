@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using IQuality.Api.Extensions;
+using IQuality.DomainServices.Interfaces;
+using IQuality.DomainServices.Services;
 using IQuality.Infrastructure.Database.Repositories;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
@@ -61,7 +63,6 @@ namespace IQuality.Api
             }.Initialize();
 
             services.AddDependencies(Environment);
-            services.AddScoped<IBuddyGroupRepository, BuddyGroupRepository>();
             
             // Setup RavenDB session and authorization
             services

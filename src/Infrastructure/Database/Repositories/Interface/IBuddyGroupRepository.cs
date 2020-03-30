@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace IQuality.Infrastructure.Database.Repositories.Interface
 {
-    public interface IBuddyGroupRepository
+    public interface IBuddyGroupRepository : IBaseRavenRepository<Buddy>
     {
         Task<List<Buddy>> GetAll();
-        Task<Buddy> GetByID(int id);
-        Task<Buddy> AddBuddy(Buddy buddy);
-        Task<int> UpdateBuddy(int id, Buddy buddy);
-        Task<int> DeleteBuddy(int id);
+        Task Delete(int id);
     }
 }

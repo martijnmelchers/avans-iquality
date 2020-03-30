@@ -8,9 +8,8 @@ namespace IQuality.DomainServices.Interfaces
 {
     public interface IBuddyGroupService
     {
-        Task<int> AddBuddy(Buddy buddy);
-        Task<int> UpdateBuddy(int id, Buddy buddy);
-        Task<int> DeleteBuddy(int id);
+        Task AddBuddy(Buddy buddy);
+        Task DeleteBuddy(int id);
         Task<List<Buddy>> GetBuddies();
         Task<Buddy> GetBuddyById(int id);
 

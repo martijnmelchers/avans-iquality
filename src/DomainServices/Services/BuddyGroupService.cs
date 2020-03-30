@@ -4,9 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using IQuality.Infrastructure.Database.Repositories.Interface;
+using IQuality.Models.Helpers;
 
 namespace IQuality.DomainServices.Services
 {
+    [Injectable(interfaceType: typeof(IBuddyGroupService))]
     public class BuddyGroupService : IBuddyGroupService
     {
         private IBuddyGroupRepository _buddyGroupRepository;
@@ -16,14 +18,16 @@ namespace IQuality.DomainServices.Services
             _buddyGroupRepository = buddyGroupRepository;
         }
 
-        public Task<int> AddBuddy(Buddy buddy)
+        public async Task AddBuddy(Buddy buddy)
         {
-            throw new NotImplementedException();
+            await _buddyGroupRepository.SaveAsync(buddy);
         }
 
-        public Task<int> DeleteBuddy(int id)
+        public async Task DeleteBuddy(int id)
         {
-            throw new NotImplementedException();
+
+            //Buddy toBeDeletedBuddy = await _buddyGroupRepository.GetByIdAsync(id.ToString());
+            await _buddyGroupRepository.Delete(id);
         }
 
         public async Task<List<Buddy>> GetBuddies()
@@ -32,14 +36,9 @@ namespace IQuality.DomainServices.Services
             return result;
         }
 
-        public Task<Buddy> GetBuddyById(int id)
+        public async Task<Buddy> GetBuddyById(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> UpdateBuddy(int id, Buddy buddy)
-        {
-            throw new NotImplementedException();
+            return await _buddyGroupRepository.GetByIdAsync(id.ToString());
         }
     }
 }
