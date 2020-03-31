@@ -67,7 +67,7 @@ namespace IQuality.Api.Controllers
         [HttpPost, Route("invite"), Authorize]
         public async Task<IActionResult> CreateInvite()
         {
-            _authorizationService.CreateInvite(HttpContext.User.GetUserId());
+            await _authorizationService.CreateInvite(HttpContext.User.GetUserId());
             return Ok();
         }
 
@@ -76,6 +76,12 @@ namespace IQuality.Api.Controllers
         {
 
             return Ok();
+        }
+
+        [HttpGet, Route("verifyToken"), Authorize]
+        public IActionResult VerifyToken()
+        {
+            return Ok("Seems to me like you're logged in!");
         }
     }
 }

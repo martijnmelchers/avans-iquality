@@ -37,6 +37,8 @@ namespace IQuality.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors();
             services.AddControllers();
 
             var documentStore = new DocumentStore
@@ -48,7 +50,7 @@ namespace IQuality.Api
                 Database = Configuration["Raven:Name"],
                 Conventions = new DocumentConventions
                 {
-                    IdentityPartsSeparator = "-",
+                    IdentityPartsSeparator = "/",
                     JsonContractResolver = new IncludeNonPublicMembersContractResolver(),
                     CustomizeJsonSerializer = serializer =>
                     {
@@ -68,25 +70,22 @@ namespace IQuality.Api
                 .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddRavenDbIdentityStores<ApplicationUser>();
 
-            services
-                .AddAuthentication(o =>
+            var key = Encoding.ASCII.GetBytes(Configuration["Jwt:AudienceSecret"]);
+            services.AddAuthentication(x =>
                 {
-                    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                }).AddJwtBearer(o =>
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(x =>
                 {
-                    o.RequireHttpsMetadata = false;
-                    o.SaveToken = true;
-                    o.TokenValidationParameters = new TokenValidationParameters
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Jwt:Issuer"],
-                        ValidAudience = Configuration["Jwt:AudienceId"],
-                        IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:AudienceSecret"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
                     };
                 });
             //
@@ -157,14 +156,14 @@ namespace IQuality.Api
 
             app.UseRouting();
 
-            app.UseCors(c =>
-                c.AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowAnyOrigin()
-            );
+            // global cors policy
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

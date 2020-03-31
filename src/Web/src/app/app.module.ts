@@ -5,9 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgProgressModule } from "ngx-progressbar";
 import { HeaderModule, TagModule } from "carbon-components-angular";
-import { Fade20Module } from "@carbon/icons-angular/lib/fade/20";
-import { HttpClientModule } from "@angular/common/http";
-import { JwtHelperService } from "@auth0/angular-jwt";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
+import { JwtHttpInterceptor } from "@IQuality/core/interceptor/jwt-http-interceptor";
 
 @NgModule({
   declarations: [
@@ -19,10 +18,11 @@ import { JwtHelperService } from "@auth0/angular-jwt";
     NgProgressModule,
     HttpClientModule,
     HeaderModule,
-    Fade20Module,
     TagModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtHttpInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

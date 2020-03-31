@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -70,14 +71,14 @@ namespace IQuality.DomainServices.Services
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                _config["AppSettings:Jwt:Issuer"],
+                _config["Jwt:Issuer"],
                 _config["Jwt:AudienceId"],
                 GetValidClaims(user),
                 DateTime.UtcNow,
-                DateTime.UtcNow.AddMinutes(Convert.ToDouble(_config["Jwt:ExpireTimeInMinutes"])),
+                DateTime.UtcNow.AddDays(Convert.ToDouble(_config["Jwt:ExpireInDays"])),
                 credentials
             );
-
+            
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
             return jwtToken;
         }
@@ -97,7 +98,7 @@ namespace IQuality.DomainServices.Services
             return claims;
         }
         
-        public async void CreateInvite(string userId)
+        public async Task CreateInvite(string userId)
         {
             var invite = new Invite
             {
