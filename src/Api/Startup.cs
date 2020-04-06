@@ -20,6 +20,7 @@ using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
 using Raven.DependencyInjection;
 using Raven.Identity;
+using IQuality.Api.Controllers;
 
 namespace IQuality.Api
 {
@@ -38,6 +39,7 @@ namespace IQuality.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSignalR();
 
             var documentStore = new DocumentStore
             {
@@ -166,7 +168,11 @@ namespace IQuality.Api
             app.UseAuthorization();
             app.UseAuthentication();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHub<ChatHubSocket>("/chatHub");
+            });
         }
     }
 

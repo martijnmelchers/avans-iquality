@@ -7,5 +7,6 @@ namespace IQuality.Models.Chat.Messages
         public string Id { get; private set; }
         
         public string SenderId { get; set; }
+        public string ChatId { get; set; }
     }
 }
