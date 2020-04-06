@@ -33,20 +33,19 @@ namespace IQuality.Infrastructure.Database.Repositories
             return Task.CompletedTask;
         }
 
-        public override Task DeleteAsync(BaseMessage entity)
+        public override void DeleteAsync(BaseMessage entity)
         {
             _session.Delete(entity);
-            return Task.CompletedTask;
+        }
+
+        protected override Task<List<BaseMessage>> ConvertAsync(List<BaseMessage> storage)
+        {
+            return Task.FromResult(storage.ToList());
         }
 
         public async Task<List<TextMessage>> GetTextMessagesByChat(string chatId)
         {
             return await _session.Query<TextMessage>().Where(x => x.ChatId == chatId).ToListAsync();
-        }
-
-        protected override Task<List<BaseMessage>> ConvertAsync(IEnumerable<BaseMessage> storage)
-        {
-            return Task.FromResult(storage.ToList());
         }
     }
 }

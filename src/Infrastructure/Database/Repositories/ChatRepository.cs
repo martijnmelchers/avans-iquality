@@ -31,18 +31,17 @@ namespace IQuality.Infrastructure.Database.Repositories
             return Task.CompletedTask;
         }
 
-        public override Task DeleteAsync(BaseChat entity)
+        public override void DeleteAsync(BaseChat entity)
         {
             _session.Delete(entity);
-            return Task.CompletedTask;
         }
 
-        protected override async Task<List<BaseChat>> ConvertAsync(IEnumerable<BaseChat> storage)
+        protected override async Task<List<BaseChat>> ConvertAsync(List<BaseChat> storage)
         {
             var baseChats = storage.ToList();
             foreach (var chat in baseChats)
             { 
-               chat.Messages = await _session.Query<BaseMessage>().Where(x => x.ChatId == chat.Id).Take(20).ToListAsync();
+                chat.Messages = await _session.Query<BaseMessage>().Where(x => x.ChatId == chat.Id).Take(20).ToListAsync();
             }
            
             return baseChats.ToList();
