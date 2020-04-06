@@ -11,7 +11,7 @@ import { JwtHelperService } from "@auth0/angular-jwt";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -20,7 +20,7 @@ import { JwtHelperService } from "@auth0/angular-jwt";
     HttpClientModule,
     HeaderModule,
     Fade20Module,
-    TagModule
+    TagModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
