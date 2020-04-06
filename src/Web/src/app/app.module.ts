@@ -3,16 +3,27 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NgProgressModule } from "ngx-progressbar";
+import { HeaderModule, TagModule } from "carbon-components-angular";
+import { Fade20Module } from "@carbon/icons-angular/lib/fade/20";
+import { HttpClientModule } from "@angular/common/http";
+import { JwtHelperService } from "@auth0/angular-jwt";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgProgressModule,
+    HttpClientModule,
+    HeaderModule,
+    Fade20Module,
+    TagModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
