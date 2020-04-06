@@ -8,9 +8,10 @@ import { ChatComponent } from './chat/chat.component';
 import { MessageComponent } from './chat/message/message.component';
 import {Send32Module} from "@carbon/icons-angular/lib/send/32";
 import {ReactiveFormsModule} from "@angular/forms";
+import {InviteComponent} from "@IQuality/areas/main/invite/invite.component";
 
 @NgModule({
-  declarations: [HomeComponent, ChatComponent, MessageComponent],
+  declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent],
   imports: [
     CommonModule,
     MainRoutingModule,

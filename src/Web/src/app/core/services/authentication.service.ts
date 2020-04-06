@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from "@IQuality/core/services/api.service";
 import { CookieService } from "ngx-cookie-service";
 import { JwtHelperService } from "@auth0/angular-jwt";
+import {Invite} from "@IQuality/core/models/invite";
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +28,10 @@ export class AuthenticationService {
 
   public get loggedIn(): boolean {
     return this.encodedToken && this.tokenService.isTokenExpired(this.encodedToken);
+  }
+
+
+  async createInviteLink(): Promise<Invite> {
+    return this._api.post<Invite>('/authorize/invite', {});
   }
 }
