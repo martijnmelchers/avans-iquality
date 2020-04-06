@@ -1,8 +1,7 @@
-<div style="height: 90vh; width: 30vw;">
-  <div ibmGrid>
+<div style="width: 30vw;">
+  <div ibmGrid style="height: 70vh; max-height: 70vh; overflow-y: scroll" #scrollMe>
     <div ibmRow>
       <div ibmCol>
-
         <div style="background-color: #F3F3F3; padding-bottom: 1em" ibmGrid>
           <div ibmRow [gutter]="false" *ngFor="let message of messages">
             <div ibmCol>
@@ -10,21 +9,20 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
-    <div ibmRow style="margin-top: 1em">
-      <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
-        <div ibmCol [columnNumbers]="{'lg': 9}">
-          <textarea formControlName="message" style="resize: none;" ibmTextArea aria-label="textarea" [rows]="4"></textarea>
-        </div>
-        <div ibmCol [columnNumbers]="{'lg': 3}" style="align-self: center">
-          <button ibmButton type="submit">
-            <svg ibmIconSend32 fill="white"></svg>
-          </button>
-        </div>
-      </form>
-    </div>
+  </div>
+
+  <div style="margin-top: 1em; width: 100%">
+    <form ibmRow [formGroup]="messageFormGroup" (ngSubmit)="onSubmit(null)">
+      <div ibmCol [columnNumbers]="{'lg': 9}">
+        <textarea formControlName="message" style="resize: none;" ibmTextArea aria-label="textarea" [rows]="4" (keyup.enter)="onSubmit($event)"></textarea>
+      </div>
+      <div ibmCol [columnNumbers]="{'lg': 3}" style="align-self: center">
+        <button ibmButton type="submit">
+          <svg ibmIconSend32 fill="white"></svg>
+        </button>
+      </div>
+    </form>
   </div>
 </div>
-

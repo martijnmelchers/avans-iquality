@@ -39,7 +39,7 @@ namespace IQuality.DomainServices.Services
         public async void DeleteChatAsync(string id)
         {
             var chat = await _repository.GetByIdAsync(id);
-            await _repository.DeleteAsync(chat);
+            _repository.DeleteAsync(chat);
         }
     }
 }

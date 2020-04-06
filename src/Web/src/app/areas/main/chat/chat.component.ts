@@ -1,22 +1,27 @@
-﻿import {Component, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Message} from "./message/message";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnInit {
-  messageForm: FormGroup;
+export class ChatComponent implements OnInit, AfterViewChecked {
+  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
+
+  public messageFormGroup: FormGroup;
+  public messageControl: FormControl;
 
   messages: Array<Message>;
 
 
   constructor(private formBuilder: FormBuilder) {
-    this.messageForm = formBuilder.group({
-      message: '',
+    this.messageControl = new FormControl();
+    this.messageFormGroup = formBuilder.group({
+      message: this.messageControl,
     });
+
 
     this.messages = new Array<any>();
     this.messages.push({
@@ -42,15 +47,29 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
   }
 
-  onSubmit() : void {
-    const message = this.messageForm.getRawValue().message;
+  onSubmit(e): void {
+    const message = this.messageFormGroup.getRawValue().message;
 
     this.messages.push({
       string: message,
       senderId: "huseyin",
       isOtherUser: false,
-    })
+    });
+
+    this.messageControl.setValue("");
+    if (e) {
+        e.preventDefault();
+    }
+  }
+
+  ngAfterViewChecked(): void {
+    const scrollTop = this.myScrollContainer.nativeElement.scrollTop;
+    const scrollHeight = this.myScrollContainer.nativeElement.scrollHeight;
+    if (scrollTop !== scrollHeight) {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    }
   }
 }
