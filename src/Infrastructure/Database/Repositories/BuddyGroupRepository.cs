@@ -37,10 +37,10 @@ namespace IQuality.Infrastructure.Database.Repositories
             _session.Delete(buddy);
         }
 
-        public override Task SaveAsync(Buddy entity)
+        public override async Task SaveAsync(Buddy entity)
         {
-            _session.StoreAsync(entity);
-            return Task.CompletedTask;
+            await _session.StoreAsync(entity);
+            return;
         }
 
         protected override Task<List<Buddy>> ConvertAsync(IEnumerable<Buddy> storage)
