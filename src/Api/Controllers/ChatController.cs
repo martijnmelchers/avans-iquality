@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
 using IQuality.DomainServices.Services;
@@ -19,9 +20,10 @@ namespace IQuality.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetChats()
+        public async Task<IActionResult> GetChats()
         {
-            return Ok(_service.GetChatsAsync());
+            List<BaseChat> chat = await _service.GetChatsAsync();
+            return Ok(chat);
         }
 
         [HttpPost]
