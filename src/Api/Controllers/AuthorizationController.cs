@@ -57,20 +57,6 @@ namespace IQuality.Api.Controllers
             return Ok();
         }
 
-        [HttpPost, Route("invite"), Authorize]
-        public async Task<IActionResult> CreateInvite()
-        {
-            await _authorizationService.CreateInvite(HttpContext.User.GetUserId());
-            return Ok();
-        }
-
-        [HttpPost, Route("invite/respond")]
-        public async Task<IActionResult> RespondInvite([FromBody] bool accepted)
-        {
-
-            return Ok();
-        }
-
         [HttpGet, Route("verifyToken"), Authorize]
         public IActionResult VerifyToken()
         {

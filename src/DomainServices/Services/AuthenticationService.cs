@@ -59,12 +59,12 @@ namespace IQuality.DomainServices.Services
             // TODO: Implement our own exception
             if(applicationUser != null)
                 throw new Exception("User already exists!");
-            
+
             var result = await _userManager.CreateAsync(user, password);
-            
+
             if(!result.Succeeded)
                 throw new Exception($"{result.Errors}");
-            
+
             return await _userManager.FindByEmailAsync(user.Email);
         }
 
@@ -73,7 +73,7 @@ namespace IQuality.DomainServices.Services
             // TODO: Add reference to _inviteService + own exception
             // if(!await _inviteService.IsValidInvite(inviteToken, InviteType.Buddy))
             //    throw new Exception("Invalid invite provided!");
-            
+
             // Create a new user first
             var applicationUser = await Register(new ApplicationUser
             {
@@ -82,13 +82,13 @@ namespace IQuality.DomainServices.Services
                 Address =  register.Address,
                 Name = register.Name,
             }, register.Password);
-            
+
             // TODO: To enum
             await _userManager.AddToRoleAsync(applicationUser, "Buddy");
-            
+
             // Add a buddy associated to the user
             await _buddyRepository.SaveAsync(new Buddy(applicationUser.Id));
-            
+
             return null;
         }
 
@@ -115,39 +115,9 @@ namespace IQuality.DomainServices.Services
                 DateTime.UtcNow.AddDays(Convert.ToDouble(_config["Jwt:ExpireInDays"])),
                 credentials
             );
-            
+
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
             return jwtToken;
-        }
-
-        public async Task CreateInvite(string userId)
-        {
-            var invite = new Invite
-            {
-                ApplicationUserId = userId,
-                Used = false
-            };
-            
-            await _inviteRepository.SaveAsync(invite);
-        }
-
-        public async Task<Invite> GetInvite(string id)
-        {
-            return await _inviteRepository.GetByIdAsync(id);
-        }
-
-        // Uses the invite link.
-        public async void RespondInvite(Invite link, bool accepted = true)
-        {
-            if (accepted)
-            {
-                link.Used = true;
-                await _inviteRepository.SaveAsync(link);
-            }
-            else
-            {
-                _inviteRepository.Delete(link);
-            }
         }
 
         #region Privates

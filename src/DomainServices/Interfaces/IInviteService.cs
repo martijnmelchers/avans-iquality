@@ -8,7 +8,7 @@ namespace IQuality.DomainServices.Interfaces
     {
         public Task<Invite> CreateInvite(string userId, string email);
         void ConsumeInvite(Invite invite);
-        public Task<Invite> GetInvite(string Id);
+        public Task<Invite> GetInvite(string inviteToken);
         Task<bool> ValidateInvite(string inviteToken);
     }
 }

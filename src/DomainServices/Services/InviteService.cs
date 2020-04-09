@@ -56,9 +56,9 @@ namespace IQuality.DomainServices.Services
             return invite;
         }
 
-        public async Task<Invite> GetInvite(string id)
+        public async Task<Invite> GetInvite(string inviteToken)
         {
-            return await _inviteRepository.GetByIdAsync(id);
+            return await _inviteRepository.GetWhereAsync((inv) => inv.Token.Equals(inviteToken));
         }
 
         // Uses the invite link.
