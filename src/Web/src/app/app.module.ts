@@ -14,6 +14,7 @@ import { TableModule } from "carbon-components-angular";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BuddyinviteComponent } from './buddyinvite/buddyinvite.component';
 import { BuddyeditComponent } from './buddyedit/buddyedit.component';
+import { BuddygrouplistComponent } from './buddygrouplist/buddygrouplist.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { BuddyeditComponent } from './buddyedit/buddyedit.component';
     BuddygroupComponent,
     BuddygroupaddComponent,
     BuddyinviteComponent,
-    BuddyeditComponent
+    BuddyeditComponent,
+    BuddygrouplistComponent
   ],
   imports: [
     BrowserModule,

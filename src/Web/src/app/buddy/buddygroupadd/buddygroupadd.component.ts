@@ -25,15 +25,13 @@ export class BuddygroupaddComponent implements OnInit {
 
   async onSubmit(buddyData) {
     
-    console.log(buddyData.selectedValue);
-    console.log(this.groupNames.length);
     let groupNameOutput;
     this.groupNames.forEach(element => {
       element = element.toLowerCase();
     });
-    if(buddyData.newGroupName != '' && !this.groupNames.includes(buddyData.newGroupName.toLowerCase())){
+    if(buddyData.newGroupName != '' && !this.groupNames.includes(buddyData.newGroupName.toLowerCase())) {
       groupNameOutput = buddyData.newGroupName;
-    }else if(buddyData.selectedValue != ''){
+    }else if(buddyData.selectedValue != '') {
       groupNameOutput = buddyData.selectedValue;
     } else if (buddyData.selectedValue == '' && this.groupNames.length != 0) {
       groupNameOutput = this.groupNames[0];
@@ -46,7 +44,7 @@ export class BuddygroupaddComponent implements OnInit {
       phoneNumber: buddyData.phoneNumber,
       groupName : groupNameOutput
     }
-    console.log(sendBuddy);
+
     await this.api.post<string>('/buddy', sendBuddy);
     this.router.navigate(['../../buddy/']);
   }

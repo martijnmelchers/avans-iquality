@@ -1,11 +1,5 @@
 <a class="btn btn-primary" [routerLink]="['../buddy/add']">Add Buddy</a>
 
-<!-- <ibm-table-container>
-    <ibm-table class="data-table" [skeleton]="skeletonStateTable" [model]="model" size="lg" [showSelectionColumn]="false">
-        <ng-content></ng-content>
-    </ibm-table>
-</ibm-table-container> -->
-
 <table class="table table-hover">
     <thead class="thead-dark">
         <th>ID</th>
@@ -13,7 +7,6 @@
         <th>Group Name</th>
         <th>Phone</th>
         <th>Actions</th>
-
     </thead>
     <tbody>
         <tr *ngFor="let buddy of buddies">
