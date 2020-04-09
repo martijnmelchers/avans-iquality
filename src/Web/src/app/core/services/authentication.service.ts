@@ -17,6 +17,7 @@ export class AuthenticationService {
   constructor(private readonly _api: ApiService, private _cookie: CookieService) {
     this.tokenService = new JwtHelperService();
     this.encodedToken = this._cookie.get('token');
+    console.log(this.encodedToken);
   }
 
 
