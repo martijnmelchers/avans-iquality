@@ -26,7 +26,7 @@ namespace IQuality.DomainServices.Services
 
         public async Task<List<Buddy>> GetBuddiesByGroupName(string groupName)
         {
-            var result = await _buddyGroupRepository.GetBuddiesByGroupName(string groupName);
+            var result = await _buddyGroupRepository.GetBuddiesByGroupName(groupName);
             return result;
         }
     }

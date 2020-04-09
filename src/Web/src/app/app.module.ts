@@ -15,6 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BuddyinviteComponent } from './buddyinvite/buddyinvite.component';
 import { BuddyeditComponent } from './buddyedit/buddyedit.component';
 import { BuddygrouplistComponent } from './buddygrouplist/buddygrouplist.component';
+import { BuddygroupitemComponent } from './buddygroupitem/buddygroupitem.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { BuddygrouplistComponent } from './buddygrouplist/buddygrouplist.compone
     BuddygroupaddComponent,
     BuddyinviteComponent,
     BuddyeditComponent,
-    BuddygrouplistComponent
+    BuddygrouplistComponent,
+    BuddygroupitemComponent
   ],
   imports: [
     BrowserModule,
