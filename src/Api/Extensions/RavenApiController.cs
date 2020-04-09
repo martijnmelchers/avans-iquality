@@ -17,7 +17,8 @@ namespace IQuality.Api.Extensions
         // Save changes to database after request
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if ((await next.Invoke()).Exception == null)
+            var executedContext = await next.Invoke();
+            if (executedContext.Exception == null)
                 await _session.SaveChangesAsync();
             
             _session.Dispose();

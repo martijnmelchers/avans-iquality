@@ -2,7 +2,6 @@
 using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Models;
-using IQuality.Models.Authentication;
 using IQuality.Models.Forms;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,30 +40,41 @@ namespace IQuality.Api.Controllers
         [HttpPost, Route("register/buddy/{inviteToken}"), AllowAnonymous]
         public async Task<IActionResult> RegisterAsBuddy(string inviteToken, [FromBody] BuddyRegister register)
         {
-            // TODO: Validate token and use the email from the invite.
-            // TODO: Consume invite?
-            await _authorizationService.Register(new ApplicationUser
-            {
-                UserName = register.Email,
-                Email = register.Email,
-                Address =  register.Address,
-                Name = register.Name,
-            }, register.Password);
+           // await _authorizationService.RegisterBuddy(register);
 
             return Ok();
         }
 
         [HttpPost, Route("register/patient"), AllowAnonymous]
-        public async Task<IActionResult> RegisterAsPatient()
+        public async Task<IActionResult> RegisterAsPatient(string inviteToken, [FromBody] PatientRegister register)
         {
             return Ok();
         }
 
         [HttpPost, Route("register/doctor"), AllowAnonymous]
-        public async Task<IActionResult> RegisterAsDoctor()
+        public async Task<IActionResult> RegisterAsDoctor(string inviteToken, [FromBody] DoctorRegister register)
         {
             return Ok();
         }
 
+        [HttpPost, Route("invite"), Authorize]
+        public async Task<IActionResult> CreateInvite()
+        {
+            await _authorizationService.CreateInvite(HttpContext.User.GetUserId());
+            return Ok();
+        }
+
+        [HttpPost, Route("invite/respond")]
+        public async Task<IActionResult> RespondInvite([FromBody] bool accepted)
+        {
+
+            return Ok();
+        }
+
+        [HttpGet, Route("verifyToken"), Authorize]
+        public IActionResult VerifyToken()
+        {
+            return Ok("Seems to me like you're logged in!");
+        }
     }
 }

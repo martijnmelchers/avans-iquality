@@ -23,7 +23,7 @@ namespace IQuality.Infrastructure.Database.Repositories
             await Session.StoreAsync(entity);
         }
 
-        public override void DeleteAsync(Invite entity)
+        public override void Delete(Invite entity)
         {
             Session.Delete(entity);
         }

@@ -28,6 +28,7 @@ namespace IQuality.Api.Controllers
         [HttpPost]
         public IActionResult CreateChat([FromBody] BaseChat chat)
         {
+            string id = HttpContext.User.GetUserId();
             return Ok(_chatService.CreateChatAsync(chat));
         }
 
@@ -37,6 +38,5 @@ namespace IQuality.Api.Controllers
             _chatService.DeleteChatAsync(chatId);
             return Ok();
         }
-
     }
 }
