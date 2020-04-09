@@ -23,33 +23,34 @@ export class BuddygroupComponent implements OnInit {
     this.loadScreen();
   }
 
+
+  async deleteBuddy(id){
+    await this.api.delete<string>(`/buddy/${id}`);
+    this.loadScreen();
+  }
+
   private loadScreen() {
-    this.model.data = this.buddies.map(datapoint => [new TableItem({}), new TableItem({}), new TableItem({})]);
 
-    this.model.header = [new TableHeaderItem({ data: "" }), new TableHeaderItem({ data: "" }), new TableHeaderItem({ data: "" })];
+    // this.model.data = this.buddies.map(datapoint => [new TableItem({}), new TableItem({}), new TableItem({})]);
 
-    setTimeout(() => {
-      this.skeletonStateTable = false;
-    }, 4000);
+    // this.model.header = [new TableHeaderItem({ data: "" }), new TableHeaderItem({ data: "" }), new TableHeaderItem({ data: "" })];
 
-    setTimeout(() => {
-      this.model.header = [new TableHeaderItem({ data: "Id" }), new TableHeaderItem({ data: "Name" }), new TableHeaderItem({ data: "PhoneNumber" }),new TableHeaderItem({ data: "Delete" })];
+    // setTimeout(() => {
+    //   this.skeletonStateTable = false;
+    // }, 4000);
 
-      this.model.data = this.buddies.map(datapoint =>
-        [
-          new TableItem({ data: datapoint.id }),
-          new TableItem({ data: datapoint.name }),
-          new TableItem({ data: datapoint.phoneNumber }),
-          new Button()
-        ]
-      );
-    }, 4000);
+    // setTimeout(() => {
+    //   this.model.header = [new TableHeaderItem({ data: "Id" }), new TableHeaderItem({ data: "Name" }), new TableHeaderItem({ data: "PhoneNumber" })];
 
-    setTimeout(() => {
-      this.model.data = this.buddies.map(datapoint => {
-        new Button();
-      })
-    }, 1000);
+    //   this.model.data = this.buddies.map(datapoint =>
+    //     [
+    //       new TableItem({ data: datapoint.id }),
+    //       new TableItem({ data: datapoint.name }),
+    //       new TableItem({ data: datapoint.phoneNumber })
+    //     ]
+    //   );
+    // }, 4000);
+
   }
 }
 

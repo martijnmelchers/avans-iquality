@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class BuddyinviteComponent implements OnInit {
   inviteForm;
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private api: ApiService) {
     this.inviteForm = this.formBuilder.group({
       name: '',
       phoneNumber: '',
