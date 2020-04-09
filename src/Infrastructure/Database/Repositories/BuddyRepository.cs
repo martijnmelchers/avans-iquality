@@ -30,9 +30,9 @@ namespace IQuality.Infrastructure.Database.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(string id)
         {
-            Buddy buddy = await _session.LoadAsync<Buddy>(id.ToString());
+            Buddy buddy = await _session.LoadAsync<Buddy>(id);
             _session.Delete(buddy);
         }
 

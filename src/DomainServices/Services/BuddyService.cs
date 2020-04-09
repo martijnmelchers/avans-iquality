@@ -24,7 +24,7 @@ namespace IQuality.DomainServices.Services
             await _buddyRepository.SaveAsync(buddy);
         }
 
-        public async Task DeleteBuddy(int id)
+        public async Task DeleteBuddy(string id)
         {
             await _buddyRepository.Delete(id);
         }

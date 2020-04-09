@@ -42,7 +42,7 @@ namespace IQuality.Api.Controllers
 
         // POST: Buddy/Delete/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
             await _buddyService.DeleteBuddy(id);
 

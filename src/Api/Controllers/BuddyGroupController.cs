@@ -34,23 +34,5 @@ namespace IQuality.Api.Controllers
             var result = await _buddyGroupService.GetBuddygroupNames();
             return Ok(result);
         }
-
-        //// POST: BuddyGroup/Create
-        //[HttpPost]
-        //public async Task<IActionResult> Create(Buddy buddy)
-        //{
-        //    await _buddyGroupService.AddBuddy(buddy);
-
-        //    return Ok();
-        //}
-
-        //// POST: BuddyGroup/Delete/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    await _buddyGroupService.DeleteBuddy(id);
-
-        //    return Ok();
-        //}
     }
 }
