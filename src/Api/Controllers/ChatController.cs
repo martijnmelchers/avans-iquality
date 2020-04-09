@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
@@ -26,10 +27,14 @@ namespace IQuality.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateChat([FromBody] BaseChat chat)
+        public async Task<IActionResult> CreateChat([FromBody] PatientChat chat)
         {
             string id = HttpContext.User.GetUserId();
-            return Ok(_chatService.CreateChatAsync(chat));
+            chat.InitiatorId = id;
+            chat.CreationDate = DateTime.Now;
+            
+            BaseChat createdChat = await _chatService.CreateChatAsync(chat);
+            return Ok(createdChat);
         }
 
         [HttpGet]

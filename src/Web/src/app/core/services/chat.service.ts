@@ -12,6 +12,6 @@ export class ChatService {
   }
 
   public createChat(name: string): Promise<BaseChat> {
-    return this._api.post<BaseChat>('/chats', {name, creationDate: Date.now()});
+    return this._api.post<BaseChat>('/chats', {name});
   }
 }

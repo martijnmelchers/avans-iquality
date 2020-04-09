@@ -20,7 +20,7 @@
     "@angular/platform-browser-dynamic": "~9.0.6",
     "@angular/router": "~9.0.6",
     "@auth0/angular-jwt": "^4.0.0",
-    "@carbon/icons-angular": "^11.0.0",
+    "@carbon/icons-angular": "^11.0.1",
     "carbon-components": "^10.10.2",
     "carbon-components-angular": "^4.0.0",
     "ngx-cookie-service": "^3.0.3",
