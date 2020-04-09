@@ -8,13 +8,13 @@ import { TableData, TableHeaderItem, TableItem, TableModel, Button } from "carbo
   styleUrls: ['./buddygroup.component.scss']
 })
 export class BuddygroupComponent implements OnInit {
-  
+
   public skeletonStateTable: boolean = true;
   public model: TableModel = new TableModel();
   buddies: any;
-  
+
   constructor(private api: ApiService) {
-    
+
   }
 
   async ngOnInit(): Promise<void> {
@@ -33,13 +33,14 @@ export class BuddygroupComponent implements OnInit {
     }, 4000);
 
     setTimeout(() => {
-      this.model.header = [new TableHeaderItem({ data: "Id" }), new TableHeaderItem({ data: "Name" }), new TableHeaderItem({ data: "PhoneNumber" })];
+      this.model.header = [new TableHeaderItem({ data: "Id" }), new TableHeaderItem({ data: "Name" }), new TableHeaderItem({ data: "PhoneNumber" }),new TableHeaderItem({ data: "Delete" })];
 
       this.model.data = this.buddies.map(datapoint =>
         [
           new TableItem({ data: datapoint.id }),
           new TableItem({ data: datapoint.name }),
-          new TableItem({ data: datapoint.phoneNumber })
+          new TableItem({ data: datapoint.phoneNumber }),
+          new Button()
         ]
       );
     }, 4000);
