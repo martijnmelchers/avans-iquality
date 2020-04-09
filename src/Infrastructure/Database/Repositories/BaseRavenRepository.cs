@@ -45,7 +45,7 @@ namespace IQuality.Infrastructure.Database.Repositories
         }
 
         public abstract Task SaveAsync(TOut entity);
-        public abstract void DeleteAsync(TOut entity);
+        public abstract void Delete(TOut entity);
         protected abstract Task<List<TOut>> ConvertAsync(List<TStorage> storage);
     }
 
