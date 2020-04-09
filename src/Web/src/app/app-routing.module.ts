@@ -4,6 +4,7 @@ import { BuddygroupComponent } from '../app/buddy/buddygroup/buddygroup.componen
 import { BuddygroupaddComponent } from '../app/buddy/buddygroupadd/buddygroupadd.component';
 import { BuddyinviteComponent } from './buddyinvite/buddyinvite.component';
 import { BuddyeditComponent } from './buddyedit/buddyedit.component';
+import { BuddygrouplistComponent } from './buddygrouplist/buddygrouplist.component';
 
 
 const routes: Routes = [
@@ -19,6 +20,9 @@ const routes: Routes = [
   },
   {
     path: 'buddy/invite',component: BuddyinviteComponent
+  },
+  {
+    path: 'buddy/list',component: BuddygrouplistComponent
   },
   {
     path: 'buddy/:id',component: BuddyeditComponent

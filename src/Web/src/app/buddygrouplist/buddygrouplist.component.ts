@@ -7,9 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BuddygrouplistComponent implements OnInit {
 
+  buddiegroups = [];
   constructor() { }
 
-  ngOnInit(): void {
+   asnyc ngOnInit(): Promise<void> {
   }
 
 }
