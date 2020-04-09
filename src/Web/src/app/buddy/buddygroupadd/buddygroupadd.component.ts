@@ -15,7 +15,8 @@ export class BuddygroupaddComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private api: ApiService, private router: Router) { 
     this.checkoutForm = this.formBuilder.group({
       name: '',
-      phoneNumber: ''
+      phoneNumber: '',
+      group: ''
     });
   }
 
