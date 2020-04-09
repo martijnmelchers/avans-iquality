@@ -2,15 +2,14 @@
 using System.Threading.Tasks;
 using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
-using IQuality.DomainServices.Services;
-using IQuality.Infrastructure.Database.Repositories;
 using IQuality.Models.Chat;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Raven.Client.Documents.Session;
 
 namespace IQuality.Api.Controllers
 {
-    [Route("/chats")]
+    [Route("/chats"), Authorize]
     public class ChatController : RavenApiController
     {
         private readonly IChatService _service;
