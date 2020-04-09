@@ -15,7 +15,7 @@ namespace IQuality.Infrastructure.Database.Repositories
     public class MessageRepository : BaseRavenRepository<BaseMessage>, IMessageRepository
     {
         private readonly IAsyncDocumentSession _session;
-        
+
         public MessageRepository(IAsyncDocumentSession session) : base(session)
         {
             _session = session;
@@ -26,17 +26,18 @@ namespace IQuality.Infrastructure.Database.Repositories
             List<BaseMessage> messages = _session.Query<BaseMessage>().Where(x => x.ChatId == chatId).ToList();
             return messages;
         }
-        
+
         public override Task SaveAsync(BaseMessage entity)
         {
             _session.StoreAsync(entity);
             return Task.CompletedTask;
         }
 
-        public override void DeleteAsync(BaseMessage entity)
+        public override void Delete(BaseMessage entity)
         {
-            _session.Delete(entity);
+            throw new System.NotImplementedException();
         }
+
 
         protected override Task<List<BaseMessage>> ConvertAsync(List<BaseMessage> storage)
         {

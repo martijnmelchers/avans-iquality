@@ -24,6 +24,8 @@ namespace IQuality.Web
 
             app.UseRouting();
 
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using IQuality.Api.Extensions;
+using IQuality.DomainServices.Interfaces;
+using IQuality.DomainServices.Services;
+using IQuality.Infrastructure.Database.Repositories;
+using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -51,7 +55,7 @@ namespace IQuality.Api
                 Database = Configuration["Raven:Name"],
                 Conventions = new DocumentConventions
                 {
-                    IdentityPartsSeparator = "/",
+                    IdentityPartsSeparator = "-",
                     JsonContractResolver = new IncludeNonPublicMembersContractResolver(),
                     CustomizeJsonSerializer = serializer =>
                     {

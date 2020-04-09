@@ -20,7 +20,7 @@ namespace IQuality.DomainServices.Services
         {
             _repository = repository;
         }
-        
+
         public async Task<BaseChat> GetChatAsync(string id)
         {
             return await _repository.GetByIdAsync(id);
@@ -30,7 +30,7 @@ namespace IQuality.DomainServices.Services
         {
             return await _repository.GetChatsAsync();
         }
-        
+
         public async Task<BaseChat> CreateChatAsync(BaseChat baseChat)
         {
             await _repository.SaveAsync(baseChat);
@@ -40,13 +40,13 @@ namespace IQuality.DomainServices.Services
         public async void DeleteChatAsync(string id)
         {
             BaseChat chat = await _repository.GetByIdAsync(id);
-            _repository.DeleteAsync(chat);
+            _repository.Delete(chat);
         }
-        
+
         public async Task GetChatMessages()
         {
-            
+
         }
-        
+
     }
 }
