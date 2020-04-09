@@ -24,7 +24,9 @@ export class BuddygroupaddComponent implements OnInit {
   }
 
   async onSubmit(buddyData) {
+    
     console.log(buddyData.selectedValue);
+    console.log(this.groupNames.length);
     let groupNameOutput;
     this.groupNames.forEach(element => {
       element = element.toLowerCase();
@@ -33,7 +35,9 @@ export class BuddygroupaddComponent implements OnInit {
       groupNameOutput = buddyData.newGroupName;
     }else if(buddyData.selectedValue != ''){
       groupNameOutput = buddyData.selectedValue;
-    }else{
+    } else if (buddyData.selectedValue == '' && this.groupNames.length != 0) {
+      groupNameOutput = this.groupNames[0];
+    } else {
       return;
     }
 
@@ -49,9 +53,8 @@ export class BuddygroupaddComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.groupNames = await this.api.get<string>('/buddygroup');
-    this.checkoutForm.value.selectedValue = this.groupNames[0];
-
-
+    if (this.groupNames.length != 0) {
+      this.checkoutForm.value.selectedValue = this.groupNames[0];
+    }
   }
-
 }
