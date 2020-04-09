@@ -5,43 +5,14 @@
     <ibm-header-item [route]="['chat']">Chat</ibm-header-item>
     <ibm-header-item>Support</ibm-header-item>
     <ibm-header-menu title="Manage">
+      <ibm-header-item [routerLink]="['buddy']">Buddy</ibm-header-item>
+      <ibm-header-item [routerLink]="['buddy/list']">BuddyGroup</ibm-header-item>
       <ibm-header-item>Link 1</ibm-header-item>
       <ibm-header-item>Link 2</ibm-header-item>
       <ibm-header-item>Link 3</ibm-header-item>
     </ibm-header-menu>
   </ibm-header-navigation>
-  <ibm-header-global>
-    <ibm-header-action title="action">
-      <svg icon ibmIconFade20></svg>
-    </ibm-header-action>
-    <ibm-header-action title="action">
-      <svg icon ibmIconFade20></svg>
-    </ibm-header-action>
-  </ibm-header-global>
 </ibm-header>
 <div style="margin-top: 4rem">
   <router-outlet></router-outlet>
-</div>
-    <ibm-header-navigation>
-        <ibm-header-item>Catalog</ibm-header-item>
-        <ibm-header-item>Docs</ibm-header-item>
-        <ibm-header-item>Support</ibm-header-item>
-        <ibm-header-menu title="Manage">
-            <ibm-header-item [routerLink]="['buddy']">Buddy</ibm-header-item>
-            <ibm-header-item [routerLink]="['buddy/list']">BuddyGroup</ibm-header-item>
-            <ibm-header-item>Link 2</ibm-header-item>
-            <ibm-header-item>Link 3</ibm-header-item>
-        </ibm-header-menu>
-    </ibm-header-navigation>
-    <ibm-header-global>
-        <ibm-header-action title="action">
-            <svg icon ibmIconFade20></svg>
-        </ibm-header-action>
-        <ibm-header-action title="action">
-            <svg icon ibmIconFade20></svg>
-        </ibm-header-action>
-    </ibm-header-global>
-</ibm-header>
-<div style="margin-top: 3rem">
-    <router-outlet></router-outlet>
 </div>

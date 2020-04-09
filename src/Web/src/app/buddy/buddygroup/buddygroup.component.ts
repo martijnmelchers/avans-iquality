@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from 'src/app/core/services/api.service';
+import { ApiService } from '@IQuality/core/services/api.service';
 import { TableData, TableHeaderItem, TableItem, TableModel, Button } from "carbon-components-angular";
 
 @Component({

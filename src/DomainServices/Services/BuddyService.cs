@@ -1,6 +1,7 @@
 ﻿using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
+using IQuality.Models.Authentication;
 using IQuality.Models.Helpers;
 using System;
 using System.Collections.Generic;

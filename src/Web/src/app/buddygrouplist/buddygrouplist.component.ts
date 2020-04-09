@@ -13,7 +13,6 @@ export class BuddygrouplistComponent implements OnInit {
 
    async ngOnInit(): Promise<void> {
      this.buddygroups = await this.api.get<string>(`/buddygroup`);
-     console.log(this.buddygroups);
   }
 
 }

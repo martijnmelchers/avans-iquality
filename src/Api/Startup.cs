@@ -55,7 +55,7 @@ namespace IQuality.Api
                 Database = Configuration["Raven:Name"],
                 Conventions = new DocumentConventions
                 {
-                    IdentityPartsSeparator = "/",
+                    IdentityPartsSeparator = "-",
                     JsonContractResolver = new IncludeNonPublicMembersContractResolver(),
                     CustomizeJsonSerializer = serializer =>
                     {

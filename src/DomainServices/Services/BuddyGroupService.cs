@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models.Helpers;
+using IQuality.Models.Authentication;
 
 namespace IQuality.DomainServices.Services
 {

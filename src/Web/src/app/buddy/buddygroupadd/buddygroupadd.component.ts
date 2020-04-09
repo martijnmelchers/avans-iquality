@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ApiService } from 'src/app/core/services/api.service';
 import { Router } from '@angular/router';
+import { ApiService } from '@IQuality/core/services/api.service';
 
 @Component({
   selector: 'app-buddygroupadd',

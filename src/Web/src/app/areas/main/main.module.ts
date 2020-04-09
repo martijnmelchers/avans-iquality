@@ -14,7 +14,6 @@ import {
 } from 'carbon-components-angular';
 import { ChatComponent } from './chat/chat.component';
 import { MessageComponent } from './chat/message/message.component';
-import {Send32Module} from "@carbon/icons-angular/lib/send/32";
 import {ReactiveFormsModule} from "@angular/forms";
 import {InviteComponent} from "@IQuality/areas/main/invite/invite.component";
 import { ChatlistComponent } from './chat/chatlist/chatlist.component';
@@ -28,7 +27,6 @@ import { ChatlistComponent } from './chat/chatlist/chatlist.component';
     GridModule,
     InputModule,
     ButtonModule,
-    Send32Module,
     ReactiveFormsModule,
     TilesModule,
     ListModule,

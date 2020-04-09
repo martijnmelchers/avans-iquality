@@ -7,7 +7,7 @@ namespace IQuality.Models.Authentication
 {
     public class Buddy : IAggregateRoot
     {
-        public string Id { get; }
+        public string Id { get; set; }
         public string ApplicationUserId { get; }
 		public string GroupName { get; set; }
         public string Name { get; set; }

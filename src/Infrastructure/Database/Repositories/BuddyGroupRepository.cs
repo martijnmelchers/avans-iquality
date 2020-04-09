@@ -1,6 +1,7 @@
 ﻿using IQuality.Infrastructure.Database.Repositories;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
+using IQuality.Models.Authentication;
 using IQuality.Models.Helpers;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
@@ -53,11 +54,6 @@ namespace IQuality.Infrastructure.Database.Repositories
             return groupBuddies;
         }
 
-        public override Task DeleteAsync(Buddy entity)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task Delete(int id)
         {
             Buddy buddy = await _session.LoadAsync<Buddy>(id.ToString());
@@ -70,7 +66,12 @@ namespace IQuality.Infrastructure.Database.Repositories
             return;
         }
 
-        protected override Task<List<Buddy>> ConvertAsync(IEnumerable<Buddy> storage)
+        public override void Delete(Buddy entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<List<Buddy>> ConvertAsync(List<Buddy> storage)
         {
             throw new NotImplementedException();
         }

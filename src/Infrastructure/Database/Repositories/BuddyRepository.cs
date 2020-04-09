@@ -28,11 +28,6 @@ namespace IQuality.Infrastructure.Database.Repositories
             return await _session.Query<Buddy>().ToListAsync();
         }
 
-        public override Task DeleteAsync(Buddy entity)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task Delete(string id)
         {
             Buddy buddy = await _session.LoadAsync<Buddy>(id);
@@ -42,13 +37,22 @@ namespace IQuality.Infrastructure.Database.Repositories
         protected override async Task<List<Buddy>> ConvertAsync(List<Buddy> storage)
         {
             return await Task.FromResult(storage);
-            await _session.StoreAsync(entity);
-            return;
         }
 
         public async Task<Buddy> GetBuddyById(string id)
         {
             return await _session.LoadAsync<Buddy>(id);
+        }
+
+        public override async Task SaveAsync(Buddy entity)
+        {
+            await _session.StoreAsync(entity);
+            return;
+        }
+
+        public override void Delete(Buddy entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
