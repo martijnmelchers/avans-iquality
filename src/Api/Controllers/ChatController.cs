@@ -44,28 +44,28 @@ namespace IQuality.Api.Controllers
 
         
  
-        [Route("/{chatId}"), HttpDelete]
+        [Route("{chatId}"), HttpDelete]
         public IActionResult DeleteChat(string chatId)
         {
             _chatService.DeleteChatAsync(chatId);
             return Ok();
         }
         
-        [Route("/{chatId}"), HttpGet]
+        [Route("{chatId}"), HttpGet]
         public async Task<IActionResult> GetChatAsync(string chatId)
         {
             BaseChat result =  await _chatService.GetChatAsync(chatId);
             return Ok(result);
         }
         
-        [Route("/{chatId}/messages"), HttpGet]
+        [Route("{chatId}/messages"), HttpGet]
         public async Task<OkObjectResult> GetChatMessages(string chatId)
         {
             List<TextMessage> messages = await _messageService.GetMessages(chatId);
             return Ok(messages);
         }
         
-        [Route("/{chatId}/messages"), HttpPost]
+        [Route("{chatId}/messages"), HttpPost]
         public async Task<IActionResult> PostChatMessage(string chatId, [FromBody] string content)
         {
             if (content == null) return NotFound();
@@ -79,7 +79,7 @@ namespace IQuality.Api.Controllers
             return Ok(messages);
         }
         
-        [Route("/{chatId}/messages/{messageId}"), HttpGet]
+        [Route("{chatId}/messages/{messageId}"), HttpGet]
         public async Task<IActionResult> GetChatMessage(string chatId, string messageId)
         {
             TextMessage messages = await _messageService.GetMessage(chatId, messageId);

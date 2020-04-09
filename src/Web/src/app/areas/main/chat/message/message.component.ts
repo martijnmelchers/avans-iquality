@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Message} from "./message";
+import {Message} from "@IQuality/core/models/message";
 
 @Component({
   selector: 'app-message',

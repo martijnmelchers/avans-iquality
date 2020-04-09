@@ -11,7 +11,7 @@ export class ChatListComponent implements OnInit {
   chats: Array<BaseChat>;
   chatName: string;
 
-  constructor(private chatService: ChatService) {
+  constructor(public chatService: ChatService) {
   }
 
   ngOnInit(): void {
@@ -30,13 +30,5 @@ export class ChatListComponent implements OnInit {
         this.chats.push(response);
       });
     }
-  }
-
-  inputChanged($event: Event) {
-    console.log($event);
-  }
-
-  chatSelected(id: string) {
-    this.chatService.selectChat(id);
   }
 }

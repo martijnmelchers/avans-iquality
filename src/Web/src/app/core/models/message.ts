@@ -1,4 +1,4 @@
-﻿export class Messages {
+﻿export class Message {
   id: string;
   senderId: string;
   chatId: string;

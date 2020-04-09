@@ -1,7 +1,7 @@
 import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Message} from "./message/message";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ChatService} from "@IQuality/core/services/chat.service";
+import {Message} from "@IQuality/core/models/message";
 
 @Component({
   selector: 'app-chat',
@@ -11,36 +11,12 @@ import {ChatService} from "@IQuality/core/services/chat.service";
 export class ChatComponent implements OnInit, AfterViewChecked {
   public messageFormGroup: FormGroup;
   public messageControl: FormControl;
-  messages: Array<Message>;
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 
-  constructor(private formBuilder: FormBuilder, private chatService: ChatService) {
+  constructor(private formBuilder: FormBuilder, public chatService: ChatService) {
     this.messageControl = new FormControl();
     this.messageFormGroup = formBuilder.group({
       message: this.messageControl,
-    });
-
-
-    this.messages = new Array<any>();
-    this.messages.push({
-      string: "WOW",
-      senderId: "Huseyin",
-      isOtherUser: false,
-    });
-    this.messages.push({
-      string: "Dit is een bericht",
-      senderId: "Storm",
-      isOtherUser: true,
-    });
-    this.messages.push({
-      string: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      senderId: "Huseyin",
-      isOtherUser: false,
-    });
-    this.messages.push({
-      string: "Lorem Ipsum is simply dummy text of the printing ",
-      senderId: "Storm",
-      isOtherUser: true,
     });
   }
 
@@ -56,14 +32,10 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     }
   }
 
+
   onSubmit(e): void {
     const message = this.messageFormGroup.getRawValue().message;
-
-    this.messages.push({
-      string: message,
-      senderId: "huseyin",
-      isOtherUser: false,
-    });
+    this.chatService.sendMessage(message);
 
     this.messageControl.setValue("");
     if (e) {

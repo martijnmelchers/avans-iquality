@@ -27,10 +27,10 @@ namespace IQuality.Infrastructure.Database.Repositories
             return messages;
         }
 
-        public override Task SaveAsync(BaseMessage entity)
+        public override async Task SaveAsync(BaseMessage entity)
         {
-            _session.StoreAsync(entity);
-            return Task.CompletedTask;
+            await _session.StoreAsync(entity);
+            await _session.SaveChangesAsync();
         }
 
         public override void Delete(BaseMessage entity)
