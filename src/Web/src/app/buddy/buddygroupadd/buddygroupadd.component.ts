@@ -16,12 +16,13 @@ export class BuddygroupaddComponent implements OnInit {
     this.checkoutForm = this.formBuilder.group({
       name: '',
       phoneNumber: '',
-      group: ''
+      groupId: '',
+      groupName: ''
     });
   }
 
   async onSubmit(buddyData) {
-    await this.api.post<string>('/buddygroup', buddyData);
+    await this.api.post<string>('/buddy', buddyData);
 
     this.router.navigate(['../../buddy/group']);
   }

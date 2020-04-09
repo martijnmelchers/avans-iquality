@@ -18,25 +18,6 @@ namespace IQuality.DomainServices.Services
             _buddyGroupRepository = buddyGroupRepository;
         }
 
-        public async Task AddBuddy(Buddy buddy)
-        {
-            await _buddyGroupRepository.SaveAsync(buddy);
-        }
-
-        public async Task DeleteBuddy(int id)
-        {
-            await _buddyGroupRepository.Delete(id);
-        }
-
-        public async Task<List<Buddy>> GetBuddies()
-        {
-            var result = await _buddyGroupRepository.GetAll();
-            return result;
-        }
-
-        public async Task<Buddy> GetBuddyById(int id)
-        {
-            return await _buddyGroupRepository.GetByIdAsync(id.ToString());
-        }
+        
     }
 }

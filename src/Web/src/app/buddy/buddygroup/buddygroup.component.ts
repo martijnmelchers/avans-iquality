@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/core/services/api.service';
-import { TableData, TableHeaderItem, TableItem, TableModel } from "carbon-components-angular";
+import { TableData, TableHeaderItem, TableItem, TableModel, Button } from "carbon-components-angular";
 
 @Component({
   selector: 'app-buddygroup',
@@ -18,7 +18,7 @@ export class BuddygroupComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.buddies = await this.api.get<string>('/buddygroup');
+    this.buddies = await this.api.get<string>('/buddy');
     console.log(this.buddies);
     this.loadScreen();
   }
@@ -43,9 +43,13 @@ export class BuddygroupComponent implements OnInit {
         ]
       );
     }, 4000);
-  }
 
-  AddBuddy
+    setTimeout(() => {
+      this.model.data = this.buddies.map(datapoint => {
+        new Button();
+      })
+    }, 1000);
+  }
 }
 
 
