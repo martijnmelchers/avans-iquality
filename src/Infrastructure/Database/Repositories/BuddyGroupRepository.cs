@@ -37,6 +37,22 @@ namespace IQuality.Infrastructure.Database.Repositories
             return buddygroupNames;
         }
 
+         public async Task<List<Buddy>> GetBuddiesByGroupName(string groupName)
+        {
+            var buddies = await _session.Query<Buddy>().ToListAsync();
+            List<Buddy> groupBuddies = new List<Buddy>();
+
+            foreach (Buddy buddy in buddies)
+            {
+                if (buddy.GroupName.ToLower() == groupName.ToLower())
+                {
+                    groupBuddies.Add(buddy);
+                }
+            }
+
+            return groupBuddies;
+        }
+
         public override Task DeleteAsync(Buddy entity)
         {
             throw new NotImplementedException();

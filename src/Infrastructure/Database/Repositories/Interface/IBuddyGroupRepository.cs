@@ -9,6 +9,7 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
     public interface IBuddyGroupRepository : IBaseRavenRepository<Buddy>
     {
         Task<List<string>> GetAll();
+        Task<List<Buddy>> GetBuddiesByGroupName(string groupName);
         Task Delete(int id);
     }
 }
