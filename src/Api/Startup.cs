@@ -63,6 +63,7 @@ namespace IQuality.Api
             
             // Add index to RavenDB
             IndexCreation.CreateIndexes(typeof(ChatIndex).Assembly, documentStore);
+            IndexCreation.CreateIndexes(typeof(MessageIndex).Assembly, documentStore);
             
             // Setup RavenDB session and authorization
             services
