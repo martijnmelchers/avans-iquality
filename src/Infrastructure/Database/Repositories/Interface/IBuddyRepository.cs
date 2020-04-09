@@ -10,5 +10,6 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
     {
         Task<List<Buddy>> GetAll();
         Task Delete(string id);
+        Task<Buddy> GetBuddyById(string id);
     }
 }

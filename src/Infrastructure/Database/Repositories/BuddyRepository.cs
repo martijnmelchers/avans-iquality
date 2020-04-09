@@ -46,5 +46,10 @@ namespace IQuality.Infrastructure.Database.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public async Task<Buddy> GetBuddyById(string id)
+        {
+            return await _session.LoadAsync<Buddy>(id);
+        }
     }
 }
