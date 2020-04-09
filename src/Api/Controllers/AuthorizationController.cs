@@ -41,6 +41,8 @@ namespace IQuality.Api.Controllers
         [HttpPost, Route("register/buddy/{inviteToken}"), AllowAnonymous]
         public async Task<IActionResult> RegisterAsBuddy(string inviteToken, [FromBody] BuddyRegister register)
         {
+            // TODO: Validate token and use the email from the invite.
+            // TODO: Consume invite?
             await _authorizationService.Register(new ApplicationUser
             {
                 UserName = register.Email,
@@ -64,18 +66,5 @@ namespace IQuality.Api.Controllers
             return Ok();
         }
 
-        [HttpPost, Route("invite"), Authorize]
-        public async Task<IActionResult> CreateInvite()
-        {
-            _authorizationService.CreateInvite(HttpContext.User.GetUserId());
-            return Ok();
-        }
-
-        [HttpPost, Route("invite/respond")]
-        public async Task<IActionResult> RespondInvite([FromBody] bool accepted)
-        {
-
-            return Ok();
-        }
     }
 }

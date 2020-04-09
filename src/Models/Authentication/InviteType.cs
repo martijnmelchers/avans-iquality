@@ -4,6 +4,7 @@
     {
         Buddy   = 1,
         Patient = 2,
-        Doctor  = 3
+        Doctor  = 3,
+        None    = 0
     }
 }

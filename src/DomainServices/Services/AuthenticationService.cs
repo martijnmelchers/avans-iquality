@@ -56,11 +56,11 @@ namespace IQuality.DomainServices.Services
             // TODO: Implement our own exception
             if(applicationUser != null)
                 throw new Exception("User already exists!");
-            
+
             var result = await _userManager.CreateAsync(user, password);
-            
+
             applicationUser = await _userManager.FindByEmailAsync(user.Email);
-            
+
             return applicationUser;
         }
 
@@ -96,16 +96,17 @@ namespace IQuality.DomainServices.Services
 
             return claims;
         }
-        
-        public async void CreateInvite(string userId)
+
+        public async Task<Invite> CreateInvite(string userId)
         {
             var invite = new Invite
             {
                 ApplicationUserId = userId,
                 Used = false
             };
-            
+
             await _inviteRepository.SaveAsync(invite);
+            return invite;
         }
 
         public async Task<Invite> GetInvite(string id)

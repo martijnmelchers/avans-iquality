@@ -9,8 +9,6 @@ namespace IQuality.DomainServices.Interfaces
         Task<(bool success, ApplicationUser user)> Login(string email, string password);
         Task<ApplicationUser> Register(ApplicationUser user, string password);
         string GenerateToken(ApplicationUser user);
-        public void CreateInvite(string userId);
-        void RespondInvite(Invite link, bool accepted = true);
-        public Task<Invite> GetInvite(string Id);
+
     }
 }
