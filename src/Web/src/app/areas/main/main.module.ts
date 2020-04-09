@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { MainRoutingModule } from './main-routing.module';
-import { HomeComponent } from './home/home.component';
+import {MainRoutingModule} from './main-routing.module';
+import {HomeComponent} from './home/home.component';
 import {
   ButtonModule,
   GridModule,
@@ -10,14 +10,14 @@ import {
   InputModule,
   TableModule,
   ListModule,
-  StructuredListModule
+  StructuredListModule,
 } from 'carbon-components-angular';
-import { ChatComponent } from './chat/chat.component';
-import { MessageComponent } from './chat/message/message.component';
-import {Send32Module} from "@carbon/icons-angular/lib/send/32";
+import {ChatComponent} from './chat/chat.component';
+import {MessageComponent} from './chat/message/message.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import {InviteComponent} from "@IQuality/areas/main/invite/invite.component";
-import { ChatlistComponent } from './chat/chatlist/chatlist.component';
+import {ChatlistComponent} from './chat/chatlist/chatlist.component';
+import {AddModule} from "@carbon/icons-angular";
 
 @NgModule({
   declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatlistComponent],
@@ -28,11 +28,12 @@ import { ChatlistComponent } from './chat/chatlist/chatlist.component';
     GridModule,
     InputModule,
     ButtonModule,
-    Send32Module,
     ReactiveFormsModule,
     TilesModule,
     ListModule,
-    StructuredListModule
+    StructuredListModule,
+    AddModule
   ]
 })
-export class MainModule { }
+export class MainModule {
+}

@@ -14,7 +14,7 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
         Task<TOut> GetWhereAsync(Expression<Func<TStorage, bool>> expression);
         Task<List<TOut>> GetAllWhereAsync(Expression<Func<TStorage, bool>> expression);
         Task SaveAsync(TOut entity);
-        void DeleteAsync(TOut entity);
+        void Delete(TOut entity);
     }
 
     public interface IBaseRavenRepository<T> : IBaseRavenRepository<T, T> where T : IAggregateRoot { }

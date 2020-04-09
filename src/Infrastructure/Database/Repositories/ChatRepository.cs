@@ -30,7 +30,7 @@ namespace IQuality.Infrastructure.Database.Repositories
             return Task.CompletedTask;
         }
 
-        public override void DeleteAsync(BaseChat entity)
+        public override void Delete(BaseChat entity)
         {
             Session.Delete(entity);
         }

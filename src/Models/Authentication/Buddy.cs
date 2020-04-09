@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IQuality.Models.Interfaces;
 
-namespace IQuality.Models
+namespace IQuality.Models.Authentication
 {
-    public class Buddy
+    public class Buddy : IAggregateRoot
     {
+        public string Id { get; }
+        public string ApplicationUserId { get; }
+
+        public Buddy(string userId)
+        {
+            ApplicationUserId = userId;
+        }
     }
 }
