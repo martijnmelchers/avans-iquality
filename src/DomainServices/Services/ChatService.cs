@@ -42,8 +42,8 @@ namespace IQuality.DomainServices.Services
             BaseChat chat = await _repository.GetByIdAsync(id);
             _repository.DeleteAsync(chat);
         }
-
-        public async Task<BaseMessage> GetChatMessages([from])
+        
+        public async Task GetChatMessages()
         {
             
         }

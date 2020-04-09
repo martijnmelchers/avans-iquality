@@ -35,7 +35,8 @@ namespace IQuality.Api.Controllers
         public IActionResult DeleteChat([FromBody] string chatId)
         {
             _chatService.DeleteChatAsync(chatId);
-             return Ok();
+            return Ok();
         }
+
     }
 }
