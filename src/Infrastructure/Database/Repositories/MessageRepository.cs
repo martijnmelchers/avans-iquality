@@ -23,7 +23,7 @@ namespace IQuality.Infrastructure.Database.Repositories
 
         public List<BaseMessage> GetMessagesAsync(string chatId)
         {
-            List<BaseMessage> messages = _session.Query<BaseMessage>().Where(x => x.ChatId == chatId).ToList();
+            List<BaseMessage> messages = _session.Query<BaseMessage>("MessageIndex").Where(x => x.ChatId == chatId).ToList();
             return messages;
         }
         
@@ -45,7 +45,19 @@ namespace IQuality.Infrastructure.Database.Repositories
 
         public async Task<List<TextMessage>> GetTextMessagesByChat(string chatId)
         {
-            return await _session.Query<TextMessage>().Where(x => x.ChatId == chatId).ToListAsync();
+            return await _session.Query<TextMessage>("MessageIndex").Where(x => x.ChatId == chatId).ToListAsync();
+        }
+
+        public async Task<TextMessage> PostTextMessageAsync(TextMessage message)
+        {
+            await _session.StoreAsync(message);
+            await _session.SaveChangesAsync();
+            return message;
+        }
+
+        public async Task<TextMessage> GetTextMessageById(string chatId, string messageId)
+        {
+            return await _session.Query<TextMessage>("MessageIndex").FirstOrDefaultAsync(x => x.ChatId == chatId && x.Id == messageId);
         }
     }
 }
