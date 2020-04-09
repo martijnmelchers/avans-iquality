@@ -89,7 +89,7 @@ namespace IQuality.DomainServices.Services
             // Add a buddy associated to the user
             await _buddyRepository.SaveAsync(new Buddy(applicationUser.Id));
             
-            return null;
+            return applicationUser;
         }
 
         public Task<ApplicationUser> RegisterPatient(string inviteToken, PatientRegister register)
