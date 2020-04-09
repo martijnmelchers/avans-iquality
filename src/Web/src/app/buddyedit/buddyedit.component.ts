@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../core/services/api.service';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-buddyedit',
@@ -9,8 +10,19 @@ import { ApiService } from '../core/services/api.service';
 })
 export class BuddyeditComponent implements OnInit {
    buddy:any;
+   checkoutForm;
 
-  constructor(private route: ActivatedRoute,private api: ApiService) { }
+  constructor(private route: ActivatedRoute,private api: ApiService,private formBuilder: FormBuilder) {
+    this.checkoutForm = this.formBuilder.group({
+      name: '',
+      phoneNumber: '',
+      groupName: ''
+    });
+  }
+
+  async onSubmit(buddyData) {
+    await this.api.post<string>('/buddy', buddyData);
+  }
 
   async ngOnInit(): Promise<void> {
     let id = this.route.snapshot.paramMap.get('id');

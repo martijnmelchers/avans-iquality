@@ -1,1 +1,23 @@
-<p>buddyedit works!</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
+                <div class="form-group mt-5">
+                    <label for="groupname">Buddy Group name</label>
+                    <input type="email" formControlName="groupName" value="{{buddy.groupName}}" class="form-control" aria-describedby="emailHelp">
+
+                </div>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" formControlName="name" value="{{buddy.name}}" class="form-control" aria-describedby="emailHelp">
+
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="text" formControlName="phoneNumber" value="{{buddy.phoneNumber}}" class="form-control" aria-describedby="emailHelp">
+                </div>
+                <button class="btn btn-success" type="submit">Add</button>
+            </form>
+        </div>
+    </div>
+</div>
