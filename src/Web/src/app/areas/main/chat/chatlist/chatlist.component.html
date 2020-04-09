@@ -1,0 +1,24 @@
+<div ibmGrid>
+  <div ibmRow [gutter]="false">
+    <div ibmCol>
+      <ibm-structured-list
+        [border]="true"
+        [condensed]="false"
+        [nowrap]="false"
+        selection="true"
+        (selected)="selected($event)">
+        <ibm-list-header>
+          <ibm-list-column>Conversations</ibm-list-column>
+        </ibm-list-header>
+        <ibm-list-row value="row1">
+          <ibm-list-column>
+            Lorem ipsum dolor sit amet,
+          </ibm-list-column>
+        </ibm-list-row>
+      </ibm-structured-list>
+    </div>
+  </div>
+  <div ibmRow>
+    <button ibmCol ibmButton (click)="onChatCreate()">Create Chat</button>
+  </div>
+</div>
