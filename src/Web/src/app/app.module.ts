@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgProgressModule } from "ngx-progressbar";
@@ -28,6 +29,7 @@ import { BuddyeditComponent } from './buddyedit/buddyedit.component';
     HttpClientModule,
     NgProgressModule,
     HeaderModule,
+    FormsModule,
     Fade20Module,
     TagModule,
     TableModule,

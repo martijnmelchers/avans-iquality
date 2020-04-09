@@ -38,8 +38,8 @@ namespace IQuality.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update(Buddy buddy)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id,Buddy buddy)
         {
             await _buddyService.UpdateBuddy(buddy);
             return Ok();

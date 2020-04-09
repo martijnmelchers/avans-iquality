@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../core/services/api.service';
 import { FormBuilder } from '@angular/forms';
 
@@ -12,7 +12,7 @@ export class BuddyeditComponent implements OnInit {
    buddy:any;
    checkoutForm;
 
-  constructor(private route: ActivatedRoute,private api: ApiService,private formBuilder: FormBuilder) {
+  constructor(private route: ActivatedRoute,private api: ApiService,private formBuilder: FormBuilder, private router: Router) {
     this.checkoutForm = this.formBuilder.group({
       name: '',
       phoneNumber: '',
@@ -21,7 +21,18 @@ export class BuddyeditComponent implements OnInit {
   }
 
   async onSubmit(buddyData) {
-    await this.api.post<string>('/buddy', buddyData);
+    if(buddyData.name == ''){
+      buddyData.name = this.buddy.name;
+    }
+    if(buddyData.groupName == ''){
+      buddyData.groupName = this.buddy.groupName;
+    }
+    if(buddyData.phoneNumber == ''){
+      buddyData.phoneNumber = this.buddy.phoneNumber;
+    }
+    buddyData.id = this.buddy.id;
+    await this.api.put<string>(`/buddy/${buddyData.id}`, buddyData);
+    this.router.navigate(['../../buddy/']);
   }
 
   async ngOnInit(): Promise<void> {
@@ -29,7 +40,6 @@ export class BuddyeditComponent implements OnInit {
 
     this.buddy = await this.api.get<string>(`/buddy/${id}`);
 
-    console.log(this.buddy);
   }
 
 }
