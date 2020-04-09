@@ -351,3 +351,5 @@ MigrationBackup/
 
 # IntelliJ editor files
 .idea/
+.vscode/launch.json
+.vscode/tasks.json
