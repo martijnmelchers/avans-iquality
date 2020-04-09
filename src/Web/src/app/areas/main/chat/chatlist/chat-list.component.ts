@@ -20,10 +20,6 @@ export class ChatListComponent implements OnInit {
     });
   }
 
-  selected($event: { value: string; selected: boolean; name: string }) {
-    console.log($event);
-  }
-
   onChatCreate() {
     if (this.chatName) {
       this.chatService.createChat(this.chatName).then((response) => {

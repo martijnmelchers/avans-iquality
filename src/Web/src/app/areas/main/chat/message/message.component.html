@@ -1,4 +1,4 @@
-<div class="my-message-box" *ngIf="message.senderId; else otherUser">
+<div class="my-message-box" *ngIf="message.senderId === auth.nameIdentifier; else otherUser">
   <div class="text my-text">
     <span>
       {{message.content}}

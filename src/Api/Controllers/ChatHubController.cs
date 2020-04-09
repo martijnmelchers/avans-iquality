@@ -23,7 +23,6 @@ namespace IQuality.Api.Controllers
         
         public async Task NewMessage(string senderId, string chatId, string message)
         {
-            
             await Clients.All.SendAsync("messageReceived", senderId, chatId, message);
             
             TextMessage textMessage = new TextMessage {SenderId = senderId, ChatId = chatId, Content = message};

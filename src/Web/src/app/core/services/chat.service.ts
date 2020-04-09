@@ -21,19 +21,20 @@ export class ChatService {
     this.connection = new signalR.HubConnectionBuilder().withUrl(`${environment.endpoints.api}/hub`).build();
 
     this.connection.on("messageReceived", (userId: string, chatId: string, message: string) => {
-      let newMessage = new Message();
-      newMessage.content = message;
+      if (chatId === this.selected.id) {
+        let newMessage = new Message();
+        newMessage.content = message;
 
-      if (userId === this.auth.nameIdentifier) {
-        newMessage.senderId = userId;
+        if (userId === this.auth.nameIdentifier) {
+          newMessage.senderId = userId;
+        }
+
+
+        this.messages.push(newMessage);
       }
-
-
-      this.messages.push(newMessage);
     });
 
     this.connection.start().catch(err => {
-      console.log("OW SHIT");
       throwError(err);
     });
     this.selected = new BaseChat();
