@@ -11,6 +11,6 @@ namespace IQuality.DomainServices.Interfaces
         Task AddBuddy(Buddy buddy);
         Task DeleteBuddy(string id);
         Task<List<Buddy>> GetBuddies();
-        Task<Buddy> GetBuddyById(int id);
+        Task<Buddy> GetBuddyById(string id);
     }
 }

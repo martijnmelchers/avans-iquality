@@ -35,9 +35,9 @@ namespace IQuality.DomainServices.Services
             return result;
         }
 
-        public async Task<Buddy> GetBuddyById(int id)
+        public async Task<Buddy> GetBuddyById(string id)
         {
-            return await _buddyRepository.GetByIdAsync(id.ToString());
+            return await _buddyRepository.GetByIdAsync(id);
         }
     }
 }

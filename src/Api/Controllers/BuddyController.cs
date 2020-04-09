@@ -31,6 +31,13 @@ namespace IQuality.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var result = await _buddyService.GetBuddyById(id);
+            return Ok(result);
+        }
+
         // POST: Buddy/Create
         [HttpPost]
         public async Task<IActionResult> Create(Buddy buddy)
