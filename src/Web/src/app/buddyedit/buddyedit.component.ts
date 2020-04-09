@@ -15,6 +15,7 @@ export class BuddyeditComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     let id = this.route.snapshot.paramMap.get('id');
     this.buddy = await this.api.get<string>(`buddy/${id}`);
+    console.log(this.buddy);
   }
 
 }
