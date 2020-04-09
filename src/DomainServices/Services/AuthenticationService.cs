@@ -70,7 +70,7 @@ namespace IQuality.DomainServices.Services
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                _config["AppSettings:Jwt:Issuer"],
+                _config["Jwt:Issuer"],
                 _config["Jwt:AudienceId"],
                 GetValidClaims(user),
                 DateTime.UtcNow,
