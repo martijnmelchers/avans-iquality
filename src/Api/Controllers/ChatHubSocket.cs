@@ -25,6 +25,7 @@ namespace IQuality.Api.Controllers
             List<TextMessage> result = await _repository.GetTextMessagesByChat(chatId);
             return result;
         }
+        
         public async Task SendMessage(string senderId, string chatId, string message)
         {
             await Clients.All.SendAsync("ReceiveMessage", senderId, chatId, message);

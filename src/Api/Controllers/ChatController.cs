@@ -50,7 +50,7 @@ namespace IQuality.Api.Controllers
             _chatService.DeleteChatAsync(chatId);
             return Ok();
         }
-
+        
         [Route("/{chatId}"), HttpGet]
         public async Task<IActionResult> GetChatAsync(string chatId)
         {

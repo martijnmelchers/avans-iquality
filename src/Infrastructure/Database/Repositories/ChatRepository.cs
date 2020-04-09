@@ -24,10 +24,9 @@ namespace IQuality.Infrastructure.Database.Repositories
             return await Session.Query<BaseChat>("ChatIndex").ToListAsync();
         }
         
-        public override Task SaveAsync(BaseChat entity)
+        public override async Task SaveAsync(BaseChat entity)
         {
-            Session.StoreAsync(entity);
-            return Task.CompletedTask;
+            await Session.StoreAsync(entity);
         }
 
         public override void Delete(BaseChat entity)

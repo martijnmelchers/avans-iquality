@@ -1,6 +1,7 @@
 import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Message} from "./message/message";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {ChatService} from "@IQuality/core/services/chat.service";
 
 @Component({
   selector: 'app-chat',
@@ -8,15 +9,12 @@ import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit, AfterViewChecked {
-  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
-
   public messageFormGroup: FormGroup;
   public messageControl: FormControl;
-
   messages: Array<Message>;
+  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 
-
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private chatService: ChatService) {
     this.messageControl = new FormControl();
     this.messageFormGroup = formBuilder.group({
       message: this.messageControl,
@@ -47,7 +45,15 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
+    this.chatService.onChatSelected.push(() => this.onChatSelected());
+  }
 
+  ngAfterViewChecked(): void {
+    const scrollTop = this.myScrollContainer.nativeElement.scrollTop;
+    const scrollHeight = this.myScrollContainer.nativeElement.scrollHeight;
+    if (scrollTop !== scrollHeight) {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    }
   }
 
   onSubmit(e): void {
@@ -61,15 +67,11 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
     this.messageControl.setValue("");
     if (e) {
-        e.preventDefault();
+      e.preventDefault();
     }
   }
 
-  ngAfterViewChecked(): void {
-    const scrollTop = this.myScrollContainer.nativeElement.scrollTop;
-    const scrollHeight = this.myScrollContainer.nativeElement.scrollHeight;
-    if (scrollTop !== scrollHeight) {
-      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-    }
+  private onChatSelected() {
+
   }
 }
