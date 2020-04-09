@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using IQuality.DomainServices.Interfaces;
-using IQuality.Infrastructure.Database.Repositories;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
 using IQuality.Models.Authentication;
+using IQuality.Models.Forms;
 using IQuality.Models.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +23,9 @@ namespace IQuality.DomainServices.Services
         private readonly IConfiguration _config;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IInviteRepository _inviteRepository;
+        private readonly IBuddyRepository _buddyRepository;
+        //private readonly  _patientRepository;
+        //private readonly _doctorRepository;
 
         public AuthenticationService(IConfiguration config, UserManager<ApplicationUser> userManager, IInviteRepository inviteRepository)
         {
@@ -50,7 +52,7 @@ namespace IQuality.DomainServices.Services
             return (await _userManager.CheckPasswordAsync(applicationUser, password), applicationUser);
         }
 
-        public async Task<ApplicationUser> Register(ApplicationUser user, string password)
+        private async Task<ApplicationUser> Register(ApplicationUser user, string password)
         {
             var applicationUser = await _userManager.FindByEmailAsync(user.Email);
 
@@ -60,9 +62,44 @@ namespace IQuality.DomainServices.Services
             
             var result = await _userManager.CreateAsync(user, password);
             
-            applicationUser = await _userManager.FindByEmailAsync(user.Email);
+            if(!result.Succeeded)
+                throw new Exception($"{result.Errors}");
             
-            return applicationUser;
+            return await _userManager.FindByEmailAsync(user.Email);
+        }
+
+        public async Task<ApplicationUser> RegisterBuddy(string inviteToken, BuddyRegister register)
+        {
+            // TODO: Add reference to _inviteService + own exception
+            // if(!await _inviteService.IsValidInvite(inviteToken, InviteType.Buddy))
+            //    throw new Exception("Invalid invite provided!");
+            
+            // Create a new user first
+            var applicationUser = await Register(new ApplicationUser
+            {
+                UserName = register.Email,
+                Email = register.Email,
+                Address =  register.Address,
+                Name = register.Name,
+            }, register.Password);
+            
+            // TODO: To enum
+            await _userManager.AddToRoleAsync(applicationUser, "Buddy");
+            
+            // Add a buddy associated to the user
+            await _buddyRepository.SaveAsync(new Buddy(applicationUser.Id));
+            
+            return null;
+        }
+
+        public Task<ApplicationUser> RegisterPatient(string inviteToken, PatientRegister register)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApplicationUser> RegisterDoctor(string inviteToken, DoctorRegister register)
+        {
+            throw new NotImplementedException();
         }
 
         public string GenerateToken(ApplicationUser user)
@@ -83,21 +120,6 @@ namespace IQuality.DomainServices.Services
             return jwtToken;
         }
 
-        private static List<Claim> GetValidClaims(ApplicationUser user)
-        {
-            var options = new IdentityOptions();
-            var claims = new List<Claim>
-            {
-                new Claim(options.ClaimsIdentity.UserIdClaimType, user.Id),
-                new Claim(options.ClaimsIdentity.UserNameClaimType, user.Email)
-            };
-
-            claims.AddRange(user.Claims.Where(c => c.ClaimType == ClaimTypes.Role)
-                .Select(c => new Claim("roles", c.ClaimValue)));
-
-            return claims;
-        }
-        
         public async Task CreateInvite(string userId)
         {
             var invite = new Invite
@@ -124,8 +146,27 @@ namespace IQuality.DomainServices.Services
             }
             else
             {
-                _inviteRepository.DeleteAsync(link);
+                _inviteRepository.Delete(link);
             }
         }
+
+        #region Privates
+
+        private static List<Claim> GetValidClaims(ApplicationUser user)
+        {
+            var options = new IdentityOptions();
+            var claims = new List<Claim>
+            {
+                new Claim(options.ClaimsIdentity.UserIdClaimType, user.Id),
+                new Claim(options.ClaimsIdentity.UserNameClaimType, user.Email)
+            };
+
+            claims.AddRange(user.Claims.Where(c => c.ClaimType == ClaimTypes.Role)
+                .Select(c => new Claim("roles", c.ClaimValue)));
+
+            return claims;
+        }
+
+        #endregion
     }
 }
