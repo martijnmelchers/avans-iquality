@@ -20,7 +20,7 @@ namespace IQuality.DomainServices.Services
         {
             _chatRepository = chatRepository;
         }
-        
+
         public async Task<BaseChat> GetChatAsync(string id)
         {
             return await _chatRepository.GetByIdAsync(id);
