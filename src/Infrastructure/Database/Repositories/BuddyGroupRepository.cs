@@ -21,9 +21,20 @@ namespace IQuality.Infrastructure.Database.Repositories
             _session = session;
         }
 
-        public async Task<List<Buddy>> GetAll()
+        public async Task<List<string>> GetAll()
         {
-            return await _session.Query<Buddy>().ToListAsync();
+            var buddies = await _session.Query<Buddy>().ToListAsync();
+            List<string> buddygroupNames = new List<string>();
+
+            foreach(Buddy buddy in buddies)
+            {
+                if (!buddygroupNames.Contains(buddy.GroupName))
+                {
+                    buddygroupNames.Add(buddy.GroupName);
+                }
+            }
+
+            return buddygroupNames;
         }
 
         public override Task DeleteAsync(Buddy entity)

@@ -8,6 +8,6 @@ namespace IQuality.DomainServices.Interfaces
 {
     public interface IBuddyGroupService
     {
-
+        Task<List<string>> GetBuddygroupNames();
     }
 }

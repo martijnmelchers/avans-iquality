@@ -25,13 +25,15 @@ namespace IQuality.Api.Controllers
             _buddyGroupService = buddyGroupService;
         }
 
-        //// GET: BuddyGroup
-        //[HttpGet]
-        //public async Task<IActionResult> Index()
-        //{
-        //    var result = await _buddyGroupService.GetBuddies();
-        //    return Ok(result);
-        //}
+
+
+        // GET: BuddyGroup
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var result = await _buddyGroupService.GetBuddygroupNames();
+            return Ok(result);
+        }
 
         //// POST: BuddyGroup/Create
         //[HttpPost]

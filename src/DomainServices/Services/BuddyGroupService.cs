@@ -18,6 +18,10 @@ namespace IQuality.DomainServices.Services
             _buddyGroupRepository = buddyGroupRepository;
         }
 
-        
+        public async Task<List<string>> GetBuddygroupNames()
+        {
+            var result = await _buddyGroupRepository.GetAll();
+            return result;
+        }
     }
 }
