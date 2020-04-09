@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using IQuality.Api.Extensions;
 using IQuality.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,6 +18,8 @@ using Raven.Client.Documents.Conventions;
 using Raven.DependencyInjection;
 using Raven.Identity;
 using IQuality.Api.Controllers;
+using IQuality.Infrastructure.Database.Index;
+using Raven.Client.Documents.Indexes;
 
 namespace IQuality.Api
 {
@@ -59,9 +58,12 @@ namespace IQuality.Api
                     }
                 }
             }.Initialize();
-
+            
             services.AddDependencies(Environment);
-
+            
+            // Add index to RavenDB
+            IndexCreation.CreateIndexes(typeof(ChatIndex).Assembly, documentStore);
+            
             // Setup RavenDB session and authorization
             services
                 .AddSingleton(documentStore)
