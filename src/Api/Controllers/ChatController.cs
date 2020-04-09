@@ -12,28 +12,29 @@ namespace IQuality.Api.Controllers
     [Route("/chats"), Authorize]
     public class ChatController : RavenApiController
     {
-        private readonly IChatService _service;
-        public ChatController(IAsyncDocumentSession db, IChatService service) : base(db)
+        private readonly IChatService _chatService;
+        public ChatController(IAsyncDocumentSession db, IChatService chatService) : base(db)
         {
-            _service = service;
+            _chatService = chatService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetChats()
         {
-            List<BaseChat> chat = await _service.GetChatsAsync();
+            List<BaseChat> chat = await _chatService.GetChatsAsync();
             return Ok(chat);
         }
 
         [HttpPost]
         public IActionResult CreateChat([FromBody] BaseChat chat)
         {
-            return Ok(_service.CreateChatAsync(chat));
+            return Ok(_chatService.CreateChatAsync(chat));
         }
 
+        [HttpGet]
         public IActionResult DeleteChat([FromBody] string chatId)
         {
-            _service.DeleteChatAsync(chatId);
+            _chatService.DeleteChatAsync(chatId);
              return Ok();
         }
     }

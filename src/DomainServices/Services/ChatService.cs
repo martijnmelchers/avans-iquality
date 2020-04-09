@@ -4,6 +4,7 @@ using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models.Chat;
+using IQuality.Models.Chat.Messages;
 using IQuality.Models.Helpers;
 using Sparrow.Json;
 
@@ -41,5 +42,11 @@ namespace IQuality.DomainServices.Services
             BaseChat chat = await _repository.GetByIdAsync(id);
             _repository.DeleteAsync(chat);
         }
+
+        public async Task<BaseMessage> GetChatMessages([from])
+        {
+            
+        }
+        
     }
 }
