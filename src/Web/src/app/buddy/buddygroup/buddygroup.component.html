@@ -10,15 +10,19 @@
     <thead class="thead-dark">
         <th>ID</th>
         <th>Name</th>
+        <th>Group Name</th>
         <th>Phone</th>
-        <th>Delete</th>
+        <th>Actions</th>
+
     </thead>
     <tbody>
         <tr *ngFor="let buddy of buddies">
             <td>{{buddy.id}}</td>
             <td>{{buddy.name}}</td>
+            <td>{{buddy.groupName}}</td>
             <td>{{buddy.phoneNumber}}</td>
-            <td><button class="btn btn-danger" (click)="deleteBuddy(buddy.id)">Delete</button></td>
+            <td><a class="btn btn-info mr-3" [routerLink]="['/','buddy',buddy.id]">Edit</a>
+                <button class="btn btn-danger" (click)="deleteBuddy(buddy.id)">Delete</button></td>
         </tr>
     </tbody>
 </table>

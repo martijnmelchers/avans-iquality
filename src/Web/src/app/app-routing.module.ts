@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { BuddygroupComponent } from '../app/buddy/buddygroup/buddygroup.component';
 import { BuddygroupaddComponent } from '../app/buddy/buddygroupadd/buddygroupadd.component';
 import { BuddyinviteComponent } from './buddyinvite/buddyinvite.component';
+import { BuddyeditComponent } from './buddyedit/buddyedit.component';
 
 
 const routes: Routes = [
@@ -18,6 +19,9 @@ const routes: Routes = [
   },
   {
     path: 'buddy/invite',component: BuddyinviteComponent
+  },
+  {
+    path: 'buddy/:id',component: BuddyeditComponent
   }
 ];
 

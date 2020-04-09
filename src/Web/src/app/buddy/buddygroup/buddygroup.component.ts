@@ -20,38 +20,14 @@ export class BuddygroupComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.buddies = await this.api.get<string>('/buddy');
     console.log(this.buddies);
-    this.loadScreen();
   }
 
 
   async deleteBuddy(id){
     await this.api.delete<string>(`/buddy/${id}`);
-    this.loadScreen();
+    this.ngOnInit();
   }
 
-  private loadScreen() {
-
-    // this.model.data = this.buddies.map(datapoint => [new TableItem({}), new TableItem({}), new TableItem({})]);
-
-    // this.model.header = [new TableHeaderItem({ data: "" }), new TableHeaderItem({ data: "" }), new TableHeaderItem({ data: "" })];
-
-    // setTimeout(() => {
-    //   this.skeletonStateTable = false;
-    // }, 4000);
-
-    // setTimeout(() => {
-    //   this.model.header = [new TableHeaderItem({ data: "Id" }), new TableHeaderItem({ data: "Name" }), new TableHeaderItem({ data: "PhoneNumber" })];
-
-    //   this.model.data = this.buddies.map(datapoint =>
-    //     [
-    //       new TableItem({ data: datapoint.id }),
-    //       new TableItem({ data: datapoint.name }),
-    //       new TableItem({ data: datapoint.phoneNumber })
-    //     ]
-    //   );
-    // }, 4000);
-
-  }
 }
 
 

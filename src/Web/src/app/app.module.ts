@@ -12,13 +12,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { TableModule } from "carbon-components-angular";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BuddyinviteComponent } from './buddyinvite/buddyinvite.component';
+import { BuddyeditComponent } from './buddyedit/buddyedit.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BuddygroupComponent,
     BuddygroupaddComponent,
-    BuddyinviteComponent
+    BuddyinviteComponent,
+    BuddyeditComponent
   ],
   imports: [
     BrowserModule,

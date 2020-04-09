@@ -12,19 +12,16 @@ export class BuddygroupaddComponent implements OnInit {
 
   checkoutForm;
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService, private router: Router) { 
+  constructor(private formBuilder: FormBuilder, private api: ApiService, private router: Router) {
     this.checkoutForm = this.formBuilder.group({
       name: '',
       phoneNumber: '',
-      groupId: '',
       groupName: ''
     });
   }
 
   async onSubmit(buddyData) {
     await this.api.post<string>('/buddy', buddyData);
-
-    this.router.navigate(['../../buddy/group']);
   }
 
   ngOnInit(): void {
