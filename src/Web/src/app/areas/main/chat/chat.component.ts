@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+﻿import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ChatService} from "@IQuality/core/services/chat.service";
 import {Message} from "@IQuality/core/models/message";
@@ -25,7 +25,8 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    const scrollTop = this.myScrollContainer.nativeElement.scrollTop;
+    const scrollTop
+      = this.myScrollContainer.nativeElement.scrollTop;
     const scrollHeight = this.myScrollContainer.nativeElement.scrollHeight;
     if (scrollTop !== scrollHeight) {
       this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;

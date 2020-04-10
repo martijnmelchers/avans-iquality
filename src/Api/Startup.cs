@@ -87,7 +87,7 @@ namespace IQuality.Api
 
             var key = Encoding.ASCII.GetBytes(Configuration["Jwt:AudienceSecret"]);
             services.AddAuthentication(x =>
-                {
+                                 {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })

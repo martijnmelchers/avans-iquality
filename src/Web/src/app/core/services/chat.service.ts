@@ -14,7 +14,7 @@ export class ChatService {
   public selected: BaseChat;
   public messages: Array<Message> = [];
   public onChatSelected: Array<() => void> = [];
-  private connection: any;
+  private connection: signalR.HubConnection;
 
   constructor(private _api: ApiService, private auth: AuthenticationService) {
     // TODO: Put the HubConnection Url in the environment.
