@@ -24,25 +24,25 @@ namespace IQuality.Infrastructure.Database.Repositories
             return await Session.Query<BaseChat>("ChatIndex").ToListAsync();
         }
         
-        public override Task SaveAsync(BaseChat entity)
+        public override async Task SaveAsync(BaseChat entity)
         {
-            Session.StoreAsync(entity);
-            return Task.CompletedTask;
+            await Session.StoreAsync(entity);
         }
 
         public override void Delete(BaseChat entity)
         {
-            Session.Delete(entity);
+            throw new System.NotImplementedException();
         }
+
 
         protected override async Task<List<BaseChat>> ConvertAsync(List<BaseChat> storage)
         {
             var baseChats = storage.ToList();
             foreach (var chat in baseChats)
-            { 
+            {
                 chat.Messages = await Queryable.Take(Session.Query<BaseMessage>().Where(x => x.ChatId == chat.Id), 20).ToListAsync();
             }
-           
+
             return baseChats.ToList();
         }
     }

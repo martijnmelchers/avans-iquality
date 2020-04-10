@@ -1,7 +1,7 @@
-<div class="my-message-box" *ngIf="!message.isOtherUser; else otherUser">
+<div class="my-message-box" *ngIf="message.senderId === auth.nameIdentifier; else otherUser">
   <div class="text my-text">
     <span>
-      {{message.string}}
+      {{message.content}}
     </span>
   </div>
 </div>
@@ -9,7 +9,7 @@
 <ng-template class="other-message-box" #otherUser>
   <div class="text other-text">
     <span>
-        {{message.string}}
+        {{message.content}}
     </span>
   </div>
 </ng-template>

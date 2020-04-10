@@ -6,21 +6,21 @@ import {HomeComponent} from './home/home.component';
 import {
   ButtonModule,
   GridModule,
-  TilesModule,
   InputModule,
-  TableModule,
   ListModule,
   StructuredListModule,
+  TableModule,
+  TilesModule,
 } from 'carbon-components-angular';
 import {ChatComponent} from './chat/chat.component';
 import {MessageComponent} from './chat/message/message.component';
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {InviteComponent} from "@IQuality/areas/main/invite/invite.component";
-import {ChatlistComponent} from './chat/chatlist/chatlist.component';
+import {ChatListComponent} from './chat/chatlist/chat-list.component';
 import {AddModule} from "@carbon/icons-angular";
 
 @NgModule({
-  declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatlistComponent],
+  declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatListComponent],
   imports: [
     CommonModule,
     MainRoutingModule,
@@ -32,7 +32,8 @@ import {AddModule} from "@carbon/icons-angular";
     TilesModule,
     ListModule,
     StructuredListModule,
-    AddModule
+    AddModule,
+    FormsModule,
   ]
 })
 export class MainModule {

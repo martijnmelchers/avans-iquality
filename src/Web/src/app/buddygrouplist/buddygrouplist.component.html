@@ -1,0 +1,13 @@
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <th></th>
+        <th>Name</th>
+
+    </thead>
+    <tbody>
+        <tr *ngFor="let buddygroup of buddygroups" [routerLink]="['/','buddygroup',buddygroup]">
+            <td></td>
+            <td>{{buddygroup}}</td>
+        </tr>
+    </tbody>
+</table>

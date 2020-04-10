@@ -40,9 +40,9 @@ namespace IQuality.Api.Controllers
         [HttpPost, Route("register/buddy/{inviteToken}"), AllowAnonymous]
         public async Task<IActionResult> RegisterAsBuddy(string inviteToken, [FromBody] BuddyRegister register)
         {
-           // await _authorizationService.RegisterBuddy(register);
+           await _authorizationService.RegisterBuddy(inviteToken, register);
 
-            return Ok();
+            return Ok("User created :-)");
         }
 
         [HttpPost, Route("register/patient"), AllowAnonymous]
@@ -54,20 +54,6 @@ namespace IQuality.Api.Controllers
         [HttpPost, Route("register/doctor"), AllowAnonymous]
         public async Task<IActionResult> RegisterAsDoctor(string inviteToken, [FromBody] DoctorRegister register)
         {
-            return Ok();
-        }
-
-        [HttpPost, Route("invite"), Authorize]
-        public async Task<IActionResult> CreateInvite()
-        {
-            await _authorizationService.CreateInvite(HttpContext.User.GetUserId());
-            return Ok();
-        }
-
-        [HttpPost, Route("invite/respond")]
-        public async Task<IActionResult> RespondInvite([FromBody] bool accepted)
-        {
-
             return Ok();
         }
 

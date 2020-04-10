@@ -13,8 +13,5 @@ namespace IQuality.DomainServices.Interfaces
         Task<ApplicationUser> RegisterPatient(string inviteToken, PatientRegister register);
         Task<ApplicationUser> RegisterDoctor(string inviteToken, DoctorRegister register);
         string GenerateToken(ApplicationUser user);
-        Task CreateInvite(string userId);
-        void RespondInvite(Invite link, bool accepted = true);
-        public Task<Invite> GetInvite(string Id);
     }
 }
