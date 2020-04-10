@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
 using IQuality.Models.Authentication;
 using IQuality.Models.Helpers;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 
 namespace IQuality.Infrastructure.Database.Repositories
@@ -28,13 +30,16 @@ namespace IQuality.Infrastructure.Database.Repositories
             Session.Delete(entity);
         }
 
+        public async Task<Invite> GetByInviteToken(string inviteToken)
+        {
+            return await Session
+                .Query<Invite>()
+                .FirstOrDefaultAsync(x => x.Token == inviteToken);
+        }
+
         protected override async Task<List<Invite>> ConvertAsync(List<Invite> storage)
         {
-            foreach (var registrationLink in storage)
-                registrationLink.ApplicationUser =
-                    await Session.LoadAsync<ApplicationUser>(registrationLink.ApplicationUserId);
-
-            return storage;
+            return await Task.FromResult(storage);
         }
     }
 }

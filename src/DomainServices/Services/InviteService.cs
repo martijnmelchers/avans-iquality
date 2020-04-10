@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
 using IQuality.Models.Authentication;
 using IQuality.Models.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 
@@ -14,41 +16,34 @@ namespace IQuality.DomainServices.Services
     [Injectable]
     public class InviteService : IInviteService
     {
-        private readonly IConfiguration _config;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IInviteRepository _inviteRepository;
 
+        public InviteService(UserManager<ApplicationUser> userManager, IInviteRepository inviteRepository)
+        {
+            _userManager = userManager;
+            _inviteRepository = inviteRepository;
+        }
+        
         public async Task<Invite> CreateInvite(string userId, string email)
         {
-
             var user = await _userManager.FindByIdAsync(userId);
 
-            var roles = await _userManager.GetRolesAsync(user);
-            string role = roles.First();
-
-
-            InviteType inviteType = InviteType.None;
-            switch (role)
+            var inviteType = user.Roles.First() switch
             {
-                case "Doctor":
-                    inviteType = InviteType.Patient;
-                    break;
-                case "Patient":
-                    inviteType = InviteType.Buddy;
-                    break;
-            }
-
-            if (inviteType == InviteType.None)
-            {
-                throw new Exception("Not a valid user");
-            }
+                Roles.Doctor => InviteType.Patient,
+                Roles.Patient => InviteType.Buddy,
+                Roles.Admin => InviteType.Doctor,
+                _ => throw new InvalidOperationException()
+            };
+            
 
             var invite = new Invite
             {
                 InviteType = inviteType,
                 Token = Guid.NewGuid().ToString(),
                 Email = email,
-                ApplicationUserId = user.Id,
+                InvitedBy = user.Id,
                 Used = false
             };
 
@@ -58,7 +53,7 @@ namespace IQuality.DomainServices.Services
 
         public async Task<Invite> GetInvite(string inviteToken)
         {
-            return await _inviteRepository.GetWhereAsync((inv) => inv.Token.Equals(inviteToken));
+            return await _inviteRepository.GetByInviteToken(inviteToken);
         }
 
         // Uses the invite link.
@@ -70,8 +65,8 @@ namespace IQuality.DomainServices.Services
 
         public async Task<bool> ValidateInvite(string inviteToken)
         {
-            var invite = await _inviteRepository.GetWhereAsync((inv => inv.Token == inviteToken));
-            return invite != null;
+            var invite = await _inviteRepository.GetByInviteToken(inviteToken);
+            return invite != null && !invite.Used;
         }
     }
 }
