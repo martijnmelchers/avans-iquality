@@ -2,9 +2,8 @@
 {
     public enum InviteType
     {
-        Buddy   = 1,
-        Patient = 2,
-        Doctor  = 3,
-        None    = 0
+        Buddy,
+        Patient,
+        Doctor
     }
 }

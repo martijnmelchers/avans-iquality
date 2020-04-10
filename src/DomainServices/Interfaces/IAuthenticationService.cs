@@ -8,10 +8,7 @@ namespace IQuality.DomainServices.Interfaces
     public interface IAuthenticationService
     {
         Task<(bool success, ApplicationUser user)> Login(string email, string password);
-        // Task<ApplicationUser> Register(ApplicationUser user, string password);
-        Task<ApplicationUser> RegisterBuddy(string inviteToken, BuddyRegister register);
-        Task<ApplicationUser> RegisterPatient(string inviteToken, PatientRegister register);
-        Task<ApplicationUser> RegisterDoctor(string inviteToken, DoctorRegister register);
+        Task<ApplicationUser> Register(string inviteToken, UserRegister register);
         string GenerateToken(ApplicationUser user);
     }
 }
