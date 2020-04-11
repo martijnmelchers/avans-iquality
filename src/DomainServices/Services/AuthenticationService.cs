@@ -14,6 +14,7 @@ using IQuality.Models.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Raven.Identity;
 
 namespace IQuality.DomainServices.Services
 {
@@ -23,11 +24,13 @@ namespace IQuality.DomainServices.Services
         private readonly IConfiguration _config;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IBuddyRepository _buddyRepository;
+
         private readonly IInviteService _inviteService;
         //private readonly  _patientRepository;
         //private readonly _doctorRepository;
 
-        public AuthenticationService(IConfiguration config, UserManager<ApplicationUser> userManager, IBuddyRepository buddyRepository, IInviteService inviteService)
+        public AuthenticationService(IConfiguration config, UserManager<ApplicationUser> userManager,
+            IBuddyRepository buddyRepository, IInviteService inviteService)
         {
             _config = config;
             _userManager = userManager;
@@ -57,13 +60,13 @@ namespace IQuality.DomainServices.Services
         {
             var applicationUser = await _userManager.FindByEmailAsync(user.Email);
 
-             // TODO: Implement our own exception
-            if(applicationUser != null)
+            // TODO: Implement our own exception
+            if (applicationUser != null)
                 throw new Exception("User already exists!");
-            
+
             var result = await _userManager.CreateAsync(user, password);
-            
-            if(!result.Succeeded)
+
+            if (!result.Succeeded)
                 throw new Exception($"{result.Errors}");
 
             return user;
@@ -71,35 +74,35 @@ namespace IQuality.DomainServices.Services
 
         public async Task<ApplicationUser> Register(string inviteToken, UserRegister register)
         {
-           // if(!await _inviteService.ValidateInvite(inviteToken))
-            //    throw new Exception("Invalid invite provided!");
-            
+            if (!await _inviteService.ValidateInvite(inviteToken))
+                throw new Exception("Invalid invite provided!");
+
             // Create a new user first
             var applicationUser = await CreateApplicationUser(new ApplicationUser
             {
                 UserName = register.Email,
                 Email = register.Email,
-                Address =  register.Address,
+                Address = register.Address,
                 Name = register.Name,
             }, register.Password);
+
+            var invite = await _inviteService.GetInvite(inviteToken);
+
+            var role = invite.InviteType switch
+            {
+                InviteType.Buddy => Roles.Buddy,
+                InviteType.Doctor => Roles.Doctor,
+                InviteType.Patient => Roles.Patient,
+                _ => throw new InvalidOperationException()
+            };
             
-            // TODO: To enum
-            await _userManager.AddToRoleAsync(applicationUser, "Buddy");
+            await _userManager.AddToRoleAsync(applicationUser, role);
+
+            await CreateExtraData()
             
-            // Add a buddy associated to the user
-            await _buddyRepository.SaveAsync(new Buddy(applicationUser.Id));
-            
+
+
             return applicationUser;
-        }
-
-        public Task<ApplicationUser> RegisterPatient(string inviteToken, PatientRegister register)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ApplicationUser> RegisterDoctor(string inviteToken, DoctorRegister register)
-        {
-            throw new NotImplementedException();
         }
 
         public string GenerateToken(ApplicationUser user)
@@ -115,11 +118,11 @@ namespace IQuality.DomainServices.Services
                 DateTime.UtcNow.AddDays(Convert.ToDouble(_config["Jwt:ExpireInDays"])),
                 credentials
             );
-            
+
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
             return jwtToken;
         }
-        
+
         #region Privates
 
         private static List<Claim> GetValidClaims(ApplicationUser user)
@@ -128,11 +131,9 @@ namespace IQuality.DomainServices.Services
             var claims = new List<Claim>
             {
                 new Claim(options.ClaimsIdentity.UserIdClaimType, user.Id),
-                new Claim(options.ClaimsIdentity.UserNameClaimType, user.Email)
+                new Claim(options.ClaimsIdentity.UserNameClaimType, user.Email),
+                new Claim("role", user.Roles.First())
             };
-
-            claims.AddRange(user.Claims.Where(c => c.ClaimType == ClaimTypes.Role)
-                .Select(c => new Claim("roles", c.ClaimValue)));
 
             return claims;
         }
