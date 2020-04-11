@@ -11,6 +11,7 @@ import {environment} from "../../../environments/environment";
   providedIn: 'root'
 })
 export class ChatService {
+
   public selected: BaseChat;
   public messages: Array<Message> = [];
   public onChatSelected: Array<() => void> = [];
@@ -37,8 +38,6 @@ export class ChatService {
     this.connection.start().catch(err => {
       throwError(err);
     });
-    this.selected = new BaseChat();
-    this.selected.name = "test";
   }
 
   public sendMessage(content: string) {
