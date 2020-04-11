@@ -27,6 +27,13 @@ namespace IQuality.Api.Controllers
             
             TextMessage textMessage = new TextMessage {SenderId = senderId, ChatId = chatId, Content = message};
             await _repository.SaveAsync(textMessage);
+            
+            //calls naar dialogflow
+            
+            //botmessage terugsturen naar alle leden van chat
+            // BotMessage botmessage = new BotMessage("BotMessage")
+            // await Clients.All.SendAsync("messageReceived", senderId, chatId, message);
+            // await _repository.SaveAsync(textMessage);
         }
     }
 }
