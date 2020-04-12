@@ -9,7 +9,6 @@ import { ApiService } from '@IQuality/core/services/api.service';
   styleUrls: ['./buddygroupadd.component.scss']
 })
 export class BuddygroupaddComponent implements OnInit {
-
   checkoutForm;
   groupNames;
 
@@ -24,14 +23,14 @@ export class BuddygroupaddComponent implements OnInit {
   }
 
   async onSubmit(buddyData) {
-    
     let groupNameOutput;
     this.groupNames.forEach(element => {
       element = element.toLowerCase();
     });
-    if(buddyData.newGroupName != '' && !this.groupNames.includes(buddyData.newGroupName.toLowerCase())) {
+
+    if (buddyData.newGroupName != '' && !this.groupNames.includes(buddyData.newGroupName.toLowerCase())) {
       groupNameOutput = buddyData.newGroupName;
-    }else if(buddyData.selectedValue != '') {
+    }else if (buddyData.selectedValue != '') {
       groupNameOutput = buddyData.selectedValue;
     } else if (buddyData.selectedValue == '' && this.groupNames.length != 0) {
       groupNameOutput = this.groupNames[0];
