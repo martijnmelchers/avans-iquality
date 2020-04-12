@@ -1,15 +1,25 @@
-<div class="my-message-box" *ngIf="message.senderId === auth.nameIdentifier; else otherUser">
-  <div class="text my-text">
-    <span>
+<div *ngIf="message.senderId === auth.nameIdentifier; else otherUser" >
+  <div class="message-box my-message-box">
+    <p class="my-p">{{message.senderName || message.senderId}}</p>
+    <span class="text my-text">
       {{message.content}}
+      <div class="message-time my-time">
+        <p>{{message.time || "16:16"}}</p>
+      </div>
     </span>
+
   </div>
 </div>
 
-<ng-template class="other-message-box" #otherUser>
-  <div class="text other-text">
-    <span>
+<ng-template #otherUser >
+  <div class="message-box other-message-box">
+    <p class="other-p">{{message.senderId}}</p>
+    <span class="text other-text">
         {{message.content}}
     </span>
+    <div class="message-time other-time">
+      <p>15:39</p>
+    </div>
+
   </div>
 </ng-template>

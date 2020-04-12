@@ -5,7 +5,7 @@
                            [condensed]="false"
                            [nowrap]="false">
         <ibm-list-header>
-          <ibm-list-column>Conversations</ibm-list-column>
+          <ibm-list-column>Gesprekken</ibm-list-column>
         </ibm-list-header>
         <ibm-list-row *ngFor="let item of chats" (click)="chatService.selectChatWithId(item.id)">
           <ibm-list-column>
