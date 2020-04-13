@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using IQuality.Api.Extensions;
-using IQuality.DomainServices.Interfaces;
-using IQuality.DomainServices.Services;
-using IQuality.Infrastructure.Database.Repositories;
-using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -21,8 +17,9 @@ using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
 using Raven.DependencyInjection;
 using Raven.Identity;
-using IQuality.Api.Controllers;
+using IQuality.Api.Hubs;
 using IQuality.Infrastructure.Database.Index;
+using IQuality.Models.Chat.Messages;
 using Raven.Client.Documents.Indexes;
 
 namespace IQuality.Api
@@ -41,9 +38,8 @@ namespace IQuality.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddCors();
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(o => { o.SerializerSettings.CheckAdditionalContent = true; });
             services.AddSignalR();
 
             var documentStore = new DocumentStore
@@ -61,15 +57,22 @@ namespace IQuality.Api
                     {
                         serializer.ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor;
                         serializer.CheckAdditionalContent = true;
+                    },
+                    FindCollectionName = type =>
+                    {
+                        if (typeof(BaseMessage).IsAssignableFrom(type))
+                            return "Message";
+                        return DocumentConventions.DefaultGetCollectionName(type);
                     }
                 }
             }.Initialize();
-            
+
             services.AddDependencies(Environment);
-            
+
             // Add index to RavenDB
             IndexCreation.CreateIndexes(typeof(ChatIndex).Assembly, documentStore);
-            
+            IndexCreation.CreateIndexes(typeof(MessageIndex).Assembly, documentStore);
+
             // Setup RavenDB session and authorization
             services
                 .AddSingleton(documentStore)
@@ -80,7 +83,7 @@ namespace IQuality.Api
 
             var key = Encoding.ASCII.GetBytes(Configuration["Jwt:AudienceSecret"]);
             services.AddAuthentication(x =>
-                {
+                                 {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
@@ -166,17 +169,18 @@ namespace IQuality.Api
 
             // global cors policy
             app.UseCors(x => x
-                .AllowAnyOrigin()
+                .WithOrigins("http://localhost:4200")
+                .AllowCredentials()
                 .AllowAnyMethod()
                 .AllowAnyHeader());
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<ChatHubSocket>("/chatHub");
+                endpoints.MapHub<ChatHub>("/hub");
             });
         }
     }
