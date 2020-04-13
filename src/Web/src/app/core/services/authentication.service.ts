@@ -13,11 +13,11 @@ export class AuthenticationService {
   public encodedToken: string;
   public decodedToken: any;
 
+  private readonly NAME_IDENTIFIER = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
 
   constructor(private readonly _api: ApiService, private _cookie: CookieService) {
     this.tokenService = new JwtHelperService();
     this.encodedToken = this._cookie.get('token');
-    console.log(this.encodedToken);
   }
 
 
@@ -31,6 +31,14 @@ export class AuthenticationService {
     return this.encodedToken && this.tokenService.isTokenExpired(this.encodedToken);
   }
 
+  public get nameIdentifier(): string {
+    if(!this.decodedToken)
+    {
+      this.decodedToken = this.tokenService.decodeToken(this.encodedToken);
+    }
+
+    return this.decodedToken[this.NAME_IDENTIFIER];
+  }
 
   async createInviteLink(): Promise<Invite> {
     return this._api.post<Invite>('/authorize/invite', {});
