@@ -19,24 +19,25 @@ namespace IQuality.Api.Hubs
 
         private readonly IMessageService _messageService;
 
-        private string GetSenderId()
-        {
-            return ((ClaimsIdentity)Context.User.Identity).Claims.First().Value;
-        }
-        
         public ChatHub(IMessageService messageService, IChatService chatService)
         {
             _messageService = messageService;
             _chatService = chatService;
         }
 
+        private string GetSenderId()
+        {
+            return ((ClaimsIdentity) Context.User.Identity).Claims.First().Value;
+        }
+
+        // TODO: Make a function which accepts a array of room I'd.
         public async Task JoinGroup(string groupName)
         {
             string userName = GetSenderId();
-            
+
             if (!await _chatService.UserCanJoinChat(userName, groupName))
             {
-                await Clients.Caller.SendAsync("SendError", "Dafuq gebeurt er");
+                await Clients.Caller.SendAsync("SendError", "Something went wrong while joining the group");
                 return;
             }
 
@@ -60,6 +61,17 @@ namespace IQuality.Api.Hubs
 
             TextMessage textMessage = new TextMessage {SenderId = senderId, ChatId = chatId, Content = message};
             await _messageService.PostMessage(textMessage);
+        }
+
+        public async Task DeleteMessage(string groupName, string messageId)
+        {
+            if (!await _messageService.RemoveMessage(groupName, messageId))
+            {
+                await Clients.Caller.SendAsync("SendError", "Something went wrong while removing the message");
+                return;
+            }
+
+            await Clients.Group(groupName).SendAsync("removeMessage", messageId, groupName);
         }
     }
 }
