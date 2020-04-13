@@ -8,6 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IQuality.Api.Controllers
 {
+    public class InviteData
+    {
+        public string email { get; set; }
+        public string groupName { get; set; }
+    }
+    
     [Route("/invite")]
     public class InviteController : Controller
     {
@@ -18,8 +24,7 @@ namespace IQuality.Api.Controllers
             _inviteService = inviteService;
         }
 
-        [HttpGet]
-        [Route("/{inviteToken}")]
+        [HttpGet, Route("/{inviteToken}")]
         public async Task<IActionResult> GetInvite(string inviteToken)
         {
             var invite = await _inviteService.GetInvite(inviteToken);
@@ -30,11 +35,11 @@ namespace IQuality.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateInvite([FromBody] string email, [FromBody] string groupName)
+        public async Task<IActionResult> CreateInvite([FromBody]InviteData data)
         {
             try
             {
-                var invite = await _inviteService.CreateInvite(HttpContext.User.GetUserId(), email, groupName);
+                var invite = await _inviteService.CreateInvite(HttpContext.User.GetUserId(), data.email, data.groupName);
                 return Ok(invite);
             }
             catch (Exception e)

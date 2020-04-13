@@ -28,7 +28,7 @@ namespace IQuality.DomainServices.Services
         public async Task<Invite> CreateInvite(string userId, string email, string groupName = "")
         {
             var user = await _userManager.FindByIdAsync(userId);
-
+            
             var inviteType = user.Roles.First() switch
             {
                 Roles.Doctor => InviteType.Patient,
