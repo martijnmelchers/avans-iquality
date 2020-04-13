@@ -5,20 +5,23 @@ using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Models.Chat;
 using IQuality.Models.Chat.Messages;
+using IQuality.Models.Forms;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Raven.Client.Documents.Session;
 
 namespace IQuality.Api.Controllers
 {
-    [Route("/chats"), Authorize]
+    [Route("/chats")]
+    [Authorize]
     public class ChatController : RavenApiController
     {
         private readonly IChatService _chatService;
         private readonly IMessageService _messageService;
-        
-        public ChatController(IAsyncDocumentSession db, IChatService chatService, IMessageService messageService) : base(db)
+
+        public ChatController(IAsyncDocumentSession db, IChatService chatService, IMessageService messageService) :
+            base(db)
         {
             _chatService = chatService;
             _messageService = messageService;
@@ -37,49 +40,61 @@ namespace IQuality.Api.Controllers
             string id = HttpContext.User.GetUserId();
             chat.InitiatorId = id;
             chat.CreationDate = DateTime.Now;
-            
+
             BaseChat createdChat = await _chatService.CreateChatAsync(chat);
             return Ok(createdChat);
         }
 
-        
- 
-        [Route("{chatId}"), HttpDelete]
+        [Route("{chatId}")]
+        [HttpDelete]
         public IActionResult DeleteChat(string chatId)
         {
             _chatService.DeleteChatAsync(chatId);
             return Ok();
         }
-        
-        [Route("{chatId}"), HttpGet]
+
+        [Route("{chatId}")]
+        [HttpGet]
         public async Task<IActionResult> GetChatAsync(string chatId)
         {
-            BaseChat result =  await _chatService.GetChatAsync(chatId);
+            BaseChat result = await _chatService.GetChatAsync(chatId);
             return Ok(result);
         }
-        
-        [Route("{chatId}/messages"), HttpGet]
-        public async Task<OkObjectResult> GetChatMessages(string chatId)
+
+        [Route("{chatId}/messages")]
+        public async Task<OkObjectResult> GetChatMessagesPagination(string chatId, [FromQuery]Pagination pagination)
         {
-            List<TextMessage> messages = await _messageService.GetMessages(chatId);
+            List<TextMessage> messages = null; 
+            if (pagination.PageNumber == 0 && pagination.PageSize == 0)
+            {
+                messages = await _messageService.GetMessages(chatId);
+            }
+            else
+            {
+                messages = await _messageService.GetMessages(chatId, (pagination.PageNumber - 1) * pagination.PageSize,
+                    pagination.PageSize);
+            }
+            
             return Ok(messages);
         }
-        
-        [Route("{chatId}/messages"), HttpPost]
+
+        [Route("{chatId}/messages")]
+        [HttpPost]
         public async Task<IActionResult> PostChatMessage(string chatId, [FromBody] string content)
         {
             if (content == null) return NotFound();
 
 
-            TextMessage messages = await _messageService.PostMessage(new TextMessage()
+            TextMessage messages = await _messageService.PostMessage(new TextMessage
             {
                 ChatId = chatId,
                 Content = content
             });
             return Ok(messages);
         }
-        
-        [Route("{chatId}/messages/{messageId}"), HttpGet]
+
+        [Route("{chatId}/messages/{messageId}")]
+        [HttpGet]
         public async Task<IActionResult> GetChatMessage(string chatId, string messageId)
         {
             TextMessage messages = await _messageService.GetMessage(chatId, messageId);

@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using IQuality.Api.Extensions;
-using IQuality.DomainServices.Interfaces;
-using IQuality.DomainServices.Services;
-using IQuality.Infrastructure.Database.Repositories;
-using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -21,7 +17,7 @@ using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
 using Raven.DependencyInjection;
 using Raven.Identity;
-using IQuality.Api.Controllers;
+using IQuality.Api.Hubs;
 using IQuality.Infrastructure.Database.Index;
 using IQuality.Models.Chat.Messages;
 using Raven.Client.Documents.Indexes;
@@ -87,7 +83,7 @@ namespace IQuality.Api
 
             var key = Encoding.ASCII.GetBytes(Configuration["Jwt:AudienceSecret"]);
             services.AddAuthentication(x =>
-                {
+                                 {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
@@ -180,11 +176,11 @@ namespace IQuality.Api
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<ChatHubController>("/hub");
+                endpoints.MapHub<ChatHub>("/hub");
             });
         }
     }

@@ -30,11 +30,11 @@ namespace IQuality.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateInvite([FromBody] string email)
+        public async Task<IActionResult> CreateInvite([FromBody] string email, [FromBody] string groupName)
         {
             try
             {
-                var invite = await _inviteService.CreateInvite(HttpContext.User.GetUserId(), email);
+                var invite = await _inviteService.CreateInvite(HttpContext.User.GetUserId(), email, groupName);
                 return Ok(invite);
             }
             catch (Exception e)

@@ -25,7 +25,7 @@ namespace IQuality.DomainServices.Services
             _inviteRepository = inviteRepository;
         }
         
-        public async Task<Invite> CreateInvite(string userId, string email)
+        public async Task<Invite> CreateInvite(string userId, string email, string groupName = "")
         {
             var user = await _userManager.FindByIdAsync(userId);
 
@@ -36,7 +36,6 @@ namespace IQuality.DomainServices.Services
                 Roles.Admin => InviteType.Doctor,
                 _ => throw new InvalidOperationException()
             };
-            
 
             var invite = new Invite
             {
@@ -44,8 +43,10 @@ namespace IQuality.DomainServices.Services
                 Token = Guid.NewGuid().ToString(),
                 Email = email,
                 InvitedBy = user.Id,
-                Used = false
+                Used = false,
+                GroupName = groupName
             };
+            
 
             await _inviteRepository.SaveAsync(invite);
             return invite;
