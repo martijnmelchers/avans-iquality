@@ -9,6 +9,7 @@ namespace IQuality.DomainServices.Interfaces
     {
         public Task<BaseChat> GetChatAsync(string id);
         public Task<List<BaseChat>> GetChatsAsync();
+        public Task<List<BaseChat>> GetChatsAsync(int skip, int take);
 
         public Task<BaseChat> CreateChatAsync(BaseChat chat);
         public Task<Boolean> UserCanJoinChat(string userId, string chatId);

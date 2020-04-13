@@ -28,6 +28,12 @@ namespace IQuality.DomainServices.Services
             return messages;
         }
 
+        public async Task<List<TextMessage>> GetMessages(string chatId, int skip, int take)
+        {
+            List<TextMessage> messages = await _messageRepository.GetTextMessagesByChat(chatId, skip, take);
+            return messages;
+        }
+        
         public async Task<TextMessage> PostMessage(TextMessage message)
         {
             TextMessage result = await _messageRepository.PostTextMessageAsync(message);
