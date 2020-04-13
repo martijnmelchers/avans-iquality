@@ -33,11 +33,10 @@ namespace IQuality.Infrastructure.Database.Repositories
         {
             throw new System.NotImplementedException();
         }
-
-
+        
         protected override async Task<List<BaseChat>> ConvertAsync(List<BaseChat> storage)
         {
-            var baseChats = storage.ToList();
+            List<BaseChat> baseChats = storage.ToList();
             foreach (var chat in baseChats)
             {
                 chat.Messages = await Queryable.Take(Session.Query<BaseMessage>().Where(x => x.ChatId == chat.Id), 20).ToListAsync();

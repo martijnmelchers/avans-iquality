@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using IQuality.DomainServices.Interfaces;
-using IQuality.Infrastructure.Database.Repositories;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models.Chat;
-using IQuality.Models.Chat.Messages;
 using IQuality.Models.Helpers;
-using Sparrow.Json;
 
 
 namespace IQuality.DomainServices.Services
@@ -35,6 +33,37 @@ namespace IQuality.DomainServices.Services
         {
             await _chatRepository.SaveAsync(baseChat);
             return baseChat;
+        }
+
+        public async Task<bool> UserCanJoinChat(string userId, string chatId)
+        {
+            BaseChat baseChat;
+            try
+            {
+                 baseChat = await GetChatAsync(chatId);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            
+            if (baseChat.InitiatorId == userId)
+            {
+                return true;
+            }
+
+            if (baseChat.ParticipatorIds != null && baseChat.ParticipatorIds.Count != 0)
+            {
+                foreach (string participator in baseChat.ParticipatorIds)
+                {
+                    if (participator == userId)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public async void DeleteChatAsync(string id)

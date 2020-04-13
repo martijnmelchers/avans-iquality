@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {ApiService} from "@IQuality/core/services/api.service";
 import {BaseChat} from "@IQuality/core/models/base-chat";
 import * as signalR from "@microsoft/signalr";
+import {LogLevel} from "@microsoft/signalr";
 import {Message} from "@IQuality/core/models/message";
-import {throwError} from "rxjs";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {environment} from "../../../environments/environment";
 
@@ -19,25 +19,34 @@ export class ChatService {
 
   constructor(private _api: ApiService, private auth: AuthenticationService) {
     // TODO: Put the HubConnection Url in the environment.
-    this.connection = new signalR.HubConnectionBuilder().withUrl(`${environment.endpoints.api}/hub`).build();
+    this.connection = new signalR.HubConnectionBuilder()
+      .withAutomaticReconnect()
+      .withUrl(`${environment.endpoints.api}/hub`, {
+      accessTokenFactory: () => auth.encodedToken
+    }).configureLogging(LogLevel.Warning).build();
 
-    this.connection.on("messageReceived", (userId: string, chatId: string, message: string) => {
-      if (chatId === this.selected.id) {
-        let newMessage = new Message();
-        newMessage.content = message;
+    // this.connection.on("messageReceived", (userId: string, chatId: string, message: string) => {
+    //   if (chatId === this.selected.id) {
+    //     let newMessage = new Message();
+    //     newMessage.content = message;
+    //
+    //     if (userId === this.auth.nameIdentifier) {
+    //       newMessage.senderId = userId;
+    //     }
+    //
+    //     this.messages.push(newMessage);
+    //   }
+    // });
 
-        if (userId === this.auth.nameIdentifier) {
-          newMessage.senderId = userId;
-        }
-
-
-        this.messages.push(newMessage);
-      }
+    this.connection.on("messageReceived", (message: string) => {
+      console.log(message);
     });
 
     this.connection.start().catch(err => {
-      throwError(err);
+      console.log("Connection error", err);
     });
+
+    console.log(this.connection);
   }
 
   public sendMessage(content: string) {
@@ -57,6 +66,10 @@ export class ChatService {
     this.messages = this.selected.messages;
     this.onChatSelected.forEach(value => {
       value();
+    });
+
+    this.connection.invoke("JoinGroup", id).catch(err => {
+      console.log(err)
     });
 
     return this.selected;
