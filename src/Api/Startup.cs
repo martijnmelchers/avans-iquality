@@ -18,9 +18,8 @@ using Raven.Client.Documents.Conventions;
 using Raven.DependencyInjection;
 using Raven.Identity;
 using IQuality.Api.Hubs;
-using IQuality.Infrastructure.Database.Index;
+using IQuality.Models.Chat;
 using IQuality.Models.Chat.Messages;
-using Raven.Client.Documents.Indexes;
 
 namespace IQuality.Api
 {
@@ -62,16 +61,16 @@ namespace IQuality.Api
                     {
                         if (typeof(BaseMessage).IsAssignableFrom(type))
                             return "Message";
+                        
+                        if (typeof(BaseChat).IsAssignableFrom(type))
+                            return "Chat";
+
                         return DocumentConventions.DefaultGetCollectionName(type);
                     }
                 }
             }.Initialize();
 
             services.AddDependencies(Environment);
-
-            // Add index to RavenDB
-            IndexCreation.CreateIndexes(typeof(ChatIndex).Assembly, documentStore);
-            IndexCreation.CreateIndexes(typeof(MessageIndex).Assembly, documentStore);
 
             // Setup RavenDB session and authorization
             services
@@ -83,7 +82,7 @@ namespace IQuality.Api
 
             var key = Encoding.ASCII.GetBytes(Configuration["Jwt:AudienceSecret"]);
             services.AddAuthentication(x =>
-                                 {
+                {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
@@ -176,7 +175,7 @@ namespace IQuality.Api
 
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
