@@ -17,4 +17,24 @@
     <Folder Include="src\app\areas\main" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="dist\**" />
+    <Compile Remove="out-tsc\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="dist\**" />
+    <EmbeddedResource Remove="out-tsc\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="dist\**" />
+    <None Remove="out-tsc\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="dist\**" />
+    <Content Remove="out-tsc\**" />
+  </ItemGroup>
+
 </Project>

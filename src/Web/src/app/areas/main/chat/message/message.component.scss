@@ -1,33 +1,71 @@
-$title-pad: 0.8em;
-$my-color: #1C1C1C;
-$other-color: #EE0765;
+$title-pad: 0.5rem;
+$my-color: #707070;
+$other-color: #AB0549;
 
 
-.my-message-box {
-  text-align: right;
-  margin: 1.3em 0;
+.message-box {
+
+  margin: 0.7rem;
+  margin-bottom: 0;
+  margin-top: 0;
+
+  &.my-message-box{
+    text-align: right;
+  }
+  &.other-message-box{
+    text-align: left;
+  }
 }
 
-.other-message-box {
-  text-align: left;
-  margin-bottom: 1.3em;
+.message-box p {
+  font-size: 0.6rem;
+
+  &.my-p{
+    margin-left: 0.3rem;
+  }
+  &.other-p{
+    margin-right: 0.3rem;
+  }
+}
+
+.message-time{
+  vertical-align: center;
+  display: block;
+
+  font-size: 0.4rem;
+  color: white;
+
+  &.my-time{
+    text-align: left;
+  }
+
+  &.other-time {
+    text-align: right;
+  }
 }
 
 .text {
-  line-height: $title-pad + 1em;
+  vertical-align: sub;
+  text-align: left;
   display: inline-block;
+
+  line-height: $title-pad + 1rem;
   padding: $title-pad;
 
-  border: 1px solid var(--ion-color-medium);
-  border-radius: 10px;
-  max-width: 90%;
+  white-space: normal;
+
+  border-radius: 0.6rem;
   color: white;
 
+  word-wrap:break-word;
+
   &.my-text {
+    max-width: 100%;
     background: $my-color;
   }
 
   &.other-text {
+    max-width: 80%;
     background: $other-color;
   }
 }
