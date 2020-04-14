@@ -98,13 +98,9 @@ namespace IQuality.DomainServices.Services
             
             await _userManager.AddToRoleAsync(applicationUser, role);
 
-            await CreateExtraData()
-            
-
-
             return applicationUser;
         }
-
+        
         public string GenerateToken(ApplicationUser user)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:AudienceSecret"]));
