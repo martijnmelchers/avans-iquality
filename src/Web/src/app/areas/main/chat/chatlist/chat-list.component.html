@@ -1,0 +1,27 @@
+<div ibmGrid>
+  <div ibmRow [gutter]="false">
+    <div ibmCol>
+      <ibm-structured-list [border]="true"
+                           [condensed]="false"
+                           [nowrap]="false">
+        <ibm-list-header>
+          <ibm-list-column>Gesprekken</ibm-list-column>
+        </ibm-list-header>
+        <ibm-list-row *ngFor="let item of chats" (click)="chatService.selectChatWithId(item.id)">
+          <ibm-list-column>
+            {{item.name}}
+          </ibm-list-column>
+        </ibm-list-row>
+      </ibm-structured-list>
+    </div>
+  </div>
+  <div ibmRow>
+    <button ibmCol ibmButton (click)="onChatCreate()">
+      Create Chat
+    </button>
+    <label>
+      Chat name
+      <input ibmText [(ngModel)]="chatName">
+    </label>
+  </div>
+</div>
