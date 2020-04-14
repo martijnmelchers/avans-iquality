@@ -34,7 +34,7 @@ namespace IQuality.Infrastructure.Database.Index
                 Messages = c.Messages
             });
             
-            this.AddMap<UserChat>(baseChat => from c in baseChat select new Mapping()
+            this.AddMap<BuddyChat>(baseChat => from c in baseChat select new Mapping()
             {
                 Id = c.Id,
                 Name = c.Name,
