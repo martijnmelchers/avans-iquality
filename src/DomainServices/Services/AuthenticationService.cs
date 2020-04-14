@@ -14,18 +14,17 @@ using IQuality.Models.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Raven.Identity;
 
 namespace IQuality.DomainServices.Services
 {
     [Injectable]
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IConfiguration _config;
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IBuddyRepository _buddyRepository;
-
+        private readonly IConfiguration _config;
         private readonly IInviteService _inviteService;
+
+        private readonly UserManager<ApplicationUser> _userManager;
         //private readonly  _patientRepository;
         //private readonly _doctorRepository;
 
@@ -56,22 +55,6 @@ namespace IQuality.DomainServices.Services
             return (await _userManager.CheckPasswordAsync(applicationUser, password), applicationUser);
         }
 
-        private async Task<ApplicationUser> CreateApplicationUser(ApplicationUser user, string password)
-        {
-            var applicationUser = await _userManager.FindByEmailAsync(user.Email);
-
-            // TODO: Implement our own exception
-            if (applicationUser != null)
-                throw new Exception("User already exists!");
-
-            var result = await _userManager.CreateAsync(user, password);
-
-            if (!result.Succeeded)
-                throw new Exception($"{result.Errors}");
-
-            return user;
-        }
-
         public async Task<ApplicationUser> Register(string inviteToken, UserRegister register)
         {
             if (!await _inviteService.ValidateInvite(inviteToken))
@@ -83,7 +66,7 @@ namespace IQuality.DomainServices.Services
                 UserName = register.Email,
                 Email = register.Email,
                 Address = register.Address,
-                Name = register.Name,
+                Name = register.Name
             }, register.Password);
 
             var invite = await _inviteService.GetInvite(inviteToken);
@@ -95,8 +78,9 @@ namespace IQuality.DomainServices.Services
                 InviteType.Patient => Roles.Patient,
                 _ => throw new InvalidOperationException()
             };
-            
+
             await _userManager.AddToRoleAsync(applicationUser, role);
+            await _inviteService.ConsumeInvite(inviteToken);
 
             return applicationUser;
         }
@@ -120,6 +104,23 @@ namespace IQuality.DomainServices.Services
         }
 
         #region Privates
+
+        private async Task<ApplicationUser> CreateApplicationUser(ApplicationUser user, string password)
+        {
+            var applicationUser = await _userManager.FindByEmailAsync(user.Email);
+
+            // TODO: Implement our own exception
+            if (applicationUser != null)
+                throw new Exception("User already exists!");
+
+            var result = await _userManager.CreateAsync(user, password);
+
+            if (!result.Succeeded)
+                throw new Exception($"{result.Errors}");
+
+            return user;
+        }
+
 
         private static List<Claim> GetValidClaims(ApplicationUser user)
         {
