@@ -33,7 +33,7 @@ namespace IQuality.Api.Controllers
         [HttpPost, Route("patient"), AllowAnonymous]
         public IActionResult Set([FromBody] myModel result)
         {
-            QueryResult response = _dialogflowService.BuildResponse(result.Text, result.Response);
+            QueryResult response = _dialogflowService.ProcessRequest(result.Text, result.Response);
             return Json(response);
         }
     }

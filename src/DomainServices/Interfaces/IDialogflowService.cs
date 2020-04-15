@@ -4,7 +4,6 @@ namespace IQuality.DomainServices.Interfaces
 {
     public interface IDialogflowService
     {
-        void ProcessRequest(WebhookRequest request);
-        QueryResult BuildResponse(string text, QueryResult response);
+        QueryResult ProcessRequest(string text, QueryResult response);
     }
 }

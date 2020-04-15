@@ -7,6 +7,7 @@ import {throwError} from "rxjs";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {environment} from "../../../environments/environment";
 import {DialogflowResult} from "@IQuality/core/models/dialogflow-result";
+import Any = jasmine.Any;
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +48,7 @@ export class ChatService {
 
   public sendMessage(content: string) {
     if(this.chatWithBot) {
-      this._api.post<DialogflowResult>("/dialogflow/patient", {text: content, response: this.latestDialogflowResponse}).then((response)=> {
+      this._api.post<any>("/dialogflow/patient", {text: content, response: this.latestDialogflowResponse}).then((response)=> {
         let userMessage = new Message();
         userMessage.senderId = this.auth.nameIdentifier;
         userMessage.content = content;
@@ -59,7 +60,7 @@ export class ChatService {
           botMessage.content = response.fulfillmentText;
           this.messages.push(botMessage);
         }
-
+      console.log(this.latestDialogflowResponse);
       })
     } else {
       this.connection.send("newMessage", this.auth.nameIdentifier, this.selected.id, content);

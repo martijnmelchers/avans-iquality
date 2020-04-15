@@ -2,7 +2,7 @@
     queryText: string;
     parameters: {
       fields: any
-    }
+    };
     fulfillmentText: string;
     outputContexts: Array<any>;
     intent: {
