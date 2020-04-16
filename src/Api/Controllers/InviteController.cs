@@ -5,6 +5,7 @@ using IQuality.DomainServices.Interfaces;
 using IQuality.Models.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Raven.Client.Documents.Session;
 
 namespace IQuality.Api.Controllers
 {
@@ -13,13 +14,13 @@ namespace IQuality.Api.Controllers
         public string email { get; set; }
         public string groupName { get; set; }
     }
-    
-    [Route("/invite")]
-    public class InviteController : Controller
-    {
-        private IInviteService _inviteService;
 
-        public InviteController(IInviteService inviteService)
+    [Route("/invite")]
+    public class InviteController : RavenApiController
+    {
+        private readonly IInviteService _inviteService;
+
+        public InviteController(IAsyncDocumentSession session, IInviteService inviteService) : base(session)
         {
             _inviteService = inviteService;
         }
@@ -35,11 +36,12 @@ namespace IQuality.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateInvite([FromBody]InviteData data)
+        public async Task<IActionResult> CreateInvite([FromBody] InviteData data)
         {
             try
             {
-                var invite = await _inviteService.CreateInvite(HttpContext.User.GetUserId(), data.email, data.groupName);
+                var invite =
+                    await _inviteService.CreateInvite(HttpContext.User.GetUserId(), data.email, data.groupName);
                 return Ok(invite);
             }
             catch (Exception e)
