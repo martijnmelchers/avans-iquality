@@ -27,7 +27,7 @@ namespace IQuality.Api.Controllers
             _buddyGroupService = buddyGroupService;
         }
 
-        [HttpGet, Authorize(Roles = Roles.Patient)]
+        [HttpGet("getMyBuddyChats/{userId}"), Authorize(Roles = Roles.Patient)]
         public async Task<IActionResult> GetBuddyChatsByUserId(string userId)
         {
             var result = await _buddyGroupService.GetBuddyChatsByUserId(userId);
