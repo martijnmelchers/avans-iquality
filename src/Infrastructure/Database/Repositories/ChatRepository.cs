@@ -21,7 +21,12 @@ namespace IQuality.Infrastructure.Database.Repositories
 
         public async Task<List<BaseChat>> GetChatsAsync()
         {
-            return await Session.Query<BaseChat>("ChatIndex").ToListAsync();
+            return await Session.Query<BaseChat>().ToListAsync();
+        }
+
+        public async Task<List<BaseChat>> GetChatsAsync(int skip, int take)
+        {
+            return await Session.Query<BaseChat>().Skip(skip).Take(take).ToListAsync();
         }
         
         public override async Task SaveAsync(BaseChat entity)
@@ -33,11 +38,10 @@ namespace IQuality.Infrastructure.Database.Repositories
         {
             throw new System.NotImplementedException();
         }
-
-
+        
         protected override async Task<List<BaseChat>> ConvertAsync(List<BaseChat> storage)
         {
-            var baseChats = storage.ToList();
+            List<BaseChat> baseChats = storage.ToList();
             foreach (var chat in baseChats)
             {
                 chat.Messages = await Queryable.Take(Session.Query<BaseMessage>().Where(x => x.ChatId == chat.Id), 20).ToListAsync();

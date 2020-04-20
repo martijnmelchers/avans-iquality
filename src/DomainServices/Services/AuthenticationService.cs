@@ -20,18 +20,21 @@ namespace IQuality.DomainServices.Services
     [Injectable]
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IConfiguration _config;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IInviteRepository _inviteRepository;
         private readonly IBuddyRepository _buddyRepository;
+        private readonly IConfiguration _config;
+        private readonly IInviteService _inviteService;
+
+        private readonly UserManager<ApplicationUser> _userManager;
         //private readonly  _patientRepository;
         //private readonly _doctorRepository;
 
-        public AuthenticationService(IConfiguration config, UserManager<ApplicationUser> userManager, IInviteRepository inviteRepository)
+        public AuthenticationService(IConfiguration config, UserManager<ApplicationUser> userManager,
+            IBuddyRepository buddyRepository, IInviteService inviteService)
         {
             _config = config;
             _userManager = userManager;
-            _inviteRepository = inviteRepository;
+            _buddyRepository = buddyRepository;
+            _inviteService = inviteService;
         }
 
         public async Task<(bool success, ApplicationUser user)> Login(string email, string password)
@@ -52,56 +55,36 @@ namespace IQuality.DomainServices.Services
             return (await _userManager.CheckPasswordAsync(applicationUser, password), applicationUser);
         }
 
-        private async Task<ApplicationUser> Register(ApplicationUser user, string password)
+        public async Task<ApplicationUser> Register(string inviteToken, UserRegister register)
         {
-            var applicationUser = await _userManager.FindByEmailAsync(user.Email);
+            if (!await _inviteService.ValidateInvite(inviteToken))
+                throw new Exception("Invalid invite provided!");
 
-            // TODO: Implement our own exception
-            if(applicationUser != null)
-                throw new Exception("User already exists!");
-            
-            var result = await _userManager.CreateAsync(user, password);
-            
-            if(!result.Succeeded)
-                throw new Exception($"{result.Errors}");
-            
-            return await _userManager.FindByEmailAsync(user.Email);
-        }
-
-        public async Task<ApplicationUser> RegisterBuddy(string inviteToken, BuddyRegister register)
-        {
-            // TODO: Add reference to _inviteService + own exception
-            // if(!await _inviteService.IsValidInvite(inviteToken, InviteType.Buddy))
-            //    throw new Exception("Invalid invite provided!");
-            
             // Create a new user first
-            var applicationUser = await Register(new ApplicationUser
+            var applicationUser = await CreateApplicationUser(new ApplicationUser
             {
                 UserName = register.Email,
                 Email = register.Email,
-                Address =  register.Address,
-                Name = register.Name,
+                Address = register.Address,
+                Name = register.Name
             }, register.Password);
-            
-            // TODO: To enum
-            await _userManager.AddToRoleAsync(applicationUser, "Buddy");
-            
-            // Add a buddy associated to the user
-            await _buddyRepository.SaveAsync(new Buddy(applicationUser.Id));
-            
+
+            var invite = await _inviteService.GetInvite(inviteToken);
+
+            var role = invite.InviteType switch
+            {
+                InviteType.Buddy => Roles.Buddy,
+                InviteType.Doctor => Roles.Doctor,
+                InviteType.Patient => Roles.Patient,
+                _ => throw new InvalidOperationException()
+            };
+
+            await _userManager.AddToRoleAsync(applicationUser, role);
+            await _inviteService.ConsumeInvite(inviteToken);
+
             return applicationUser;
         }
-
-        public Task<ApplicationUser> RegisterPatient(string inviteToken, PatientRegister register)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ApplicationUser> RegisterDoctor(string inviteToken, DoctorRegister register)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public string GenerateToken(ApplicationUser user)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:AudienceSecret"]));
@@ -115,42 +98,29 @@ namespace IQuality.DomainServices.Services
                 DateTime.UtcNow.AddDays(Convert.ToDouble(_config["Jwt:ExpireInDays"])),
                 credentials
             );
-            
+
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
             return jwtToken;
         }
 
-        public async Task CreateInvite(string userId)
-        {
-            var invite = new Invite
-            {
-                ApplicationUserId = userId,
-                Used = false
-            };
-            
-            await _inviteRepository.SaveAsync(invite);
-        }
-
-        public async Task<Invite> GetInvite(string id)
-        {
-            return await _inviteRepository.GetByIdAsync(id);
-        }
-
-        // Uses the invite link.
-        public async void RespondInvite(Invite link, bool accepted = true)
-        {
-            if (accepted)
-            {
-                link.Used = true;
-                await _inviteRepository.SaveAsync(link);
-            }
-            else
-            {
-                _inviteRepository.Delete(link);
-            }
-        }
-
         #region Privates
+
+        private async Task<ApplicationUser> CreateApplicationUser(ApplicationUser user, string password)
+        {
+            var applicationUser = await _userManager.FindByEmailAsync(user.Email);
+
+            // TODO: Implement our own exception
+            if (applicationUser != null)
+                throw new Exception("User already exists!");
+
+            var result = await _userManager.CreateAsync(user, password);
+
+            if (!result.Succeeded)
+                throw new Exception($"{result.Errors}");
+
+            return user;
+        }
+
 
         private static List<Claim> GetValidClaims(ApplicationUser user)
         {
@@ -158,11 +128,9 @@ namespace IQuality.DomainServices.Services
             var claims = new List<Claim>
             {
                 new Claim(options.ClaimsIdentity.UserIdClaimType, user.Id),
-                new Claim(options.ClaimsIdentity.UserNameClaimType, user.Email)
+                new Claim(options.ClaimsIdentity.UserNameClaimType, user.Email),
+                new Claim("role", user.Roles.First())
             };
-
-            claims.AddRange(user.Claims.Where(c => c.ClaimType == ClaimTypes.Role)
-                .Select(c => new Claim("roles", c.ClaimValue)));
 
             return claims;
         }

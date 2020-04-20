@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using IQuality.Api.Extensions;
-using IQuality.DomainServices.Interfaces;
-using IQuality.DomainServices.Services;
-using IQuality.Infrastructure.Database.Repositories;
-using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -21,10 +17,9 @@ using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
 using Raven.DependencyInjection;
 using Raven.Identity;
-using IQuality.Api.Controllers;
-using IQuality.Infrastructure.Database.Index;
+using IQuality.Api.Hubs;
+using IQuality.Models.Chat;
 using IQuality.Models.Chat.Messages;
-using Raven.Client.Documents.Indexes;
 
 namespace IQuality.Api
 {
@@ -66,16 +61,16 @@ namespace IQuality.Api
                     {
                         if (typeof(BaseMessage).IsAssignableFrom(type))
                             return "Message";
+                        
+                        if (typeof(BaseChat).IsAssignableFrom(type))
+                            return "Chat";
+
                         return DocumentConventions.DefaultGetCollectionName(type);
                     }
                 }
             }.Initialize();
 
             services.AddDependencies(Environment);
-
-            // Add index to RavenDB
-            IndexCreation.CreateIndexes(typeof(ChatIndex).Assembly, documentStore);
-            IndexCreation.CreateIndexes(typeof(MessageIndex).Assembly, documentStore);
 
             // Setup RavenDB session and authorization
             services
@@ -184,7 +179,7 @@ namespace IQuality.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<ChatHubController>("/hub");
+                endpoints.MapHub<ChatHub>("/hub");
             });
         }
     }

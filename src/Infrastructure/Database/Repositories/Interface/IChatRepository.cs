@@ -7,5 +7,6 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
     public interface IChatRepository : IBaseRavenRepository<BaseChat>
     {
         Task<List<BaseChat>> GetChatsAsync();
+        Task<List<BaseChat>> GetChatsAsync(int skip, int take);
     }
 }
