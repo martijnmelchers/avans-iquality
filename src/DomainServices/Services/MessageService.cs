@@ -17,13 +17,6 @@ namespace IQuality.DomainServices.Services
             _messageRepository = messageRepository;
         }
 
-
-        public async Task<List<TextMessage>> GetMessages(string chatId)
-        {
-            List<TextMessage> messages = await _messageRepository.GetTextMessagesByChat(chatId);
-            return messages;
-        }
-
         public async Task<List<TextMessage>> GetMessages(string chatId, int skip, int take)
         {
             List<TextMessage> messages = await _messageRepository.GetTextMessagesByChat(chatId, skip, take);
