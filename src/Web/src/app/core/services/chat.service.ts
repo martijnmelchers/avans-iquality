@@ -7,7 +7,6 @@ import {Message} from "@IQuality/core/models/message";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {environment} from "../../../environments/environment";
 import {DialogflowResult} from "@IQuality/core/models/dialogflow-result";
-import Any = jasmine.Any;
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +16,6 @@ export class ChatService {
   public selected: BaseChat;
   public messages: Array<Message> = [];
   public onChatSelected: Array<() => void> = [];
-  private connection: any;
   private latestDialogflowResponse: DialogflowResult;
 
   private readonly connection: signalR.HubConnection;
@@ -54,8 +52,6 @@ export class ChatService {
     }).catch(err => {
       console.log("Connection error", err);
     });
-
-    console.log(this.connection);
   }
 
   public sendMessage(content: string) {
