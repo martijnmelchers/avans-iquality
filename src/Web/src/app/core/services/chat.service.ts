@@ -39,16 +39,14 @@ export class ChatService {
       }
     });
 
-    this.connection.on("messageReceived", (message: string) => {
+    this.connection.start().then(() => {
       const response = this.getChats();
       response.then((chats) => {
         for (const chat of chats) {
           this.hubJoinGroup(chat.id);
         }
       })
-    });
-
-    this.connection.start().catch(err => {
+    }).catch(err => {
       console.log("Connection error", err);
     });
 
@@ -71,6 +69,7 @@ export class ChatService {
 
   public async selectChatWithId(id: string): Promise<BaseChat> {
     this.selected = await this._api.get<BaseChat>(`/chats/${id}`);
+
     this.messages = this.selected.messages;
     this.onChatSelected.forEach(value => {
       value();
