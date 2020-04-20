@@ -6,19 +6,24 @@ import {LogLevel} from "@microsoft/signalr";
 import {Message} from "@IQuality/core/models/message";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {environment} from "../../../environments/environment";
+import {DialogflowResult} from "@IQuality/core/models/dialogflow-result";
+import Any = jasmine.Any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-
+  private chatWithBot: boolean;
   public selected: BaseChat;
   public messages: Array<Message> = [];
   public onChatSelected: Array<() => void> = [];
+  private connection: any;
+  private latestDialogflowResponse: DialogflowResult;
 
   private readonly connection: signalR.HubConnection;
 
   constructor(private _api: ApiService, private auth: AuthenticationService) {
+    this.chatWithBot = true;
     // TODO: Put the HubConnection Url in the environment.
     this.connection = new signalR.HubConnectionBuilder()
       .withAutomaticReconnect()
@@ -54,7 +59,24 @@ export class ChatService {
   }
 
   public sendMessage(content: string) {
-    this.connection.send("newMessage", this.auth.nameIdentifier, this.selected.id, content);
+    if(this.chatWithBot) {
+      this._api.post<any>("/dialogflow/patient", {text: content, response: this.latestDialogflowResponse}).then((response)=> {
+        let userMessage = new Message();
+        userMessage.senderId = this.auth.nameIdentifier;
+        userMessage.content = content;
+        this.messages.push(userMessage);
+
+        this.latestDialogflowResponse = response;
+        let botMessage = new Message();
+        if(response != null){
+          botMessage.content = response.fulfillmentText;
+          this.messages.push(botMessage);
+        }
+      console.log(this.latestDialogflowResponse);
+      })
+    } else {
+      this.connection.send("newMessage", this.auth.nameIdentifier, this.selected.id, content);
+    }
   }
 
   public async createChat(name: string): Promise<BaseChat> {
