@@ -62,10 +62,10 @@ namespace IQuality.Api.Controllers
         }
 
         [Route("{chatId}/messages")]
-        public async Task<OkObjectResult> GetChatMessagesPagination(string chatId, [FromQuery]Pagination pagination)
+        public async Task<IActionResult> GetChatMessagesPagination(string chatId, [FromQuery] int page = 1)
         {
             List<TextMessage> messages = null; 
-            if (pagination.PageNumber == 0 && pagination.PageSize == 0)
+            /*if ()
             {
                 messages = await _messageService.GetMessages(chatId);
             }
@@ -73,7 +73,7 @@ namespace IQuality.Api.Controllers
             {
                 messages = await _messageService.GetMessages(chatId, (pagination.PageNumber - 1) * pagination.PageSize,
                     pagination.PageSize);
-            }
+            }*/
             
             return Ok(messages);
         }

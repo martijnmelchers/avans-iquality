@@ -21,12 +21,12 @@ namespace IQuality.Infrastructure.Database.Repositories
 
         public async Task<List<BaseChat>> GetChatsAsync()
         {
-            return await Session.Query<BaseChat>("ChatIndex").ToListAsync();
+            return await Session.Query<BaseChat>().ToListAsync();
         }
 
         public async Task<List<BaseChat>> GetChatsAsync(int skip, int take)
         {
-            return await Session.Query<BaseChat>("ChatIndex").Skip(skip).Take(take).ToListAsync();
+            return await Session.Query<BaseChat>().Skip(skip).Take(take).ToListAsync();
         }
         
         public override async Task SaveAsync(BaseChat entity)
