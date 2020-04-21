@@ -54,10 +54,10 @@ namespace IQuality.Api.Hubs
             await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has left he group {groupName}");
         }
 
-        public async Task NewMessage(string chatId, string message)
+        public async Task NewMessage(string userId, string chatId, string message)
         {
             string senderId = GetSenderId();
-            await Clients.Group(chatId).SendAsync("messageReceived", senderId, message);
+            await Clients.Group(chatId).SendAsync("messageReceived", senderId, chatId, message);
 
             TextMessage textMessage = new TextMessage {SenderId = senderId, ChatId = chatId, Content = message};
             await _messageService.PostMessage(textMessage);

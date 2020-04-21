@@ -28,7 +28,7 @@ namespace IQuality.DomainServices.Services
         public async Task<Invite> CreateInvite(string userId, string email, string groupName = "")
         {
             var user = await _userManager.FindByIdAsync(userId);
-
+            
             var inviteType = user.Roles.First() switch
             {
                 Roles.Doctor => InviteType.Patient,
@@ -43,12 +43,11 @@ namespace IQuality.DomainServices.Services
                 Token = Guid.NewGuid().ToString(),
                 Email = email,
                 InvitedBy = user.Id,
-                Used = false,
                 GroupName = groupName
             };
             
-
             await _inviteRepository.SaveAsync(invite);
+            
             return invite;
         }
 
@@ -58,16 +57,16 @@ namespace IQuality.DomainServices.Services
         }
 
         // Uses the invite link.
-        public async void ConsumeInvite(Invite invite)
+        public async Task ConsumeInvite(string inviteToken)
         {
-            invite.Used = true;
-            await _inviteRepository.SaveAsync(invite);
+            var invite = await _inviteRepository.GetByInviteToken(inviteToken);
+            invite.Consume();
         }
 
         public async Task<bool> ValidateInvite(string inviteToken)
         {
             var invite = await _inviteRepository.GetByInviteToken(inviteToken);
-            return invite != null && !invite.Used;
+            return invite != null && !invite.Consumed;
         }
     }
 }
