@@ -26,12 +26,12 @@ namespace IQuality.DomainServices.Services
 
         public async Task<List<BaseChat>> GetChatsAsync()
         {
-            return await _chatRepository.GetChatsAsync();
+            return await _chatRepository.GetChatsAsync<BaseChat>();
         }
 
         public async Task<List<BaseChat>> GetChatsAsync(int skip, int take)
         {
-            return await _chatRepository.GetChatsAsync(skip, take);
+            return await _chatRepository.GetChatsAsync<BaseChat>(skip, take);
         }
 
         public async Task<BaseChat> CreateChatAsync(BaseChat baseChat)

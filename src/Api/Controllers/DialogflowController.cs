@@ -5,25 +5,22 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Google.Cloud.Dialogflow.V2;
 using Google.Protobuf;
+using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
+using IQuality.Models.Forms;
 using IQuality.Models.Helpers;
+using Raven.Client.Documents.Session;
 
 namespace IQuality.Api.Controllers
 {
-    public class myModel
-    {
-        public string Text { get; set; }
-        public QueryResult Response { get; set; }
-    }
-        
     [Route("/dialogflow")]
     [Injectable(interfaceType: typeof(IDialogflowService))]
-    public class DialogflowController : Controller
+    public class DialogflowController : RavenApiController
     {
         private static readonly JsonParser jsonParser = new JsonParser(JsonParser.Settings.Default.WithIgnoreUnknownFields(true));
         private IDialogflowService _dialogflowService;
 
-        public DialogflowController(IDialogflowService dialogflowService)
+        public DialogflowController(IAsyncDocumentSession session, IDialogflowService dialogflowService) : base(session)
         {
             _dialogflowService = dialogflowService;
         }
@@ -44,9 +41,9 @@ namespace IQuality.Api.Controllers
         }
         
         [HttpPost, Route("patient"), AllowAnonymous]
-        public IActionResult Set([FromBody] myModel result)
+        public async Task<IActionResult> Set([FromBody] PatientMessage patientMessage)
         {
-            QueryResult response = _dialogflowService.ProcessClientRequest(result.Text, result.Response);
+            QueryResult response = await _dialogflowService.ProcessClientRequest(patientMessage.text, patientMessage.roomId);
             return Json(response);
         }
     }

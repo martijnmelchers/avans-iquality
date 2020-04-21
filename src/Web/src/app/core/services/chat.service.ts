@@ -6,7 +6,7 @@ import {LogLevel} from "@microsoft/signalr";
 import {Message} from "@IQuality/core/models/message";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {environment} from "../../../environments/environment";
-import {DialogflowResult} from "@IQuality/core/models/dialogflow-result";
+import {PatientMessage} from "@IQuality/core/models/patient-message";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,6 @@ export class ChatService {
   public selected: BaseChat;
   public messages: Array<Message> = [];
   public onChatSelected: Array<() => void> = [];
-  private latestDialogflowResponse: DialogflowResult;
 
   private readonly connection: signalR.HubConnection;
 
@@ -56,19 +55,21 @@ export class ChatService {
 
   public sendMessage(content: string) {
     if(this.chatWithBot) {
-      this._api.post<any>("/dialogflow/patient", {text: content, response: this.latestDialogflowResponse}).then((response)=> {
+      const patientMessage = new PatientMessage();
+      patientMessage.roomId = this.selected.id;
+      patientMessage.text = content;
+
+      this._api.post<any>("/dialogflow/patient",  patientMessage).then((response)=> {
         let userMessage = new Message();
         userMessage.senderId = this.auth.nameIdentifier;
         userMessage.content = content;
         this.messages.push(userMessage);
 
-        this.latestDialogflowResponse = response;
         let botMessage = new Message();
         if(response != null){
           botMessage.content = response.fulfillmentText;
           this.messages.push(botMessage);
         }
-      console.log(this.latestDialogflowResponse);
       })
     } else {
       this.connection.send("newMessage", this.auth.nameIdentifier, this.selected.id, content);
