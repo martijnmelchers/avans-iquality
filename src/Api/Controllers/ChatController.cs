@@ -75,12 +75,12 @@ namespace IQuality.Api.Controllers
         {
             if (content == null) return NotFound();
 
-
             TextMessage messages = await _messageService.PostMessage(new TextMessage
             {
                 ChatId = chatId,
                 Content = content
             });
+            
             return Ok(messages);
         }
 

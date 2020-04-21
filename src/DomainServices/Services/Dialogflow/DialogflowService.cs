@@ -18,10 +18,8 @@ namespace IQuality.DomainServices.Services
         }
         
 
-        public QueryResult ProcessRequest(string text, QueryResult result)
+        public QueryResult ProcessClientRequest(string text, QueryResult result)
         {
-            //call service to make a response
-            
             //build response
             if (result != null)
             {
@@ -32,6 +30,11 @@ namespace IQuality.DomainServices.Services
             {
                 return _responseBuilderService.BuildTextResponse(text);
             }
+        }
+
+        public void ProcessWebhookRequest(WebhookRequest request)
+        {
+            
         }
     }
 }

@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.ComponentModel;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Google.Cloud.Dialogflow.V2;
+using Google.Protobuf;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Models.Helpers;
 
@@ -16,6 +20,7 @@ namespace IQuality.Api.Controllers
     [Injectable(interfaceType: typeof(IDialogflowService))]
     public class DialogflowController : Controller
     {
+        private static readonly JsonParser jsonParser = new JsonParser(JsonParser.Settings.Default.WithIgnoreUnknownFields(true));
         private IDialogflowService _dialogflowService;
 
         public DialogflowController(IDialogflowService dialogflowService)
@@ -23,17 +28,25 @@ namespace IQuality.Api.Controllers
             _dialogflowService = dialogflowService;
         }
         
-        // [HttpPost, Route("bot"), AllowAnonymous]
-        // public  IActionResult Set([FromBody] WebhookRequest result)
-        // {
-        //     _dialogflowService.ProcessRequest(result);
-        //     return Ok();
-        // }
+        [HttpPost, Route("bot"), AllowAnonymous]
+        public async Task<IActionResult> Set()
+        {
+            WebhookRequest request;
+            using (StreamReader reader = new StreamReader(Request.Body))
+            {
+                string lines = await reader.ReadToEndAsync();
+                request = jsonParser.Parse<WebhookRequest>(lines);
+            }
+            
+            
+            _dialogflowService.ProcessWebhookRequest(request);
+            return Ok();
+        }
         
         [HttpPost, Route("patient"), AllowAnonymous]
         public IActionResult Set([FromBody] myModel result)
         {
-            QueryResult response = _dialogflowService.ProcessRequest(result.Text, result.Response);
+            QueryResult response = _dialogflowService.ProcessClientRequest(result.Text, result.Response);
             return Json(response);
         }
     }
