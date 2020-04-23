@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
@@ -11,8 +11,8 @@ namespace IQuality.Api.Controllers
 {
     public class InviteData
     {
-        public string email { get; set; }
-        public string groupName { get; set; }
+        public string Email { get; set; }
+        public string BuddyChatID { get; set; }
     }
 
     [Route("/invite")]
@@ -25,7 +25,7 @@ namespace IQuality.Api.Controllers
             _inviteService = inviteService;
         }
 
-        [HttpGet, Route("/{inviteToken}")]
+        [HttpGet, Route("{inviteToken}")]
         public async Task<IActionResult> GetInvite(string inviteToken)
         {
             var invite = await _inviteService.GetInvite(inviteToken);
@@ -41,7 +41,7 @@ namespace IQuality.Api.Controllers
             try
             {
                 var invite =
-                    await _inviteService.CreateInvite(HttpContext.User.GetUserId(), data.email, data.groupName);
+                    await _inviteService.CreateInvite(HttpContext.User.GetUserId(), data.Email, data.BuddyChatID);
                 return Ok(invite);
             }
             catch (Exception e)

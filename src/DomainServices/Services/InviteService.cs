@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -25,7 +25,7 @@ namespace IQuality.DomainServices.Services
             _inviteRepository = inviteRepository;
         }
         
-        public async Task<Invite> CreateInvite(string userId, string email, string groupName = "")
+        public async Task<Invite> CreateInvite(string userId, string email, string buddyChatID = "")
         {
             var user = await _userManager.FindByIdAsync(userId);
             
@@ -43,7 +43,7 @@ namespace IQuality.DomainServices.Services
                 Token = Guid.NewGuid().ToString(),
                 Email = email,
                 InvitedBy = user.Id,
-                GroupName = groupName
+                BuddyChatID = buddyChatID
             };
             
             await _inviteRepository.SaveAsync(invite);
