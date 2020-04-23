@@ -59,6 +59,13 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     this.initializeScrollContainer();
   }
 
+  public onChatToggle(chatWithBot: boolean){
+    this.chatService.messages = [];
+    if(chatWithBot){} else {
+      this.chatService.messages = this.chatService.selected.messages;
+    }
+  }
+
   public closeChat() {
     this.chatService.selected = undefined;
   }
