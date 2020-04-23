@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IQuality.Infrastructure.Database.Repositories.Interface;
@@ -14,21 +15,25 @@ namespace IQuality.Infrastructure.Database.Repositories
     [Injectable(interfaceType: typeof(IChatRepository))]
     public class ChatRepository : BaseRavenRepository<BaseChat>, IChatRepository
     {
-
         public ChatRepository(IAsyncDocumentSession session) : base(session)
         {
         }
 
-        public async Task<List<BaseChat>> GetChatsAsync()
+        public async Task<List<T>> GetChatsAsync<T>() where T : BaseChat
         {
-            return await Session.Query<BaseChat>().ToListAsync();
+            return await Session.Query<T>().ToListAsync();
         }
 
-        public async Task<List<BaseChat>> GetChatsAsync(int skip, int take)
+        public async Task<T> GetChatAsync<T>(string roomId) where T : BaseChat
         {
-            return await Session.Query<BaseChat>().Skip(skip).Take(take).ToListAsync();
+            return await Session.LoadAsync<T>(roomId);
         }
-        
+
+        public async Task<List<T>> GetChatsAsync<T>(int skip, int take) where T : BaseChat
+        {
+            return await Session.Query<T>().Skip(skip).Take(take).ToListAsync();
+        }
+
         public override async Task SaveAsync(BaseChat entity)
         {
             await Session.StoreAsync(entity);
@@ -36,16 +41,15 @@ namespace IQuality.Infrastructure.Database.Repositories
 
         public override void Delete(BaseChat entity)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
-        
+
         protected override async Task<List<BaseChat>> ConvertAsync(List<BaseChat> storage)
         {
             List<BaseChat> baseChats = storage.ToList();
             foreach (var chat in baseChats)
-            {
-                chat.Messages = await Queryable.Take(Session.Query<BaseMessage>().Where(x => x.ChatId == chat.Id), 20).ToListAsync();
-            }
+                chat.Messages = await Queryable.Take(Session.Query<BaseMessage>().Where(x => x.ChatId == chat.Id), 20)
+                    .ToListAsync();
 
             return baseChats.ToList();
         }

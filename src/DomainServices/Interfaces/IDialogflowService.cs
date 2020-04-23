@@ -1,9 +1,11 @@
-﻿using Google.Cloud.Dialogflow.V2;
+﻿using System.Threading.Tasks;
+using Google.Cloud.Dialogflow.V2;
 
 namespace IQuality.DomainServices.Interfaces
 {
     public interface IDialogflowService
     {
-        QueryResult ProcessRequest(string text, QueryResult response);
+        Task<QueryResult> ProcessClientRequest(string text, string roomId);
+        void ProcessWebhookRequest(WebhookRequest request);
     }
 }

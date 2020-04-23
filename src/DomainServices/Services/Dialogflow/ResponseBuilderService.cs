@@ -9,8 +9,8 @@ namespace IQuality.DomainServices.Services
     {
         public QueryResult BuildTextResponse(string text)
         {
-            var client = SessionsClient.Create();
-            var response = client.DetectIntent(
+            SessionsClient client = SessionsClient.Create();
+            DetectIntentResponse response = client.DetectIntent(
                 session: SessionName.FromProjectSession("cui-cbolll", "diabuddy"),
                 queryInput: new QueryInput()
                 {
