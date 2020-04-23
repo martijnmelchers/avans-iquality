@@ -1,25 +1,41 @@
-<div *ngIf="message.senderId === auth.nameIdentifier; else otherUser">
+<div *ngIf="message.senderId === auth.nameIdentifier">
   <div class="message-box my-message-box">
     <p class="my-p">{{message.senderName || message.senderId}}</p>
-    <span class="text my-text" style="padding-right: 2em">
+    <span class="text my-text">
       {{message.content}}
       <div class="message-time my-time">
         <p>{{message.time || "16:16"}}</p>
       </div>
     </span>
+  </div>
+</div>
 
+<div *ngIf="chatService.isChatWithBot(); else otherUser" >
+  <div class="message-box other-message-box">
+    <p class="other-p">BuddyBot</p>
+    <span class="text bot-text">
+      <div class="bot-border">
+        {{message.content}}
+      </div>
+    </span>
+    <span>
+        <ul>
+          <ibm-tag *ngFor="let suggestion of suggestions" style="cursor: pointer">
+              {{suggestion?.name}}
+          </ibm-tag>
+        </ul>
+    </span>
   </div>
 </div>
 
 <ng-template #otherUser>
   <div class="message-box other-message-box">
-    <p class="other-p">{{message.senderId}}</p>
-    <span class="text other-text" style="padding-right: 2em">
+    <p class="other-p">{{message.senderName || message.senderId}}</p>
+    <span class="text other-text">
         {{message.content}}
       <div class="message-time other-time">
         <p>15:39</p>
       </div>
     </span>
-
   </div>
 </ng-template>

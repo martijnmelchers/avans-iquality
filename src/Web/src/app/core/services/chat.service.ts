@@ -12,7 +12,9 @@ import {PatientMessage} from "@IQuality/core/models/patient-message";
   providedIn: 'root'
 })
 export class ChatService {
-  private chatWithBot: boolean;
+  public chatWithBot: boolean;
+  public isChatWithBot() { return this.chatWithBot; }
+
   public selected: BaseChat;
   public messages: Array<Message> = [];
   public onChatSelected: Array<() => void> = [];
