@@ -10,7 +10,7 @@
   </div>
 </div>
 
-<div *ngIf="chatService.isChatWithBot(); else otherUser" >
+<div *ngIf="chatService.isChatWithBot() && message.senderId !== auth.nameIdentifier" >
   <div class="message-box other-message-box">
     <p class="other-p">BuddyBot</p>
     <span class="text bot-text">
@@ -28,7 +28,7 @@
   </div>
 </div>
 
-<ng-template #otherUser>
+<div *ngIf="!chatService.isChatWithBot() && message.senderId !== auth.nameIdentifier">
   <div class="message-box other-message-box">
     <p class="other-p">{{message.senderName || message.senderId}}</p>
     <span class="text other-text">
@@ -38,4 +38,4 @@
       </div>
     </span>
   </div>
-</ng-template>
+</div>
