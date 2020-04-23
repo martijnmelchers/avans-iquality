@@ -9,8 +9,8 @@ import {
   InputModule,
   ListModule,
   StructuredListModule,
-  TableModule,
-  TilesModule,
+  TableModule, TagModule,
+  TilesModule, ToggleModule,
 } from 'carbon-components-angular';
 import {ChatComponent} from './chat/chat.component';
 import {MessageComponent} from './chat/message/message.component';
@@ -37,6 +37,8 @@ import {AddModule, CloseModule, ColumnModule, SendAltModule} from "@carbon/icons
     SendAltModule,
     CloseModule,
     ColumnModule,
+    TagModule,
+    ToggleModule,
   ]
 })
 export class MainModule {
