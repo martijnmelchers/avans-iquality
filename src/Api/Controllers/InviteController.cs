@@ -12,7 +12,7 @@ namespace IQuality.Api.Controllers
     public class InviteData
     {
         public string Email { get; set; }
-        public string BuddyChatID { get; set; }
+        public string ChatId { get; set; }
     }
 
     [Route("/invite")]
@@ -41,7 +41,7 @@ namespace IQuality.Api.Controllers
             try
             {
                 var invite =
-                    await _inviteService.CreateInvite(HttpContext.User.GetUserId(), data.Email, data.BuddyChatID);
+                    await _inviteService.CreateInvite(HttpContext.User.GetUserId(), data.Email, data.ChatId);
                 return Ok(invite);
             }
             catch (Exception e)

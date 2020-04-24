@@ -6,7 +6,7 @@ namespace IQuality.DomainServices.Interfaces
 {
     public interface IInviteService
     {
-        public Task<Invite> CreateInvite(string userId, string email, string buddyChatID);
+        public Task<Invite> CreateInvite(string userId, string email, string chatId);
         Task ConsumeInvite(string inviteToken);
         public Task<Invite> GetInvite(string inviteToken);
         Task<bool> ValidateInvite(string inviteToken);

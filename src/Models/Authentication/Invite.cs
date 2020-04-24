@@ -12,7 +12,7 @@ namespace IQuality.Models.Authentication
         public DateTime ConsumedOn { get; set; }
         public string InvitedBy { get; set; }
         public InviteType InviteType { get; set; }
-        public string BuddyChatID { get; set; }
+        public string ChatId { get; set; }
 
         public void Consume()
         {
