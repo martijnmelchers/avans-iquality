@@ -1,4 +1,5 @@
-﻿using Sparrow.Json;
+﻿using IQuality.Models.Authentication;
+using Sparrow.Json;
 
 namespace IQuality.Models.Forms
 {

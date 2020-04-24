@@ -18,8 +18,11 @@ using Raven.Client.Documents.Conventions;
 using Raven.DependencyInjection;
 using Raven.Identity;
 using IQuality.Api.Hubs;
+using IQuality.Models.Authentication;
 using IQuality.Models.Chat;
 using IQuality.Models.Chat.Messages;
+using Microsoft.AspNetCore.Identity;
+using IdentityRole = Raven.Identity.IdentityRole;
 
 namespace IQuality.Api
 {
@@ -156,8 +159,9 @@ namespace IQuality.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager)
         {
+            IdentityDataInitializer.SeedUsers(Configuration, userManager);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -166,7 +170,7 @@ namespace IQuality.Api
 
             app.UseRouting();
 
-            // global cors policy
+            // global cors policy1
             app.UseCors(x => x
                 .WithOrigins("http://localhost:4200")
                 .AllowCredentials()
@@ -194,6 +198,42 @@ namespace IQuality.Api
             members.AddRange(type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance));
 
             return members;
+        }
+    }
+
+    public static class IdentityDataInitializer
+    {
+        public static void SeedUsers(IConfiguration config, UserManager<ApplicationUser> userManager)
+        {
+            var user = new ApplicationUser
+            {
+                UserName = config["DefaultAccount:Email"],
+                Email = config["DefaultAccount:Email"],
+                EmailConfirmed = true,
+                Address = new Address
+                {
+                    City = config["DefaultAccount:Address:City"],
+                    Country = config["DefaultAccount:Address:Country"],
+                    HouseNumber = int.Parse(config["DefaultAccount:Address:HouseNumber"]),
+                    StreetName = config["DefaultAccount:Address:StreetName"],
+                    ZipCode = config["DefaultAccount:Address:ZipCode"]
+                },
+                Name = new FullName
+                {
+                    First = config["DefaultAccount:Name:First"],
+                    Last = config["DefaultAccount:Name:Last"]
+                }
+            };
+
+            // If the default account exists, we don't have to create it again!
+            if (userManager.FindByEmailAsync(user.Email).Result != null) return;
+            
+            IdentityResult result = userManager.CreateAsync(user, config["DefaultAccount:Password"]).Result;
+
+            if (result.Succeeded)
+            {
+                userManager.AddToRoleAsync(user, Roles.Admin);
+            }
         }
     }
 }
