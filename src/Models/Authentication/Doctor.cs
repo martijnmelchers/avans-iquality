@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using IQuality.Models.Interfaces;
+﻿using IQuality.Models.Interfaces;
 
-namespace IQuality.Models
+namespace IQuality.Models.Authentication
 {
     public class Doctor : IAggregateRoot
     {

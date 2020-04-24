@@ -1,6 +1,6 @@
 ﻿using Raven.Identity;
 
-namespace IQuality.Models
+namespace IQuality.Models.Authentication
 {
     public class ApplicationUser : IdentityUser
     {

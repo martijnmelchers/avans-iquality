@@ -4,6 +4,7 @@
     {
         Buddy,
         Patient,
-        Doctor
+        Doctor,
+        Admin
     }
 }
