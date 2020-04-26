@@ -1,4 +1,5 @@
-﻿using IQuality.Models.Interfaces;
+﻿using System;
+using IQuality.Models.Interfaces;
 
 namespace IQuality.Models.Chat.Messages
 {
@@ -7,6 +8,9 @@ namespace IQuality.Models.Chat.Messages
         public string Id { get; set; }
         
         public string SenderId { get; set; }
+        
         public string ChatId { get; set; }
+        
+        public string SendDate { get; set; }
     }
 }

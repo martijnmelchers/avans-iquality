@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
@@ -77,6 +78,7 @@ namespace IQuality.Api.Controllers
 
             TextMessage messages = await _messageService.PostMessage(new TextMessage
             {
+                SenderName = HttpContext.User.Claims.ToArray()[1].Value,
                 ChatId = chatId,
                 Content = content
             });
