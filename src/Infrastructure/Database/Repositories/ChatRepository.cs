@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IQuality.Infrastructure.Database.Repositories.Interface;
@@ -48,6 +48,11 @@ namespace IQuality.Infrastructure.Database.Repositories
             }
 
             return baseChats.ToList();
+        }
+
+        public async Task<List<BuddyChat>> GetBuddyChatsByUserId(string userId)
+        {
+            return await Session.Query<BuddyChat>().OfType<BuddyChat>().Where(x => x.ParticipatorIds.Contains(userId) || x.InitiatorId == userId).ToListAsync();
         }
     }
 }
