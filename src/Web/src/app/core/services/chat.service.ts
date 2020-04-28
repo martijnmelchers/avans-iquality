@@ -79,8 +79,8 @@ export class ChatService {
     }
   }
 
-  public async createChat(name: string): Promise<BaseChat> {
-    let chat = await this._api.post<BaseChat>('/chats', {name});
+  public async createBuddychat(name: string): Promise<BaseChat> {
+    let chat = await this._api.post<BaseChat>('/chats/createbuddychat', {name});
     this.hubJoinGroup(chat.id);
     return chat;
   }

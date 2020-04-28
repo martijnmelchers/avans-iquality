@@ -22,7 +22,7 @@ export class ChatListComponent implements OnInit {
 
   onChatCreate() {
     if (this.chatName) {
-      this.chatService.createChat(this.chatName).then((response) => {
+      this.chatService.createBuddychat(this.chatName).then((response) => {
         this.chats.push(response);
       });
     }
