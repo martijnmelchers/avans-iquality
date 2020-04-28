@@ -55,7 +55,7 @@ namespace IQuality.DomainServices.Services
                 QueryResult temp = _responseBuilderService.BuildContextResponse(result, text);
                 return temp;
             }
-
+            
             return _responseBuilderService.BuildTextResponse(text);
         }
 

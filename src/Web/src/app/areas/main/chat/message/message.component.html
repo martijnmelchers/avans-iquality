@@ -4,7 +4,7 @@
     <span class="text my-text">
       {{message.content}}
       <div class="message-time my-time">
-        <p>{{ message.sendDate || "16:16"}}</p>
+        <p>{{ message.sendDate | date:"HH:mm"}}</p>
       </div>
     </span>
   </div>

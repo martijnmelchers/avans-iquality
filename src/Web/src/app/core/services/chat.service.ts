@@ -7,6 +7,7 @@ import {Message} from "@IQuality/core/models/message";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {environment} from "../../../environments/environment";
 import {PatientMessage} from "@IQuality/core/models/patient-message";
+import {formatDate} from "@angular/common";
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,7 @@ export class ChatService {
         newMessage.content = message;
         newMessage.senderId = userId;
         newMessage.senderName = userName;
-        newMessage.sendDate = this.getTime(Date.now());
+        newMessage.sendDate = new Date(Date.now())
 
 
         this.messages.push(newMessage);
@@ -65,6 +66,7 @@ export class ChatService {
       this._api.post<any>("/dialogflow/patient",  patientMessage).then((response)=> {
         let userMessage = new Message();
         userMessage.senderId = this.auth.getNameIdentifier;
+        userMessage.senderName = this.auth.getName;
         userMessage.content = content;
         this.messages.push(userMessage);
 
@@ -106,8 +108,8 @@ export class ChatService {
     });
   }
 
-  public getTime(dateNow: number) : string {
-    const time = new Date(dateNow);
+  public getTime(date: string) : string {
+    const time = new Date(date);
     return `${time.getHours()}:${time.getMinutes()}`
   }
 }
