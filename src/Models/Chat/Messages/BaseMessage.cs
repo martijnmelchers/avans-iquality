@@ -11,6 +11,6 @@ namespace IQuality.Models.Chat.Messages
         
         public string ChatId { get; set; }
         
-        public string SendDate { get; set; }
+        public DateTime SendDate { get; set; }
     }
 }

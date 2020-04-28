@@ -72,7 +72,7 @@ namespace IQuality.Api.Hubs
                 SenderName = senderName,
                 ChatId = chatId,
                 Content = message,
-                SendDate = DateTime.Now.ToString("H:mm")
+                SendDate = DateTime.Now,
             };
             await _messageService.PostMessage(textMessage);
         }
