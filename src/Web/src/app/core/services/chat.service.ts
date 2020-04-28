@@ -16,14 +16,23 @@ export class ChatService {
   public isChatWithBot() { return this.chatWithBot; }
 
   public selected: BaseChat;
+
+  //Messages zijn voor alles om te laten zien
   public messages: Array<Message> = [];
+  //Database messages zijn de messages die opgeslagen zijn in de database
+  public databaseMessages: Array<Message> = [];
+
   public onChatSelected: Array<() => void> = [];
 
-  private readonly connection: signalR.HubConnection;
+  private connection: signalR.HubConnection;
 
   constructor(private _api: ApiService, private auth: AuthenticationService) {
     this.chatWithBot = true;
     // TODO: Put the HubConnection Url in the environment.
+    this.setUpSocketConnection(auth)
+  }
+
+  private setUpSocketConnection(auth: AuthenticationService){
     this.connection = new signalR.HubConnectionBuilder()
       .withAutomaticReconnect()
       .withUrl(`${environment.endpoints.api}/hub`, {
@@ -63,10 +72,7 @@ export class ChatService {
       patientMessage.text = content;
 
       this._api.post<any>("/dialogflow/patient",  patientMessage).then((response)=> {
-        let userMessage = new Message();
-        userMessage.senderId = this.auth.getNameIdentifier;
-        userMessage.content = content;
-        this.messages.push(userMessage);
+        this.messages.push(this.createMessage(content));
 
         let botMessage = new Message();
         if(response != null){
@@ -76,7 +82,15 @@ export class ChatService {
       })
     } else {
       this.connection.send("newMessage", this.selected.id, content);
+      this.databaseMessages.push(this.createMessage(content));
     }
+  }
+
+  private createMessage(content: string){
+    let message = new Message();
+    message.senderId = this.auth.getNameIdentifier;
+    message.content = content;
+    return message
   }
 
   public async createBuddychat(name: string): Promise<BaseChat> {
