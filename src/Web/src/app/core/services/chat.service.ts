@@ -28,7 +28,6 @@ export class ChatService {
   private connection: signalR.HubConnection;
 
   constructor(private _api: ApiService, private auth: AuthenticationService) {
-    this.chatWithBot = false;
     this.setUpSocketConnection(auth)
   }
 
@@ -64,6 +63,7 @@ export class ChatService {
   }
 
   public async selectChatWithId(id: string): Promise<BaseChat> {
+    this.chatWithBot = false;
     this.selected = await this._api.get<BaseChat>(`/chats/${id}`);
 
     this.messages = this.databaseMessages = this.selected.messages;
