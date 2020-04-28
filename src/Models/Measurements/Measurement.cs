@@ -1,7 +1,6 @@
-﻿using IQuality.Models.Interfaces;
-using System;
+﻿using System;
 
-namespace IQuality.Models
+namespace IQuality.Models.Measurements
 {
     public class Measurement
     {

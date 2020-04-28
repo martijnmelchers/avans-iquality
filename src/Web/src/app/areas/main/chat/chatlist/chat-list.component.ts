@@ -8,7 +8,7 @@ import {ChatService} from "@IQuality/core/services/chat.service";
   styleUrls: ['./chat-list.component.scss']
 })
 export class ChatListComponent implements OnInit {
-  chats: Array<BaseChat>;
+  chats: Array<BaseChat> = [];
   chatName: string;
 
   constructor(public chatService: ChatService) {
@@ -22,7 +22,7 @@ export class ChatListComponent implements OnInit {
 
   onChatCreate() {
     if (this.chatName) {
-      this.chatService.createChat(this.chatName).then((response) => {
+      this.chatService.createBuddychat(this.chatName).then((response) => {
         this.chats.push(response);
       });
     }

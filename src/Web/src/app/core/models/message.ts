@@ -5,6 +5,6 @@
   senderName: string;
 
   chatId: string;
-  time: string;
+  sendDate: string;
   content: string;
 }

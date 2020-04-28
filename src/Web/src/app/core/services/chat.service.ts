@@ -30,14 +30,15 @@ export class ChatService {
         accessTokenFactory: () => auth.encodedToken
       }).configureLogging(LogLevel.Warning).build();
 
-    this.connection.on("messageReceived", (userId: string, chatId: string, message: string) => {
+    this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, message: string) => {
       if (chatId === this.selected.id) {
         let newMessage = new Message();
-        newMessage.content = message;
 
-        if (userId === this.auth.nameIdentifier) {
-          newMessage.senderId = userId;
-        }
+        newMessage.content = message;
+        newMessage.senderId = userId;
+        newMessage.senderName = userName;
+        newMessage.sendDate = this.getTime(Date.now());
+
 
         this.messages.push(newMessage);
       }
@@ -63,7 +64,7 @@ export class ChatService {
 
       this._api.post<any>("/dialogflow/patient",  patientMessage).then((response)=> {
         let userMessage = new Message();
-        userMessage.senderId = this.auth.nameIdentifier;
+        userMessage.senderId = this.auth.getNameIdentifier;
         userMessage.content = content;
         this.messages.push(userMessage);
 
@@ -74,12 +75,12 @@ export class ChatService {
         }
       })
     } else {
-      this.connection.send("newMessage", this.auth.nameIdentifier, this.selected.id, content);
+      this.connection.send("newMessage", this.selected.id, content);
     }
   }
 
-  public async createChat(name: string): Promise<BaseChat> {
-    let chat = await this._api.post<BaseChat>('/chats', {name});
+  public async createBuddychat(name: string): Promise<BaseChat> {
+    let chat = await this._api.post<BaseChat>('/chats/createbuddychat', {name});
     this.hubJoinGroup(chat.id);
     return chat;
   }
@@ -103,5 +104,10 @@ export class ChatService {
     this.connection.invoke("JoinGroup", roomId).catch(err => {
       console.log(err)
     });
+  }
+
+  public getTime(dateNow: number) : string {
+    const time = new Date(dateNow);
+    return `${time.getHours()}:${time.getMinutes()}`
   }
 }

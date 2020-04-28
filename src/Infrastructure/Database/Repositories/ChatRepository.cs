@@ -53,5 +53,10 @@ namespace IQuality.Infrastructure.Database.Repositories
 
             return baseChats.ToList();
         }
+
+        public async Task<List<BuddyChat>> GetBuddyChatsByUserId(string userId)
+        {
+            return await Session.Query<BuddyChat>().OfType<BuddyChat>().Where(x => x.ParticipatorIds.Contains(userId) || x.InitiatorId == userId).ToListAsync();
+        }
     }
 }

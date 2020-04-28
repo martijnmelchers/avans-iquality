@@ -1,5 +1,5 @@
 ﻿using IQuality.Models.Authentication;
-﻿using IQuality.Models;
+using IQuality.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

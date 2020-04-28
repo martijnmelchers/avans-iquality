@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
+using IQuality.Models.Authentication;
 using IQuality.Models.Chat;
 using IQuality.Models.Chat.Messages;
 using IQuality.Models.Forms;
@@ -45,6 +47,17 @@ namespace IQuality.Api.Controllers
             return Ok(createdChat);
         }
 
+        [HttpPost("createbuddychat")]
+        public async Task<IActionResult> CreateBuddyChat([FromBody] BuddyChat chat)
+        {
+            string id = HttpContext.User.GetUserId();
+            chat.InitiatorId = id;
+            chat.CreationDate = DateTime.Now;
+
+            BaseChat createdChat = await _chatService.CreateChatAsync(chat);
+            return Ok(createdChat);
+        }
+
         [Route("{chatId}")]
         [HttpDelete]
         public IActionResult DeleteChat(string chatId)
@@ -77,6 +90,7 @@ namespace IQuality.Api.Controllers
 
             TextMessage messages = await _messageService.PostMessage(new TextMessage
             {
+                SenderName = HttpContext.User.Claims.ToArray()[1].Value,
                 ChatId = chatId,
                 Content = content
             });

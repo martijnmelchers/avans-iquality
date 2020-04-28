@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -14,6 +14,7 @@ using IQuality.Models.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Raven.Client.Documents.Linq;
 
 namespace IQuality.DomainServices.Services
 {
@@ -25,15 +26,17 @@ namespace IQuality.DomainServices.Services
         private readonly IInviteService _inviteService;
 
         private readonly UserManager<ApplicationUser> _userManager;
-        //private readonly  _patientRepository;
+        private readonly IPatientRepository _patientRepository;
         //private readonly _doctorRepository;
 
         public AuthenticationService(IConfiguration config, UserManager<ApplicationUser> userManager,
-            IBuddyRepository buddyRepository, IInviteService inviteService)
+            IBuddyRepository buddyRepository, IPatientRepository patientRepository,
+            IInviteService inviteService)
         {
             _config = config;
             _userManager = userManager;
             _buddyRepository = buddyRepository;
+            _patientRepository = patientRepository;
             _inviteService = inviteService;
         }
 
@@ -70,21 +73,23 @@ namespace IQuality.DomainServices.Services
             }, register.Password);
 
             var invite = await _inviteService.GetInvite(inviteToken);
-
+            
             var role = invite.InviteType switch
             {
                 InviteType.Buddy => Roles.Buddy,
                 InviteType.Doctor => Roles.Doctor,
                 InviteType.Patient => Roles.Patient,
+                InviteType.Admin => Roles.Admin,
                 _ => throw new InvalidOperationException()
             };
 
             await _userManager.AddToRoleAsync(applicationUser, role);
             await _inviteService.ConsumeInvite(inviteToken);
+            await CreateAdditionalData(invite, applicationUser);
 
             return applicationUser;
         }
-        
+
         public string GenerateToken(ApplicationUser user)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:AudienceSecret"]));
@@ -133,6 +138,16 @@ namespace IQuality.DomainServices.Services
             };
 
             return claims;
+        }
+        
+        private async Task CreateAdditionalData(Invite invite, ApplicationUser applicationUser)
+        {
+            switch (invite.InviteType)
+            {
+                case InviteType.Patient:
+                    await _patientRepository.SaveAsync(new Patient(applicationUser.Id, invite.InvitedBy));
+                    break;
+            }
         }
 
         #endregion
