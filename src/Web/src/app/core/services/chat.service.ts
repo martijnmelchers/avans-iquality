@@ -41,8 +41,8 @@ export class ChatService {
         this.messages.push(this.createMessage(content));
 
         let botMessage = new Message();
-        if(response != null){
-          botMessage.content = response.fulfillmentText;
+        if(response.queryResult != null){
+          botMessage.content = response.queryResult.fulfillmentText;
           this.messages.push(botMessage);
         }
       })
