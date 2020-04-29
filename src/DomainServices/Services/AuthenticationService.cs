@@ -73,7 +73,7 @@ namespace IQuality.DomainServices.Services
             }, register.Password);
 
             var invite = await _inviteService.GetInvite(inviteToken);
-
+            
             var role = invite.InviteType switch
             {
                 InviteType.Buddy => Roles.Buddy,

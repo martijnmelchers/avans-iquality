@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories.Interface;
@@ -17,13 +18,6 @@ namespace IQuality.DomainServices.Services
             _messageRepository = messageRepository;
         }
 
-
-        public async Task<List<TextMessage>> GetMessages(string chatId)
-        {
-            List<TextMessage> messages = await _messageRepository.GetTextMessagesByChat(chatId);
-            return messages;
-        }
-
         public async Task<List<TextMessage>> GetMessages(string chatId, int skip, int take)
         {
             List<TextMessage> messages = await _messageRepository.GetTextMessagesByChat(chatId, skip, take);
@@ -32,6 +26,7 @@ namespace IQuality.DomainServices.Services
 
         public async Task<TextMessage> PostMessage(TextMessage message)
         {
+            message.SendDate = DateTime.Now;
             TextMessage result = await _messageRepository.PostTextMessageAsync(message);
             return result;
         }
