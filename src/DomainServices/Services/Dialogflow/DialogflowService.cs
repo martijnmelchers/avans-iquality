@@ -34,7 +34,7 @@ namespace IQuality.DomainServices.Services
         public async Task<QueryResult> ProcessClientRequest(string text, string roomId)
         {
             QueryResult result = null;
-            PatientChat patientChat = await _chatRepository.GetChatAsync<PatientChat>(roomId);
+            PatientChat patientChat = await _chatRepository.GetPatientChatIncludeGoalsAsync(roomId);
 
             switch (patientChat.IntentType)
             {

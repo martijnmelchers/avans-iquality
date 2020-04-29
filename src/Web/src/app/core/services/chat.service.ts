@@ -51,8 +51,17 @@ export class ChatService {
     }
   }
 
-  public async createBuddychat(name: string): Promise<BaseChat> {
-    let chat = await this._api.post<BaseChat>('/chats/createbuddychat', {name});
+  public async createBuddychat(name: string, isBuddyChat: boolean): Promise<BaseChat> {
+    let chat;
+
+    if(isBuddyChat)
+    {
+       chat = await this._api.post<BaseChat>('/chats/createbuddychat', {name});
+    }
+    else {
+      chat = await this._api.post<BaseChat>('/chats', {name});
+    }
+
     this.hubJoinGroup(chat.id);
     return chat;
   }

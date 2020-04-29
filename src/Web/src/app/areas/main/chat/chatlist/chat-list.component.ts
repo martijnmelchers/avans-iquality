@@ -20,9 +20,9 @@ export class ChatListComponent implements OnInit {
     }, err => console.log(err));
   }
 
-  onChatCreate() {
+  onBuddyChatCreate(isBuddyChat: boolean) {
     if (this.chatName) {
-      this.chatService.createBuddychat(this.chatName).then((response) => {
+      this.chatService.createBuddychat(this.chatName, isBuddyChat).then((response) => {
         this.chats.push(response);
       });
     }

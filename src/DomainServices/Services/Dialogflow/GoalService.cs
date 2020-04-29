@@ -12,16 +12,16 @@ namespace IQuality.DomainServices.Services
     public class GoalService: IGoalService, IIntentService
     {
         private readonly IGoalRepository _goalRepository;
-        private ResponseBuilderService _responseBuilderService;
+        private readonly IResponseBuilderService _responseBuilderService;
 
-        public GoalService(IGoalRepository goalRepository)
+        public GoalService(IGoalRepository goalRepository, IResponseBuilderService responseBuilderService)
         {
+            _responseBuilderService = responseBuilderService;
             _goalRepository = goalRepository;
         }
         
         public async Task<QueryResult> HandleIntent(string roomId, PatientChat chat, string userText)
         {
-            _responseBuilderService = new ResponseBuilderService();
             switch (chat.IntentName)
             {
                 case "create_goal":
