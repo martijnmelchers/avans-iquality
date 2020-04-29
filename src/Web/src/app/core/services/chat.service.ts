@@ -48,7 +48,6 @@ export class ChatService {
       })
     } else {
       this.connection.send("newMessage", this.selected.id, content);
-      this.databaseMessages.push(this.createMessage(content));
     }
   }
 
@@ -104,7 +103,7 @@ export class ChatService {
 
     this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
       if (chatId === this.selected.id) {
-        this.messages.push(this.createMessage(content));
+        this.databaseMessages.push(this.createMessage(content));
       }
     });
 

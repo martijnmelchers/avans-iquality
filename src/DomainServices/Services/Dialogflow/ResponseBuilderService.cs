@@ -1,4 +1,5 @@
-﻿using Google.Cloud.Dialogflow.V2;
+﻿using System.Threading.Tasks;
+using Google.Cloud.Dialogflow.V2;
 using Google.Protobuf.WellKnownTypes;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Models.Helpers;
@@ -8,9 +9,9 @@ namespace IQuality.DomainServices.Services
     [Injectable]
     public class ResponseBuilderService: IResponseBuilderService
     {
-        public QueryResult BuildTextResponse(string text, string roomId, string context)
+        public async Task<QueryResult> BuildTextResponse(string text, string roomId, string context)
         {
-            SessionsClient sessionsClient = SessionsClient.Create();
+            SessionsClient sessionsClient =  await SessionsClient.CreateAsync();
             DetectIntentRequest request = new DetectIntentRequest
             {
                 SessionAsSessionName = SessionName.FromProjectSession("cui-cbolll", "diabuddy"),
@@ -42,7 +43,7 @@ namespace IQuality.DomainServices.Services
                     }
                 }
             };
-            DetectIntentResponse response = sessionsClient.DetectIntent(request);
+            DetectIntentResponse response = await sessionsClient.DetectIntentAsync(request);
             return response.QueryResult;
         }
     }

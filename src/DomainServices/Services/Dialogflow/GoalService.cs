@@ -1,29 +1,48 @@
-﻿using Google.Cloud.Dialogflow.V2;
+﻿using System.Threading.Tasks;
+using Google.Cloud.Dialogflow.V2;
 using IQuality.DomainServices.Interfaces;
+using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models.Chat;
+using IQuality.Models.Goals;
+using IQuality.Models.Helpers;
 
 namespace IQuality.DomainServices.Services
 {
-    public class GoalService: IIntentService
+    [Injectable(interfaceType: typeof(IGoalService))]
+    public class GoalService: IGoalService, IIntentService
     {
+        private readonly IGoalRepository _goalRepository;
         private ResponseBuilderService _responseBuilderService;
-        public QueryResult HandleIntent(string roomId, PatientChat chat, string userText)
+
+        public GoalService(IGoalRepository goalRepository)
+        {
+            _goalRepository = goalRepository;
+        }
+        
+        public async Task<QueryResult> HandleIntent(string roomId, PatientChat chat, string userText)
         {
             _responseBuilderService = new ResponseBuilderService();
             switch (chat.IntentName)
             {
                 case "create_goal":
-                    return SaveGoal(userText, roomId, chat);
+                    return await SaveGoal(userText, roomId, chat);
                 default:
-                    return _responseBuilderService.BuildTextResponse(userText, roomId, "first_intent");
+                    return await _responseBuilderService.BuildTextResponse(userText, roomId, "first_intent");
             }
         }
 
-        private QueryResult SaveGoal(string userText, string roomId, PatientChat chat)
+        private async Task<QueryResult> SaveGoal(string userText, string roomId, PatientChat chat)
         {
+            Goal goal = new Goal()
+            {
+                Description = userText,
+            };
+            await _goalRepository.SaveAsync(goal);
+            
+            chat.GoalId.Add(goal.Id);
             chat.IntentName = "";
             chat.IntentType = "";
-            return _responseBuilderService.BuildTextResponse(userText, roomId, "create_goal_description");
+            return await _responseBuilderService.BuildTextResponse(userText, roomId, "create_goal_description");
         }
     }
 }
