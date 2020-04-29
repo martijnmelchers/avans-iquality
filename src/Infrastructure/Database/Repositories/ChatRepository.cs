@@ -28,7 +28,7 @@ namespace IQuality.Infrastructure.Database.Repositories
         {
             return await Session.LoadAsync<T>(roomId);
         }
-
+        
         public async Task<List<T>> GetChatsAsync<T>(int skip, int take) where T : BaseChat
         {
             return await Session.Query<T>().Skip(skip).Take(take).ToListAsync();
@@ -57,6 +57,11 @@ namespace IQuality.Infrastructure.Database.Repositories
         public async Task<List<BuddyChat>> GetBuddyChatsByUserId(string userId)
         {
             return await Session.Query<BuddyChat>().OfType<BuddyChat>().Where(x => x.ParticipatorIds.Contains(userId) || x.InitiatorId == userId).ToListAsync();
+        }
+
+        public async Task<PatientChat> GetPatientChatIncludeGoalsAsync(string roomId)
+        {
+            return await Session.Include<PatientChat>(x => x.GoalId).LoadAsync<PatientChat>(roomId);
         }
     }
 }

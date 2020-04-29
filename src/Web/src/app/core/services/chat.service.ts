@@ -41,19 +41,27 @@ export class ChatService {
         this.messages.push(this.createMessage(content));
 
         let botMessage = new Message();
-        if(response != null){
-          botMessage.content = response.fulfillmentText;
+        if(response.queryResult != null){
+          botMessage.content = response.queryResult.fulfillmentText;
           this.messages.push(botMessage);
         }
       })
     } else {
       this.connection.send("newMessage", this.selected.id, content);
-      this.databaseMessages.push(this.createMessage(content));
     }
   }
 
-  public async createBuddychat(name: string): Promise<BaseChat> {
-    let chat = await this._api.post<BaseChat>('/chats/createbuddychat', {name});
+  public async createBuddychat(name: string, isBuddyChat: boolean): Promise<BaseChat> {
+    let chat;
+
+    if(isBuddyChat)
+    {
+       chat = await this._api.post<BaseChat>('/chats/createbuddychat', {name});
+    }
+    else {
+      chat = await this._api.post<BaseChat>('/chats', {name});
+    }
+
     this.hubJoinGroup(chat.id);
     return chat;
   }
@@ -104,7 +112,7 @@ export class ChatService {
 
     this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
       if (chatId === this.selected.id) {
-        this.messages.push(this.createMessage(content));
+        this.databaseMessages.push(this.createMessage(content));
       }
     });
 

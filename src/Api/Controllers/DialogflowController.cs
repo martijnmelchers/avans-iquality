@@ -34,6 +34,7 @@ namespace IQuality.Api.Controllers
                 string lines = await reader.ReadToEndAsync();
                 request = jsonParser.Parse<WebhookRequest>(lines);
             }
+            
             await _dialogflowService.ProcessWebhookRequest(request);
             return Ok();
         }
@@ -41,7 +42,9 @@ namespace IQuality.Api.Controllers
         [HttpPost, Route("patient"), AllowAnonymous]
         public async Task<IActionResult> Set([FromBody] PatientMessage patientMessage)
         {
-            QueryResult response = await _dialogflowService.ProcessClientRequest(patientMessage.text, patientMessage.roomId);
+            Bot response = await _dialogflowService.ProcessClientRequest(patientMessage.text, patientMessage.roomId);
+            
+            
             return Json(response);
         }
     }

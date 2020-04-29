@@ -10,5 +10,6 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
         Task<T> GetChatAsync<T>(string roomId) where T : BaseChat;
         Task<List<T>> GetChatsAsync<T>(int skip, int take) where T : BaseChat;
         Task<List<BuddyChat>> GetBuddyChatsByUserId(string userId);
+        Task<PatientChat> GetPatientChatIncludeGoalsAsync(string roomId);
     }
 }

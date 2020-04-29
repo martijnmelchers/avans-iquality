@@ -16,11 +16,14 @@
     </div>
   </div>
   <div ibmRow>
-    <button ibmCol ibmButton (click)="onChatCreate()">
+    <button ibmCol ibmButton (click)="onBuddyChatCreate(true)">
       Create Buddychat
     </button>
+    <button ibmCol ibmButton (click)="onBuddyChatCreate(false)">
+      Create Patientchat
+    </button>
     <label>
-      Buddychat name
+      Name
       <input ibmText [(ngModel)]="chatName">
     </label>
   </div>

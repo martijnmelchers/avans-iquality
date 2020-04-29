@@ -1,29 +1,76 @@
-﻿using Google.Cloud.Dialogflow.V2;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Google.Cloud.Dialogflow.V2;
 using IQuality.DomainServices.Interfaces;
+using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models.Chat;
+using IQuality.Models.Forms;
+using IQuality.Models.Goals;
+using IQuality.Models.Helpers;
 
 namespace IQuality.DomainServices.Services
 {
-    public class GoalService: IIntentService
+    [Injectable(interfaceType: typeof(IGoalService))]
+    public class GoalService : IGoalService, IIntentService
     {
-        private ResponseBuilderService _responseBuilderService;
-        public QueryResult HandleIntent(string roomId, PatientChat chat, string userText)
+        private readonly IGoalRepository _goalRepository;
+        private readonly IResponseBuilderService _responseBuilderService;
+
+        public GoalService(IGoalRepository goalRepository, IResponseBuilderService responseBuilderService)
         {
-            _responseBuilderService = new ResponseBuilderService();
+            _responseBuilderService = responseBuilderService;
+            _goalRepository = goalRepository;
+        }
+
+        public Task<Bot> HandleIntentWebhook(QueryResult result, PatientChat chat)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Bot> HandleIntentClient(string roomId, PatientChat chat, string userText)
+        {
+            Bot botResponse = new Bot();
+
             switch (chat.IntentName)
             {
                 case "create_goal":
-                    return SaveGoal(userText, roomId, chat);
+                    botResponse.QueryResult = await SaveGoal(userText, roomId, chat);
+                    botResponse.ResponseType = ResponseType.Text;
+                    break;
+                case "get_goals":
+                    botResponse.Goals = await GetGoals(chat);
+                    botResponse.ResponseType = ResponseType.GoalList;
+                    botResponse.QueryResult =
+                        await _responseBuilderService.BuildTextResponse(userText, roomId, "first_intent");
+                    break;
                 default:
-                    return _responseBuilderService.BuildTextResponse(userText, roomId, "first_intent");
+                    botResponse.QueryResult =
+                        await _responseBuilderService.BuildTextResponse(userText, roomId, "first_intent");
+                    break;
             }
+
+            return botResponse;
         }
 
-        private QueryResult SaveGoal(string userText, string roomId, PatientChat chat)
+        private async Task<QueryResult> SaveGoal(string userText, string roomId, PatientChat chat)
         {
+            Goal goal = new Goal
+            {
+                Description = userText
+            };
+            await _goalRepository.SaveAsync(goal);
+
+            chat.GoalId.Add(goal.Id);
             chat.IntentName = "";
             chat.IntentType = "";
-            return _responseBuilderService.BuildTextResponse(userText, roomId, "create_goal_description");
+            return await _responseBuilderService.BuildTextResponse(userText, roomId, "create_goal_description");
+        }
+
+
+        private async Task<List<Goal>> GetGoals(PatientChat chat)
+        {
+            return await _goalRepository.GetByIdsAsync(chat.GoalId);
         }
     }
 }
