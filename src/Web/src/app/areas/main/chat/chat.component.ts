@@ -1,4 +1,4 @@
-﻿import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+﻿import {AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ChatService} from "@IQuality/core/services/chat.service";
 
@@ -7,24 +7,19 @@ import {ChatService} from "@IQuality/core/services/chat.service";
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnInit, AfterViewChecked {
+export class ChatComponent {
   public messageFormGroup: FormGroup;
   public messageControl: FormControl;
   @ViewChild('chatScroll') private chatScrollContainer: ElementRef;
 
   constructor(private formBuilder: FormBuilder, public chatService: ChatService) {
+
     this.messageControl = new FormControl();
-    this.messageFormGroup = formBuilder.group({
+    this.messageFormGroup = this.formBuilder.group({
       message: this.messageControl,
     });
-  }
 
-  ngOnInit(): void {
     this.chatService.onChatSelected.push(() => this.onChatSelected());
-  }
-
-  ngAfterViewChecked(): void {
-
   }
 
   onSubmit(e): void {
@@ -43,9 +38,9 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   }
 
-  private initializeScrollContainer(){
+  private initializeScrollContainer() {
 
-    if(!this.chatScrollContainer) return;
+    if (!this.chatScrollContainer) return;
 
     const scrollTop = this.chatScrollContainer.nativeElement.scrollTop;
     const scrollHeight = this.chatScrollContainer.nativeElement.scrollHeight;
@@ -57,6 +52,13 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   public onChatLoaded() {
     this.initializeScrollContainer();
+  }
+
+  public onChatToggle(chatWithBot: boolean) {
+    this.chatService.messages = [];
+    if (!chatWithBot) {
+      this.chatService.messages = this.chatService.databaseMessages;
+    }
   }
 
   public closeChat() {

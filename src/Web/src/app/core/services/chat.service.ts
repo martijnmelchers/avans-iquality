@@ -17,44 +17,18 @@ export class ChatService {
   public isChatWithBot() { return this.chatWithBot; }
 
   public selected: BaseChat;
+
+  //Messages zijn voor alles om te laten zien
   public messages: Array<Message> = [];
+  //Database messages zijn de messages die opgeslagen zijn in de database
+  public databaseMessages: Array<Message> = [];
+
   public onChatSelected: Array<() => void> = [];
 
-  private readonly connection: signalR.HubConnection;
+  private connection: signalR.HubConnection;
 
   constructor(private _api: ApiService, private auth: AuthenticationService) {
-    this.chatWithBot = true;
-    // TODO: Put the HubConnection Url in the environment.
-    this.connection = new signalR.HubConnectionBuilder()
-      .withAutomaticReconnect()
-      .withUrl(`${environment.endpoints.api}/hub`, {
-        accessTokenFactory: () => auth.encodedToken
-      }).configureLogging(LogLevel.Warning).build();
-
-    this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, message: string) => {
-      if (chatId === this.selected.id) {
-        let newMessage = new Message();
-
-        newMessage.content = message;
-        newMessage.senderId = userId;
-        newMessage.senderName = userName;
-        newMessage.sendDate = new Date(Date.now())
-
-
-        this.messages.push(newMessage);
-      }
-    });
-
-    this.connection.start().then(() => {
-      const response = this.getChats();
-      response.then((chats) => {
-        for (const chat of chats) {
-          this.hubJoinGroup(chat.id);
-        }
-      })
-    }).catch(err => {
-      console.log("Connection error", err);
-    });
+    this.setUpSocketConnection(auth)
   }
 
   public sendMessage(content: string) {
@@ -64,11 +38,7 @@ export class ChatService {
       patientMessage.text = content;
 
       this._api.post<any>("/dialogflow/patient",  patientMessage).then((response)=> {
-        let userMessage = new Message();
-        userMessage.senderId = this.auth.getNameIdentifier;
-        userMessage.senderName = this.auth.getName;
-        userMessage.content = content;
-        this.messages.push(userMessage);
+        this.messages.push(this.createMessage(content));
 
         let botMessage = new Message();
         if(response != null){
@@ -78,6 +48,7 @@ export class ChatService {
       })
     } else {
       this.connection.send("newMessage", this.selected.id, content);
+      this.databaseMessages.push(this.createMessage(content));
     }
   }
 
@@ -92,9 +63,10 @@ export class ChatService {
   }
 
   public async selectChatWithId(id: string): Promise<BaseChat> {
+    this.chatWithBot = false;
     this.selected = await this._api.get<BaseChat>(`/chats/${id}`);
 
-    this.messages = this.selected.messages;
+    this.messages = this.databaseMessages = this.selected.messages;
     this.onChatSelected.forEach(value => {
       value();
     });
@@ -112,4 +84,40 @@ export class ChatService {
     const time = new Date(date);
     return `${time.getHours()}:${time.getMinutes()}`
   }
+
+  private createMessage(content: string){
+    let message = new Message();
+    message.senderId = this.auth.getNameIdentifier;
+    message.senderName = this.auth.getName;
+    message.content = content;
+    message.sendDate = new Date(Date.now());
+
+    return message
+  }
+
+  private setUpSocketConnection(auth: AuthenticationService){
+    this.connection = new signalR.HubConnectionBuilder()
+      .withAutomaticReconnect()
+      .withUrl(`${environment.endpoints.api}/hub`, {
+        accessTokenFactory: () => auth.encodedToken
+      }).configureLogging(LogLevel.Warning).build();
+
+    this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
+      if (chatId === this.selected.id) {
+        this.messages.push(this.createMessage(content));
+      }
+    });
+
+    this.connection.start().then(() => {
+      const response = this.getChats();
+      response.then((chats) => {
+        for (const chat of chats) {
+          this.hubJoinGroup(chat.id);
+        }
+      })
+    }).catch(err => {
+      console.log("Connection error", err);
+    });
+  }
+
 }

@@ -28,9 +28,9 @@
         <div ibmRow>
           <div class="column-align" ibmCol columnNumbers="10">
             <ibm-toggle
-
+              offText="Bot"
               onText="Bot"
-              offText="Doctor"
+              (click)="onChatToggle(chatService.chatWithBot)"
               [(checked)]="chatService.chatWithBot">
             </ibm-toggle>
           </div>
