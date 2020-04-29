@@ -4,7 +4,6 @@ namespace IQuality.DomainServices.Interfaces
 {
     public interface IResponseBuilderService
     {
-        QueryResult BuildTextResponse(string text);
-        QueryResult BuildContextResponse(QueryResult result, string text);
+        QueryResult BuildTextResponse(string text, string roomId, string context);
     }
 }
