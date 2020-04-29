@@ -6,5 +6,6 @@ namespace IQuality.Models.Chat
     {
         public string IntentName { get; set; }
         public DateTime IntentStartDate { get; set; }
+        public string IntentType { get; set; }
     }
 }

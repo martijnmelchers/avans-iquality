@@ -1,4 +1,5 @@
 ﻿using Google.Cloud.Dialogflow.V2;
+using Google.Protobuf.WellKnownTypes;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Models.Helpers;
 
@@ -7,24 +8,7 @@ namespace IQuality.DomainServices.Services
     [Injectable]
     public class ResponseBuilderService: IResponseBuilderService
     {
-        public QueryResult BuildTextResponse(string text)
-        {
-            SessionsClient client = SessionsClient.Create();
-            DetectIntentResponse response = client.DetectIntent(
-                session: SessionName.FromProjectSession("cui-cbolll", "diabuddy"),
-                queryInput: new QueryInput()
-                {
-                    Text = new TextInput()
-                    {
-                        Text = text,
-                        LanguageCode = "en-us"
-                    }
-                }
-            );
-            return response.QueryResult;
-        }
-        
-        public QueryResult BuildContextResponse(QueryResult result, string text)
+        public QueryResult BuildTextResponse(string text, string roomId, string context)
         {
             SessionsClient sessionsClient = SessionsClient.Create();
             DetectIntentRequest request = new DetectIntentRequest
@@ -37,10 +21,17 @@ namespace IQuality.DomainServices.Services
                     {
                         new Context()
                         {
-                            ContextName = new ContextName("cui-cbolll", "diabuddy", "create_goal_description"),
-                            LifespanCount = 1
+                            ContextName = new ContextName("cui-cbolll", "diabuddy", context),
+                            LifespanCount = 1,
+                            Parameters = new Struct
+                            {
+                                Fields =
+                                {
+                                    ["roomId"] = Value.ForString(roomId)
+                                }
+                            }
                         }
-                    }
+                    },
                 },
                 QueryInput = new QueryInput()
                 {
@@ -55,7 +46,4 @@ namespace IQuality.DomainServices.Services
             return response.QueryResult;
         }
     }
-    
-    
-    
 }

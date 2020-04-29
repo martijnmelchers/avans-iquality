@@ -34,9 +34,7 @@ namespace IQuality.Api.Controllers
                 string lines = await reader.ReadToEndAsync();
                 request = jsonParser.Parse<WebhookRequest>(lines);
             }
-            
-            
-            _dialogflowService.ProcessWebhookRequest(request);
+            await _dialogflowService.ProcessWebhookRequest(request);
             return Ok();
         }
         

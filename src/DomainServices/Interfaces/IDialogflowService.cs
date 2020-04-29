@@ -6,6 +6,6 @@ namespace IQuality.DomainServices.Interfaces
     public interface IDialogflowService
     {
         Task<QueryResult> ProcessClientRequest(string text, string roomId);
-        void ProcessWebhookRequest(WebhookRequest request);
+        Task ProcessWebhookRequest(WebhookRequest request);
     }
 }

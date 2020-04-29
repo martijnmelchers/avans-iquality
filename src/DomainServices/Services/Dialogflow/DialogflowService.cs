@@ -4,6 +4,7 @@ using Google.Cloud.Dialogflow.V2;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models.Chat;
+using IQuality.Models.Dialogflow;
 using IQuality.Models.Helpers;
 using Microsoft.Extensions.Configuration;
 
@@ -14,11 +15,8 @@ namespace IQuality.DomainServices.Services
     {
         private readonly IChatRepository _chatRepository;
         private IResponseBuilderService _responseBuilderService;
-        
         private IIntentService _intentService;
-
         private readonly int _intervalTime;
-        
 
         public DialogflowService(IConfiguration config, IResponseBuilderService responseBuilderService,
             IChatRepository chatRepository)
@@ -28,39 +26,29 @@ namespace IQuality.DomainServices.Services
             _chatRepository = chatRepository;
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS",
                 "dialogflow.config.json");
-            
         }
-
-
+        
         public async Task<QueryResult> ProcessClientRequest(string text, string roomId)
         {
             QueryResult result = null;
             PatientChat patientChat = await _chatRepository.GetChatAsync<PatientChat>(roomId);
             
-            if (patientChat.IntentName == null || ((DateTime.Now - patientChat.IntentStartDate).TotalMinutes > _intervalTime))
-            {
-                // TODO: Start a new goal intent                
-            }
-            else
-            {
-                // TODO: Continue with intent
-
-
-                patientChat.IntentName = "Een intent naam";
-            }
-            
-            //build response
-            if (result != null)
-            {
-                QueryResult temp = _responseBuilderService.BuildContextResponse(result, text);
-                return temp;
-            }
-
-            return _responseBuilderService.BuildTextResponse(text);
+                switch (patientChat.IntentType)
+                {
+                    case IntentTypes.Goal: 
+                        GoalService goalService = new GoalService();
+                        return goalService.HandleIntent(roomId, patientChat, text);
+                       default: return _responseBuilderService.BuildTextResponse(text, roomId, "first_intent");
+                }
         }
 
-        public void ProcessWebhookRequest(WebhookRequest request)
+        public async Task ProcessWebhookRequest(WebhookRequest request)
         {
+            string roomId = request.QueryResult.Parameters.Fields["roomId"].StringValue;
+            PatientChat patientChat = await _chatRepository.GetChatAsync<PatientChat>(roomId);
+            
+            patientChat.IntentType = request.QueryResult.Parameters.Fields["intentType"].StringValue;
+            patientChat.IntentName = request.QueryResult.Intent.DisplayName;
         }
     }
 }
