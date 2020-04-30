@@ -12,6 +12,7 @@ import {ChatService} from "@IQuality/core/services/chat.service";
 export class MessageComponent implements OnInit {
   @Input("message") message: Message;
   public suggestions = Array<Suggestion>();
+  public options: Array<string>;
 
   constructor(public auth: AuthenticationService, public chatService: ChatService) { }
 

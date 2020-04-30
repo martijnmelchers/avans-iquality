@@ -31,6 +31,7 @@ export class ChatService {
     this.setUpSocketConnection(auth)
   }
 
+  //TODO: Bot geeft altijd goals terug zelfs als er niet om gevraagd is
   public sendMessage(content: string) {
     if(this.chatWithBot) {
       const patientMessage = new PatientMessage();
@@ -43,6 +44,8 @@ export class ChatService {
         let botMessage = new Message();
         if(response.queryResult != null){
           botMessage.content = response.queryResult.fulfillmentText;
+          botMessage.options = response.goals;
+          console.log(response);
           this.messages.push(botMessage);
         }
       })

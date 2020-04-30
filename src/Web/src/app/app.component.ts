@@ -20,7 +20,6 @@ export class AppComponent {
       const progressRef: NgProgressRef = progress.ref();
 
       //console.log(progressRef);
-      console.log(window.innerWidth);
 
       if (activeRequests === 1)
         progressRef.start();
