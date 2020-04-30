@@ -27,7 +27,7 @@
     </ibm-structured-list>
     <span>
         <ul>
-          <ibm-tag *ngFor="let suggestion of suggestions" style="cursor: pointer">
+          <ibm-tag *ngFor="let suggestion of suggestions" style="cursor: pointer" (click)="onSuggestionClicked(suggestion)">
               {{suggestion?.name}}
           </ibm-tag>
         </ul>
