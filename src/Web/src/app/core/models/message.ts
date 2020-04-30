@@ -7,4 +7,5 @@
   chatId: string;
   sendDate: Date;
   content: string;
+  options?: Array<string>
 }
