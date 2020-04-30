@@ -1,12 +1,15 @@
 using IQuality.Models.Authentication;
 using IQuality.Models.Authentication.Settings;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace IQuality.Infrastructure.Database.Repositories.Interface
+namespace IQuality.DomainServices.Interfaces
 {
-    public interface IPatientRepository : IBaseRavenRepository<Patient>
+   public interface IPatientService
     {
-        public Task<Patient> GetPatientAsync(string id);
+        Task<PatientSettings> GetPatientSettings(string userID);
         public Task<Patient> SetPatientSettingsAsync(PatientSettings settings, string patientID);
     }
 }
