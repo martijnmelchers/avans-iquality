@@ -17,29 +17,30 @@ import {MessageComponent} from './chat/message/message.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {InviteComponent} from "@IQuality/areas/main/invite/invite.component";
 import {ChatListComponent} from './chat/chatlist/chat-list.component';
-import {AddModule, CloseModule, ColumnModule, SendAltModule} from "@carbon/icons-angular";
+import {AddModule, CloseModule, ColumnModule, DotMarkModule, SendAltModule} from "@carbon/icons-angular";
 
 @NgModule({
   declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatListComponent],
-  imports: [
-    CommonModule,
-    MainRoutingModule,
-    TableModule,
-    GridModule,
-    InputModule,
-    ButtonModule,
-    ReactiveFormsModule,
-    TilesModule,
-    ListModule,
-    StructuredListModule,
-    AddModule,
-    FormsModule,
-    SendAltModule,
-    CloseModule,
-    ColumnModule,
-    TagModule,
-    ToggleModule,
-  ]
+    imports: [
+        CommonModule,
+        MainRoutingModule,
+        TableModule,
+        GridModule,
+        InputModule,
+        ButtonModule,
+        ReactiveFormsModule,
+        TilesModule,
+        ListModule,
+        StructuredListModule,
+        AddModule,
+        FormsModule,
+        SendAltModule,
+        CloseModule,
+        ColumnModule,
+        TagModule,
+        ToggleModule,
+        DotMarkModule,
+    ]
 })
 export class MainModule {
 }

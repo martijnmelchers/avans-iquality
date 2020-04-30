@@ -7,14 +7,16 @@ import {Message} from "@IQuality/core/models/message";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {environment} from "../../../environments/environment";
 import {PatientMessage} from "@IQuality/core/models/patient-message";
-import {formatDate} from "@angular/common";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
   public chatWithBot: boolean;
-  public isChatWithBot() { return this.chatWithBot; }
+
+  public isChatWithBot() {
+    return this.chatWithBot;
+  }
 
   public selected: BaseChat;
 
@@ -31,18 +33,21 @@ export class ChatService {
     this.setUpSocketConnection(auth)
   }
 
+  //TODO: Bot geeft altijd goals terug zelfs als er niet om gevraagd is
   public sendMessage(content: string) {
-    if(this.chatWithBot) {
+    if (this.chatWithBot) {
       const patientMessage = new PatientMessage();
       patientMessage.roomId = this.selected.id;
       patientMessage.text = content;
 
-      this._api.post<any>("/dialogflow/patient",  patientMessage).then((response)=> {
+      this._api.post<any>("/dialogflow/patient", patientMessage).then((response) => {
         this.messages.push(this.createMessage(content));
 
         let botMessage = new Message();
-        if(response.queryResult != null){
+        if (response.queryResult != null) {
           botMessage.content = response.queryResult.fulfillmentText;
+          botMessage.options = response.goals;
+          console.log(response);
           this.messages.push(botMessage);
         }
       })
@@ -54,11 +59,9 @@ export class ChatService {
   public async createBuddychat(name: string, isBuddyChat: boolean): Promise<BaseChat> {
     let chat;
 
-    if(isBuddyChat)
-    {
-       chat = await this._api.post<BaseChat>('/chats/createbuddychat', {name});
-    }
-    else {
+    if (isBuddyChat) {
+      chat = await this._api.post<BaseChat>('/chats/createbuddychat', {name});
+    } else {
       chat = await this._api.post<BaseChat>('/chats', {name});
     }
 
@@ -88,12 +91,12 @@ export class ChatService {
     });
   }
 
-  public getTime(date: string) : string {
+  public getTime(date: string): string {
     const time = new Date(date);
     return `${time.getHours()}:${time.getMinutes()}`
   }
 
-  private createMessage(content: string){
+  private createMessage(content: string) {
     let message = new Message();
     message.senderId = this.auth.getNameIdentifier;
     message.senderName = this.auth.getName;
@@ -103,7 +106,7 @@ export class ChatService {
     return message
   }
 
-  private setUpSocketConnection(auth: AuthenticationService){
+  private setUpSocketConnection(auth: AuthenticationService) {
     this.connection = new signalR.HubConnectionBuilder()
       .withAutomaticReconnect()
       .withUrl(`${environment.endpoints.api}/hub`, {
