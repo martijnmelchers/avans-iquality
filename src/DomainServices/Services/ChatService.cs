@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using IQuality.DomainServices.Interfaces;
@@ -75,6 +75,11 @@ namespace IQuality.DomainServices.Services
         {
             BaseChat chat = await _chatRepository.GetByIdAsync(id);
             _chatRepository.Delete(chat);
+        }
+
+        public async Task<PatientChat> GetPatientChatIncludeGoalsAsync(string chatId)
+        {
+            return await _chatRepository.GetPatientChatIncludeGoalsAsync(chatId);
         }
     }
 }

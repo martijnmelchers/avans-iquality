@@ -11,8 +11,4 @@
     <PackageReference Include="RavenDB.Identity" Version="7.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Actions\" />
-  </ItemGroup>
-
 </Project>

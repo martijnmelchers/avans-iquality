@@ -1,4 +1,4 @@
-﻿using IQuality.Models.Interfaces;
+using IQuality.Models.Interfaces;
 
 namespace IQuality.Models.Actions
 {

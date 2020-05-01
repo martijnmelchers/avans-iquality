@@ -6,6 +6,8 @@ using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Models.Authentication;
 using IQuality.Models.Authentication.Settings;
+using IQuality.Models.Chat;
+using IQuality.Models.Goals;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Raven.Client.Documents.Session;
@@ -17,14 +19,16 @@ namespace IQuality.Api.Controllers
     {
         private readonly IAsyncDocumentSession _session;
         private readonly IPatientService _patientService;
-        public PatientController(IAsyncDocumentSession session,IPatientService patientService) : base(session)
+        private readonly IGoalService _goalService;
+        private readonly IChatService _chatService;
+
+        public PatientController(IAsyncDocumentSession session, IPatientService patientService, IGoalService goalService, IChatService chatService) : base(session)
         {
             _session = session;
             _patientService = patientService;
+            _goalService = goalService;
+            _chatService = chatService;
         }
-
-
-
 
         [HttpGet,  Authorize(Roles = Roles.Patient)]
         public async Task<IActionResult> GetPatientSettings()
@@ -39,6 +43,17 @@ namespace IQuality.Api.Controllers
         {
             var result = await _patientService.SetPatientSettingsAsync(settings,HttpContext.User.GetUserId());
             return Ok(result);
+        }
+
+
+        [HttpPost("{chatId}"), Authorize(Roles = Roles.Patient)]
+        public async Task<IActionResult> SetGoal([FromBody] string goalDescription, [FromRoute] string chatId)
+        {
+            PatientChat chat = await _chatService.GetPatientChatIncludeGoalsAsync(chatId);
+
+            await _goalService.SaveGoal(goalDescription, chat);
+
+            return Ok();
         }
     }
 }
