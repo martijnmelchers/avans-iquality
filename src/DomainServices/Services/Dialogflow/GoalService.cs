@@ -35,7 +35,8 @@ namespace IQuality.DomainServices.Services
             switch (chat.IntentName)
             {
                 case "create_goal":
-                    botResponse.QueryResult = await SaveGoal(userText, roomId, chat);
+                    await SaveGoal(userText, chat);
+                    botResponse.QueryResult = await _responseBuilderService.BuildTextResponse(userText, roomId, "create_goal_description");
                     botResponse.ResponseType = ResponseType.Text;
                     break;
                 case "get_goals":
@@ -53,22 +54,20 @@ namespace IQuality.DomainServices.Services
             return botResponse;
         }
 
-        private async Task<QueryResult> SaveGoal(string userText, string roomId, PatientChat chat)
+        public async Task SaveGoal(string goalDescription, PatientChat chat)
         {
             Goal goal = new Goal
             {
-                Description = userText
+                Description = goalDescription
             };
             await _goalRepository.SaveAsync(goal);
 
             chat.GoalId.Add(goal.Id);
             chat.IntentName = "";
             chat.IntentType = "";
-            return await _responseBuilderService.BuildTextResponse(userText, roomId, "create_goal_description");
         }
 
-
-        private async Task<List<Goal>> GetGoals(PatientChat chat)
+        public async Task<List<Goal>> GetGoals(PatientChat chat)
         {
             return await _goalRepository.GetByIdsAsync(chat.GoalId);
         }

@@ -18,9 +18,16 @@
         {{message.content}}
       </div>
     </span>
+    <ibm-structured-list border="false" condensed="true" style="!important margin-bottom: 0">
+      <ibm-list-header>
+        <ibm-list-row *ngFor="let option of message.options">
+          <ibm-list-column>{{option?.description}}</ibm-list-column>
+        </ibm-list-row>
+      </ibm-list-header>
+    </ibm-structured-list>
     <span>
         <ul>
-          <ibm-tag *ngFor="let suggestion of suggestions" style="cursor: pointer">
+          <ibm-tag *ngFor="let suggestion of suggestions" style="cursor: pointer" (click)="onSuggestionClicked(suggestion)">
               {{suggestion?.name}}
           </ibm-tag>
         </ul>

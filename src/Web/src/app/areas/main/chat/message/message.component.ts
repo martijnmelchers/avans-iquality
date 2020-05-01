@@ -12,12 +12,16 @@ import {ChatService} from "@IQuality/core/services/chat.service";
 export class MessageComponent implements OnInit {
   @Input("message") message: Message;
   public suggestions = Array<Suggestion>();
+  public options: Array<string>;
 
   constructor(public auth: AuthenticationService, public chatService: ChatService) { }
 
   ngOnInit(): void {
-    this.suggestions.push(new Suggestion("More results", "Please show me more results!"));
-    this.suggestions.push(new Suggestion("Show weight", "Please show me my current weight"));
+    this.suggestions.push(new Suggestion("Show active goals", "Get goals"));
+    this.suggestions.push(new Suggestion("Set goal", "Set goal"));
   }
 
+  public onSuggestionClicked(suggestion : Suggestion) {
+      this.chatService.sendMessage(suggestion.explanation);
+  }
 }
