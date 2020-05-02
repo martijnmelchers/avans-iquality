@@ -1,4 +1,4 @@
-﻿using IQuality.Models.Interfaces;
+using IQuality.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,12 +9,8 @@ namespace IQuality.Models.Authentication
     {
         public string Id { get; set; }
         public string ApplicationUserId { get; }
-		public string GroupName { get; set; }
-        public string Name { get; set; }
-        public string PhoneNumber { get; set; }
-        public string ImagePath { get; set; }
-		
-		public Buddy() 
+
+        public Buddy() 
 		{
 			
 		}

@@ -9,6 +9,9 @@ import { RequestStatusService } from "./core/services/request-status.service";
 })
 export class AppComponent {
 
+  public active: boolean;
+  public hasHamburger: boolean;
+
   constructor(
     progress: NgProgress,
     requestStatus: RequestStatusService
@@ -25,9 +28,12 @@ export class AppComponent {
         progressRef.complete();
     });
 
-
+    this.hasHamburger = window.innerWidth < 1055;
     requestStatus.requestStart();
-
     setTimeout(() => requestStatus.requestFinish(), 2500);
+  }
+
+  onResize($event: any) {
+    this.hasHamburger = window.innerWidth < 1055;
   }
 }

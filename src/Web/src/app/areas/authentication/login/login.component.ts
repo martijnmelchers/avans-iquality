@@ -41,8 +41,6 @@ export class LoginComponent implements OnInit {
     try {
       const token = await this._api.post<string>('/authorize/login', this.form.getRawValue(), null, { disableAuthentication: true, responseType: 'text', headers: {} });
       this._auth.saveToken(token);
-
-      console.log(await this._api.post<string>('/authorize/invite', null, null, { responseType: 'text', headers: {} }));
     } catch(e) {
       console.log(e);
       this.hasError = true;

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -30,6 +31,11 @@ namespace IQuality.Api.Hubs
             return ((ClaimsIdentity) Context.User.Identity).Claims.First().Value;
         }
 
+        private string GetUserName()
+        {
+            return ((ClaimsIdentity) Context.User.Identity).Claims.ToArray()[1].Value;
+        }
+
         // TODO: Make a function which accepts a array of room I'd.
         public async Task JoinGroup(string groupName)
         {
@@ -57,9 +63,17 @@ namespace IQuality.Api.Hubs
         public async Task NewMessage(string chatId, string message)
         {
             string senderId = GetSenderId();
-            await Clients.Group(chatId).SendAsync("messageReceived", senderId, message);
+            string senderName = GetUserName();
+            await Clients.Group(chatId).SendAsync("messageReceived", senderId, senderName, chatId, message);
 
-            TextMessage textMessage = new TextMessage {SenderId = senderId, ChatId = chatId, Content = message};
+            TextMessage textMessage = new TextMessage
+            {
+                SenderId = senderId,
+                SenderName = senderName,
+                ChatId = chatId,
+                Content = message,
+                SendDate = DateTime.Now,
+            };
             await _messageService.PostMessage(textMessage);
         }
 

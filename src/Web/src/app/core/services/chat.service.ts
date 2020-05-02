@@ -6,61 +6,65 @@ import {LogLevel} from "@microsoft/signalr";
 import {Message} from "@IQuality/core/models/message";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {environment} from "../../../environments/environment";
+import {PatientMessage} from "@IQuality/core/models/patient-message";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
+  public chatWithBot: boolean;
+
+  public isChatWithBot() {
+    return this.chatWithBot;
+  }
 
   public selected: BaseChat;
+
+  //Messages zijn voor alles om te laten zien
   public messages: Array<Message> = [];
+  //Database messages zijn de messages die opgeslagen zijn in de database
+  public databaseMessages: Array<Message> = [];
+
   public onChatSelected: Array<() => void> = [];
 
-  private readonly connection: signalR.HubConnection;
+  private connection: signalR.HubConnection;
 
   constructor(private _api: ApiService, private auth: AuthenticationService) {
-    // TODO: Put the HubConnection Url in the environment.
-    this.connection = new signalR.HubConnectionBuilder()
-      .withAutomaticReconnect()
-      .withUrl(`${environment.endpoints.api}/hub`, {
-        accessTokenFactory: () => auth.encodedToken
-      }).configureLogging(LogLevel.Warning).build();
+    this.setUpSocketConnection(auth)
+  }
 
-    this.connection.on("messageReceived", (userId: string, chatId: string, message: string) => {
-      if (chatId === this.selected.id) {
-        let newMessage = new Message();
-        newMessage.content = message;
+  //TODO: Bot geeft altijd goals terug zelfs als er niet om gevraagd is
+  public sendMessage(content: string) {
+    if (this.chatWithBot) {
+      const patientMessage = new PatientMessage();
+      patientMessage.roomId = this.selected.id;
+      patientMessage.text = content;
 
-        if (userId === this.auth.nameIdentifier) {
-          newMessage.senderId = userId;
-        }
+      this._api.post<any>("/dialogflow/patient", patientMessage).then((response) => {
+        this.messages.push(this.createMessage(content));
 
-        this.messages.push(newMessage);
-      }
-    });
-
-    this.connection.on("messageReceived", (message: string) => {
-      const response = this.getChats();
-      response.then((chats) => {
-        for (const chat of chats) {
-          this.hubJoinGroup(chat.id);
+        let botMessage = new Message();
+        if (response.queryResult != null) {
+          botMessage.content = response.queryResult.fulfillmentText;
+          botMessage.options = response.goals;
+          console.log(response);
+          this.messages.push(botMessage);
         }
       })
-    });
-
-    this.connection.start().catch(err => {
-      console.log("Connection error", err);
-    });
-
-    console.log(this.connection);
+    } else {
+      this.connection.send("newMessage", this.selected.id, content);
+    }
   }
 
-  public sendMessage(content: string) {
-    this.connection.send("newMessage", this.auth.nameIdentifier, this.selected.id, content);
-  }
+  public async createBuddychat(name: string, isBuddyChat: boolean): Promise<BaseChat> {
+    let chat;
 
-  public async createChat(name: string): Promise<BaseChat> {
-    let chat = await this._api.post<BaseChat>('/chats', {name});
+    if (isBuddyChat) {
+      chat = await this._api.post<BaseChat>('/chats/createbuddychat', {name});
+    } else {
+      chat = await this._api.post<BaseChat>('/chats', {name});
+    }
+
     this.hubJoinGroup(chat.id);
     return chat;
   }
@@ -70,8 +74,10 @@ export class ChatService {
   }
 
   public async selectChatWithId(id: string): Promise<BaseChat> {
+    this.chatWithBot = false;
     this.selected = await this._api.get<BaseChat>(`/chats/${id}`);
-    this.messages = this.selected.messages;
+
+    this.messages = this.databaseMessages = this.selected.messages;
     this.onChatSelected.forEach(value => {
       value();
     });
@@ -84,4 +90,45 @@ export class ChatService {
       console.log(err)
     });
   }
+
+  public getTime(date: string): string {
+    const time = new Date(date);
+    return `${time.getHours()}:${time.getMinutes()}`
+  }
+
+  private createMessage(content: string) {
+    let message = new Message();
+    message.senderId = this.auth.getNameIdentifier;
+    message.senderName = this.auth.getName;
+    message.content = content;
+    message.sendDate = new Date(Date.now());
+
+    return message
+  }
+
+  private setUpSocketConnection(auth: AuthenticationService) {
+    this.connection = new signalR.HubConnectionBuilder()
+      .withAutomaticReconnect()
+      .withUrl(`${environment.endpoints.api}/hub`, {
+        accessTokenFactory: () => auth.encodedToken
+      }).configureLogging(LogLevel.Warning).build();
+
+    this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
+      if (chatId === this.selected.id) {
+        this.databaseMessages.push(this.createMessage(content));
+      }
+    });
+
+    this.connection.start().then(() => {
+      const response = this.getChats();
+      response.then((chats) => {
+        for (const chat of chats) {
+          this.hubJoinGroup(chat.id);
+        }
+      })
+    }).catch(err => {
+      console.log("Connection error", err);
+    });
+  }
+
 }

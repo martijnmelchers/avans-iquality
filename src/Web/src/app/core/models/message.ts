@@ -5,6 +5,7 @@
   senderName: string;
 
   chatId: string;
-  time: string;
+  sendDate: Date;
   content: string;
+  options?: Array<string>
 }

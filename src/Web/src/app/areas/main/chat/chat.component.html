@@ -26,6 +26,14 @@
     <div ibmCol>
       <form (ngSubmit)="onSubmit(null)" [formGroup]="messageFormGroup">
         <div ibmRow>
+          <div class="column-align" ibmCol columnNumbers="10">
+            <ibm-toggle
+              offText="Bot"
+              onText="Bot"
+              (click)="onChatToggle(chatService.chatWithBot)"
+              [(checked)]="chatService.chatWithBot">
+            </ibm-toggle>
+          </div>
           <div ibmCol>
             <ibm-label (keyup.enter)="onSubmit($event)">
               <input aria-label="textarea" class="chat-box" formControlName="message" ibmCol
@@ -33,7 +41,7 @@
                      placeholder="Messages"/>
             </ibm-label>
           </div>
-          <div class="column-align" ibmCol columnNumbers="10">
+          <div class="column-align" ibmCol columnNumbers="9">
             <button class="button" type="submit">
               <ibm-icon-send-alt size="32"></ibm-icon-send-alt>
             </button>

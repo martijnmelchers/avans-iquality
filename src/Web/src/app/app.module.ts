@@ -5,27 +5,16 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgProgressModule } from "ngx-progressbar";
-import { HeaderModule, TagModule } from "carbon-components-angular";
+import {HeaderModule, PanelModule, SideNavModule, TagModule} from "carbon-components-angular";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { JwtHttpInterceptor } from "@IQuality/core/interceptor/jwt-http-interceptor";
-import { BuddygroupComponent } from './buddy/buddygroup/buddygroup.component';
-import { BuddygroupaddComponent } from './buddy/buddygroupadd/buddygroupadd.component';
 import { TableModule } from "carbon-components-angular";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BuddyinviteComponent } from './buddyinvite/buddyinvite.component';
-import { BuddyeditComponent } from './buddyedit/buddyedit.component';
-import { BuddygrouplistComponent } from './buddygrouplist/buddygrouplist.component';
-import { BuddygroupitemComponent } from './buddygroupitem/buddygroupitem.component';
+import {FadeModule} from "@carbon/icons-angular";
 
 @NgModule({
   declarations: [
-    AppComponent,
-    BuddygroupComponent,
-    BuddygroupaddComponent,
-    BuddyinviteComponent,
-    BuddyeditComponent,
-    BuddygrouplistComponent,
-    BuddygroupitemComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +27,10 @@ import { BuddygroupitemComponent } from './buddygroupitem/buddygroupitem.compone
     FormsModule,
     TagModule,
     TableModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SideNavModule,
+    FadeModule,
+    PanelModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtHttpInterceptor, multi: true },
