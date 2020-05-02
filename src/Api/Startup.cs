@@ -64,7 +64,7 @@ namespace IQuality.Api
                     {
                         if (typeof(BaseMessage).IsAssignableFrom(type))
                             return "Message";
-                        
+
                         if (typeof(BaseChat).IsAssignableFrom(type))
                             return "Chat";
 
@@ -159,9 +159,11 @@ namespace IQuality.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            IdentityDataInitializer.SeedUsers(Configuration, userManager);
+            IdentityDataInitializer.SeedRoles(roleManager);
+            IdentityDataInitializer.SeedUsers(Configuration, userManager, roleManager);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -203,7 +205,22 @@ namespace IQuality.Api
 
     public static class IdentityDataInitializer
     {
-        public static void SeedUsers(IConfiguration config, UserManager<ApplicationUser> userManager)
+        public static void SeedRoles(RoleManager<IdentityRole> roleManager)
+        {
+            if (!roleManager.RoleExistsAsync(Roles.Admin).Result)
+                roleManager.CreateAsync(new IdentityRole(Roles.Admin)).Wait();
+
+            if (!roleManager.RoleExistsAsync(Roles.Buddy).Result)
+                roleManager.CreateAsync(new IdentityRole(Roles.Buddy)).Wait();
+
+            if (!roleManager.RoleExistsAsync(Roles.Doctor).Result)
+                roleManager.CreateAsync(new IdentityRole(Roles.Doctor)).Wait();
+
+            if (!roleManager.RoleExistsAsync(Roles.Patient).Result)
+                roleManager.CreateAsync(new IdentityRole(Roles.Patient)).Wait();
+        }
+
+        public static void SeedUsers(IConfiguration config, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             var user = new ApplicationUser
             {
@@ -225,15 +242,11 @@ namespace IQuality.Api
                 }
             };
 
+
             // If the default account exists, we don't have to create it again!
             if (userManager.FindByEmailAsync(user.Email).Result != null) return;
-            
-            IdentityResult result = userManager.CreateAsync(user, config["DefaultAccount:Password"]).Result;
 
-            if (result.Succeeded)
-            {
-                userManager.AddToRoleAsync(user, Roles.Admin);
-            }
+            userManager.CreateAsync(user, config["DefaultAccount:Password"]).Wait();
         }
     }
 }
