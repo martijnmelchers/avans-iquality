@@ -5,10 +5,11 @@ using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models.Chat.Messages;
 using IQuality.Models.Helpers;
+using Microsoft.AspNetCore.Http;
 
 namespace IQuality.DomainServices.Services
 {
-    [Injectable(interfaceType: typeof(IMessageService))]
+    [Injectable]
     public class MessageService : IMessageService
     {
         private readonly IMessageRepository _messageRepository;
@@ -40,6 +41,16 @@ namespace IQuality.DomainServices.Services
         public async Task<bool> RemoveMessage(string groupName, string messageId)
         {
             return await _messageRepository.DeleteMessage(groupName, messageId);
+        }
+
+        public async Task<BotMessage> CreateBotMessage(BotMessage message, string chatId)
+        {
+            message.SendDate = DateTime.Now;
+            message.ChatId = chatId;
+
+            await _messageRepository.SaveAsync(message);
+
+            return message;
         }
     }
 }
