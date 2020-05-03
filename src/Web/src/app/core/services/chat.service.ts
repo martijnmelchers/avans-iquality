@@ -44,7 +44,7 @@ export class ChatService {
       this.messages.push(response);
 
     } else {
-      this.connection.send("newMessage", this.selected.id, content);
+      await this.connection.send("newMessage", this.selected.id, content);
     }
   }
 
