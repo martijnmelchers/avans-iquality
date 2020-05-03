@@ -3,10 +3,14 @@ import {ApiService} from "@IQuality/core/services/api.service";
 import {BaseChat} from "@IQuality/core/models/base-chat";
 import * as signalR from "@microsoft/signalr";
 import {LogLevel} from "@microsoft/signalr";
-import {Message} from "@IQuality/core/models/message";
+
+import {Message} from "@IQuality/core/models/messages/message";
+import {PatientMessage} from "@IQuality/core/models/messages/patient-message";
+
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {environment} from "../../../environments/environment";
-import {PatientMessage} from "@IQuality/core/models/patient-message";
+import {BotMessage} from "@IQuality/core/models/messages/bot-message";
+
 
 @Injectable({
   providedIn: 'root'
@@ -43,14 +47,12 @@ export class ChatService {
       this._api.post<any>("/dialogflow/patient", patientMessage).then((response) => {
         this.messages.push(this.createMessage(content));
 
-        let botMessage = new Message();
+        let botMessage = new BotMessage();
         if (response.queryResult != null) {
-          botMessage.content = response.queryResult.fulfillmentText;
-          botMessage.options = response.goals;
-          console.log(response);
+          botMessage = response.botMessage;
           this.messages.push(botMessage);
         }
-      })
+      });
     } else {
       this.connection.send("newMessage", this.selected.id, content);
     }
@@ -97,7 +99,7 @@ export class ChatService {
   }
 
   private createMessage(content: string) {
-    let message = new Message();
+    let message = new PatientMessage();
     message.senderId = this.auth.getNameIdentifier;
     message.senderName = this.auth.getName;
     message.content = content;
