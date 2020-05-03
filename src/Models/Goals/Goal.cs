@@ -4,7 +4,7 @@ using IQuality.Models.Interfaces;
 
 namespace IQuality.Models.Goals
 {
-    public class Goal : IAggregateRoot
+    public class Goal : IAggregateRoot, IListable
     {
         public string Id { get; private set; }
         public GoalType Type { get; set; }

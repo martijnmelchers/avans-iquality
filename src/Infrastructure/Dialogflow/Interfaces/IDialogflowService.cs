@@ -2,11 +2,11 @@
 using Google.Cloud.Dialogflow.V2;
 using IQuality.Models.Forms;
 
-namespace IQuality.DomainServices.Interfaces
+namespace IQuality.Infrastructure.Dialogflow.Interfaces
 {
     public interface IDialogflowService
     {
-        Task<Bot> ProcessClientRequest(string text, string roomId);
+        Task<Bot> ProcessClientRequest(string text, string chatId);
         Task ProcessWebhookRequest(WebhookRequest request);
     }
 }

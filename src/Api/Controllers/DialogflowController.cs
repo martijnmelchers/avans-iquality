@@ -7,6 +7,7 @@ using Google.Cloud.Dialogflow.V2;
 using Google.Protobuf;
 using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
+using IQuality.Infrastructure.Dialogflow.Interfaces;
 using IQuality.Models.Forms;
 using IQuality.Models.Helpers;
 using Raven.Client.Documents.Session;
