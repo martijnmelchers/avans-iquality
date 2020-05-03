@@ -8,6 +8,7 @@ using Google.Protobuf;
 using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Dialogflow.Interfaces;
+using IQuality.Models.Authentication;
 using IQuality.Models.Forms;
 using IQuality.Models.Helpers;
 using Raven.Client.Documents.Session;
@@ -40,13 +41,10 @@ namespace IQuality.Api.Controllers
             return Ok();
         }
         
-        [HttpPost, Route("patient"), AllowAnonymous]
+        [HttpPost, Route("patient"), Authorize]
         public async Task<IActionResult> Set([FromBody] PatientMessage patientMessage)
         {
-            Bot response = await _dialogflowService.ProcessClientRequest(patientMessage.text, patientMessage.roomId);
-            
-            
-            return Json(response);
+            return Ok(await _dialogflowService.ProcessClientRequest(patientMessage.text, patientMessage.roomId));
         }
     }
 }

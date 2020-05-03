@@ -5,6 +5,7 @@ using Google.Cloud.Dialogflow.V2;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Infrastructure.Dialogflow.Interfaces;
 using IQuality.Models.Chat;
+using IQuality.Models.Chat.Messages;
 using IQuality.Models.Forms;
 using IQuality.Models.Goals;
 using IQuality.Models.Helpers;
@@ -29,37 +30,41 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
             throw new NotImplementedException();
         }
 
-        public async Task<Bot> HandleClientIntent(PatientChat chat, string userText, QueryResult queryResult = null)
+        public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userText, QueryResult queryResult)
         {
-            Bot response = new Bot();
+            var response = new BotMessage();
+            ;
 
             switch (chat.IntentName)
             {
-                case "create_goal":
-                    // do niets :)
-                    chat.IntentName = "create_goal_text";
-                    response.QueryResult = queryResult;
-                    response.ResponseType = ResponseType.Text;
+                case GoalIntentNames.CreateGoal:
+                    chat.IntentName = GoalIntentNames.CreateGoalText;
+                    response.Content = queryResult.FulfillmentText;
                     break;
-                case "create_goal_text":
+                case GoalIntentNames.CreateGoalText:
                     await SaveGoal(userText, chat);
-                    response.QueryResult = await _responseBuilderService.BuildTextResponse(userText, "create_goal_description");
-                    response.ResponseType = ResponseType.Text;
-                    
+                    var dialogflowResponse = await _responseBuilderService.BuildTextResponse(userText,
+                        GoalIntentNames.CreateGoalDescription);
+
+
+                    response.Content = dialogflowResponse.FulfillmentText;
                     
                     chat.ClearIntent();
-                    // save...
+                    
                     break;
-                case "get_goals":
-                    response.ListData = new List<IListable>(await GetGoals(chat));
+                case GoalIntentNames.GetGoals:
+                    var goals = await GetGoals(chat);
+
+                    response.ListData = goals.ToListable();
                     response.ResponseType = ResponseType.List;
-                    response.QueryResult = queryResult;
+                    response.Content = queryResult.FulfillmentText;
 
                     chat.ClearIntent();
                     break;
                 default:
-                    response.QueryResult =
-                        await _responseBuilderService.BuildTextResponse(userText, "first_intent");
+                    response.Content = (await _responseBuilderService.BuildTextResponse(userText, "first_intent"))
+                        .FulfillmentText;
+                        
                     break;
             }
 
@@ -83,5 +88,13 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
         {
             return await _goalRepository.GetByIdsAsync(chat.GoalId);
         }
+    }
+
+    public static class GoalIntentNames
+    {
+        public const string CreateGoal = "create_goal";
+        public const string CreateGoalText = "create_goal_text";
+        public const string CreateGoalDescription = "create_goal_description";
+        public const string GetGoals = "get_goals";
     }
 }
