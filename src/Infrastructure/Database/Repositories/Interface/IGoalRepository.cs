@@ -10,5 +10,6 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
     {
         Task SaveAsyncCheckDescription(string description, string roomId);
         Task<Goal> GetWhereDescription(string description);
+        Task<List<Goal>> GetGoalsOfChat(string chatId);
     }
 }

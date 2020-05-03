@@ -29,7 +29,12 @@ namespace IQuality.Infrastructure.Database.Repositories
             
             return await Session.Query<Goal>().FirstOrDefaultAsync(x => x.Description == description);
         }
-        
+
+        public async Task<List<Goal>> GetGoalsOfChat(string chatId)
+        {
+            return await Session.Query<Goal>().Where(x => x.ChatId == chatId).ToListAsync();
+        }
+
         public Task SaveAsyncCheckDescription(string description, string roomId)
         {
             throw new NotImplementedException();

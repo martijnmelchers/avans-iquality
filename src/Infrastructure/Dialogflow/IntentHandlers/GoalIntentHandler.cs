@@ -61,7 +61,7 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
                     break;
                 //
                 case GoalIntentNames.GetGoals:
-                    var goals = await GetGoals(chat);
+                    List<Goal> goals = await GetGoals(chat);
 
                     response.ListData = goals.ToListable();
                     response.ResponseType = ResponseType.List;
@@ -120,7 +120,7 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
 
         public async Task<List<Goal>> GetGoals(PatientChat chat)
         {
-            return await _goalRepository.GetByIdsAsync(chat.GoalId);
+            return await _goalRepository.GetGoalsOfChat(chat.Id);
         }
 
         public async Task DeleteGoal(string goalId)

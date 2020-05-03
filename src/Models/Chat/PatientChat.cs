@@ -8,10 +8,8 @@ namespace IQuality.Models.Chat
     {
         public PatientChat()
         {
-            GoalId = new List<string>();
         }
         
-        public List<string> GoalId { get; set; }
         public string IntentName { get; set; }
         public DateTime IntentStartDate { get; set; }
         public string IntentType { get; set; }

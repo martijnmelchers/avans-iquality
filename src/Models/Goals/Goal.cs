@@ -14,7 +14,6 @@ namespace IQuality.Models.Goals
         public Interval Reminders { get; set; }
         
         public List<BaseAction> Actions { get; set; }
-        public string Text { get; set; }
-        public Listable ToListable() => new Listable(Text);
+        public Listable ToListable() => new Listable(Description);
     }
 }
