@@ -19,11 +19,13 @@ namespace IQuality.Api.Controllers
     [Injectable(interfaceType: typeof(IDialogflowService))]
     public class DialogflowController : RavenApiController
     {
-        private static readonly JsonParser jsonParser = new JsonParser(JsonParser.Settings.Default.WithIgnoreUnknownFields(true));
+        // private static readonly JsonParser jsonParser = new JsonParser(JsonParser.Settings.Default.WithIgnoreUnknownFields(true));
+        private readonly IGoalIntentHandler _goalIntentHandler;
         private IDialogflowService _dialogflowService;
 
-        public DialogflowController(IAsyncDocumentSession session, IDialogflowService dialogflowService) : base(session)
+        public DialogflowController(IGoalIntentHandler goalIntentHandler, IAsyncDocumentSession session, IDialogflowService dialogflowService) : base(session)
         {
+            _goalIntentHandler = goalIntentHandler;
             _dialogflowService = dialogflowService;
         }
         
@@ -45,6 +47,13 @@ namespace IQuality.Api.Controllers
         public async Task<IActionResult> Set([FromBody] PatientMessage patientMessage)
         {
             return Ok(await _dialogflowService.ProcessClientRequest(patientMessage.text, patientMessage.roomId));
+        }
+
+        [HttpDelete, Route("deleteGoal"), Authorize]
+        public IActionResult DeleteGoal(string goalId)
+        {
+            _goalIntentHandler.DeleteGoal(goalId);
+            return Ok();
         }
     }
 }

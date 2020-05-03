@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models.Goals;
 using IQuality.Models.Helpers;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 
 namespace IQuality.Infrastructure.Database.Repositories
@@ -20,6 +22,13 @@ namespace IQuality.Infrastructure.Database.Repositories
         {
             await Session.StoreAsync(entity);
         }
+
+        public async Task<Goal> GetWhereDescription(string description)
+        {
+            if (description == null) return null;
+            
+            return await Session.Query<Goal>().FirstOrDefaultAsync(x => x.Description == description);
+        }
         
         public Task SaveAsyncCheckDescription(string description, string roomId)
         {
@@ -28,7 +37,7 @@ namespace IQuality.Infrastructure.Database.Repositories
         
         public override void Delete(Goal entity)
         {
-            throw new NotImplementedException();
+            Session.Delete(entity);
         }
 
         protected override async Task<List<Goal>> ConvertAsync(List<Goal> storage)

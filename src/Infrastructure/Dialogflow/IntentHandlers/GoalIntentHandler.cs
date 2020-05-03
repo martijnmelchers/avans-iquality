@@ -33,7 +33,6 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
         public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userText, QueryResult queryResult)
         {
             var response = new BotMessage();
-            ;
 
             switch (chat.IntentName)
             {
@@ -42,15 +41,22 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
                     response.Content = queryResult.FulfillmentText;
                     break;
                 case GoalIntentNames.CreateGoalText:
-                    await SaveGoal(userText, chat);
-                    var dialogflowResponse = await _responseBuilderService.BuildTextResponse(userText,
-                        GoalIntentNames.CreateGoalDescription);
+                    if (!await GoalDescriptionExists(userText))
+                    {
+                        await SaveGoal(userText, chat);
+                        var dialogflowResponse = await _responseBuilderService.BuildTextResponse(userText,
+                            GoalIntentNames.CreateGoalDescription);
 
 
-                    response.Content = dialogflowResponse.FulfillmentText;
+                        response.Content = dialogflowResponse.FulfillmentText;                            
+                    }
+                    else
+                    {
+                        response.Content = "That goal already exists";
+                    }
+                    
                     
                     chat.ClearIntent();
-                    
                     break;
                 case GoalIntentNames.GetGoals:
                     var goals = await GetGoals(chat);
@@ -58,6 +64,30 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
                     response.ListData = goals.ToListable();
                     response.ResponseType = ResponseType.List;
                     response.Content = queryResult.FulfillmentText;
+
+                    chat.ClearIntent();
+                    break;
+
+                // UPDATE GOAL
+                case GoalIntentNames.UpdateGoal:
+                    chat.IntentName = GoalIntentNames.UpdateGoalSelect;
+                    response.Content = queryResult.FulfillmentText;
+                    break;
+                case GoalIntentNames.UpdateGoalSelect:
+                    if (!await GoalDescriptionExists(userText))
+                    {
+                        response.Content = "That goal does not exists, please try again";
+                        break;
+                    }
+
+                    chat.IntentName = GoalIntentNames.UpdateGoalUpdate;
+                    chat.UpdateSelectedGoal = userText;
+                    response.Content = "What is the new description?";
+                    break;
+                case GoalIntentNames.UpdateGoalUpdate:
+                    await UpdateGoal(chat.UpdateSelectedGoal, userText);
+
+                    response.Content = $"{chat.UpdateSelectedGoal} is changed to {userText}";
 
                     chat.ClearIntent();
                     break;
@@ -70,7 +100,7 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
 
             return response;
         }
-
+        
         public async Task SaveGoal(string goalDescription, PatientChat chat)
         {
             Goal goal = new Goal
@@ -89,6 +119,24 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
         {
             return await _goalRepository.GetByIdsAsync(chat.GoalId);
         }
+
+        public async Task DeleteGoal(string goalId)
+        {
+            Goal goal = await _goalRepository.GetByIdAsync(goalId);
+            _goalRepository.Delete(goal);
+        }
+
+        public async Task UpdateGoal(string description, string newDescription)
+        {
+            Goal goal = await _goalRepository.GetWhereDescription(description);
+
+            goal.Description = newDescription;
+        }
+
+        public async Task<bool> GoalDescriptionExists(string description)
+        {
+            return _goalRepository.GetWhereDescription(description) != null;
+        } 
     }
 
     public static class GoalIntentNames
@@ -97,5 +145,9 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
         public const string CreateGoalText = "create_goal_text";
         public const string CreateGoalDescription = "create_goal_description";
         public const string GetGoals = "get_goals";
+        
+        public const string UpdateGoal = "update_goal";
+        public const string UpdateGoalSelect = "update_goal_select";
+        public const string UpdateGoalUpdate = "update_goal_update";
     }
 }
