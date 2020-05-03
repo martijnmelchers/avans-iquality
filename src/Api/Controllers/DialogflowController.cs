@@ -27,7 +27,7 @@ namespace IQuality.Api.Controllers
             _dialogflowService = dialogflowService;
         }
         
-        [HttpPost, Route("bot"), AllowAnonymous]
+        /*[HttpPost, Route("bot"), AllowAnonymous]
         public async Task<IActionResult> Set()
         {
             WebhookRequest request;
@@ -39,7 +39,7 @@ namespace IQuality.Api.Controllers
             
             await _dialogflowService.ProcessWebhookRequest(request);
             return Ok();
-        }
+        }*/
         
         [HttpPost, Route("patient"), Authorize]
         public async Task<IActionResult> Set([FromBody] PatientMessage patientMessage)

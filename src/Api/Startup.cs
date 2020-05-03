@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using IQuality.Api.Extensions;
 using IQuality.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -21,6 +23,7 @@ using IQuality.Api.Hubs;
 using IQuality.Models.Authentication;
 using IQuality.Models.Chat;
 using IQuality.Models.Chat.Messages;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using IdentityRole = Raven.Identity.IdentityRole;
 
@@ -64,7 +67,7 @@ namespace IQuality.Api
                     {
                         if (typeof(BaseMessage).IsAssignableFrom(type))
                             return "Message";
-                        
+
                         if (typeof(BaseChat).IsAssignableFrom(type))
                             return "Chat";
 
@@ -100,6 +103,40 @@ namespace IQuality.Api
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
+                    x.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+
+                            var path = context.HttpContext.Request.Path;
+
+                            if (string.IsNullOrWhiteSpace(accessToken)) return Task.CompletedTask;
+
+                            // SignalR chat hub correct token
+                            if (path.StartsWithSegments("/hub"))
+                                context.Token = accessToken;
+
+                            return Task.CompletedTask;
+                        },
+                        OnAuthenticationFailed = context =>
+                        {
+                            context.HttpContext.Items.Add("token_error", true);
+                            return Task.CompletedTask;
+                        },
+                        OnChallenge = context =>
+                        {
+                            context.HandleResponse();
+                            if (context.HttpContext.Items.All(t => t.Key.ToString() != "token_error"))
+                                return Task.CompletedTask;
+
+                            context.Response.StatusCode = 401;
+                            context.Response.ContentType = "application/json";
+                            context.Response.WriteAsync(JsonConvert.SerializeObject(new
+                                { key = "UnknownToken", message = "Invalid token provided." })).Wait();
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
             //
             //     services.AddAuthentication(options =>
@@ -120,46 +157,13 @@ namespace IQuality.Api
             //                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:AudienceSecret"]))
             //         };
             //
-            //         o.Events = new JwtBearerEvents
-            //         {
-            //             OnMessageReceived = context =>
-            //             {
-            //                 var accessToken = context.Request.Query["access_token"];
-            //
-            //                 var path = context.HttpContext.Request.Path;
-            //
-            //                 if (string.IsNullOrWhiteSpace(accessToken)) return Task.CompletedTask;
-            //
-            //                 // SignalR chat hub correct token
-            //                 if (path.StartsWithSegments("/chatHub"))
-            //                     context.Token = accessToken;
-            //
-            //                 return Task.CompletedTask;
-            //             },
-            //             OnAuthenticationFailed = context =>
-            //             {
-            //                 context.HttpContext.Items.Add("token_error", true);
-            //                 return Task.CompletedTask;
-            //             },
-            //             OnChallenge = context =>
-            //             {
-            //                 context.HandleResponse();
-            //                 if (context.HttpContext.Items.All(t => t.Key.ToString() != "token_error"))
-            //                     return Task.CompletedTask;
-            //
-            //                 context.Response.StatusCode = 401;
-            //                 context.Response.ContentType = "application/json";
-            //                 context.Response.WriteAsync(JsonConvert.SerializeObject(new
-            //                     { key = "UnknownToken", message = "Invalid token provided." })).Wait();
-            //                 return Task.CompletedTask;
-            //
-            //             }
-            //         };
+            //         
             //     });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            UserManager<ApplicationUser> userManager)
         {
             IdentityDataInitializer.SeedUsers(Configuration, userManager);
             if (env.IsDevelopment())
@@ -227,7 +231,7 @@ namespace IQuality.Api
 
             // If the default account exists, we don't have to create it again!
             if (userManager.FindByEmailAsync(user.Email).Result != null) return;
-            
+
             IdentityResult result = userManager.CreateAsync(user, config["DefaultAccount:Password"]).Result;
 
             if (result.Succeeded)

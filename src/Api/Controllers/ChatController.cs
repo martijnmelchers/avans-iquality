@@ -32,8 +32,7 @@ namespace IQuality.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetChats()
         {
-            List<BaseChat> chat = await _chatService.GetChatsAsync();
-            return Ok(chat);
+            return Ok(await _chatService.GetChatsAsync());
         }
 
         [HttpPost]
@@ -43,8 +42,7 @@ namespace IQuality.Api.Controllers
             chat.InitiatorId = id;
             chat.CreationDate = DateTime.Now;
 
-            BaseChat createdChat = await _chatService.CreateChatAsync(chat);
-            return Ok(createdChat);
+            return Ok(await _chatService.CreateChatAsync(chat));
         }
 
         [HttpPost("createbuddychat")]
@@ -54,8 +52,7 @@ namespace IQuality.Api.Controllers
             chat.InitiatorId = id;
             chat.CreationDate = DateTime.Now;
 
-            BaseChat createdChat = await _chatService.CreateChatAsync(chat);
-            return Ok(createdChat);
+            return Ok(await _chatService.CreateChatAsync(chat));
         }
 
         [Route("{chatId}")]
@@ -70,8 +67,7 @@ namespace IQuality.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetChatAsync(string chatId)
         {
-            BaseChat result = await _chatService.GetChatAsync(chatId);
-            return Ok(result);
+            return Ok(await _chatService.GetChatAsync(chatId));
         }
 
         [Route("{chatId}/messages")]
