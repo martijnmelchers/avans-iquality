@@ -51,7 +51,7 @@ namespace IQuality.DomainServices.Services
             var result = await _responseBuilderService.BuildTextResponse(text, IntentNames.Default);
             
             if (
-                chatContext.IntentName == string.Empty || 
+                string.IsNullOrEmpty(chatContext.IntentName) ||
                 result.Intent.DisplayName == IntentNames.Cancel ||
                 result.Intent.DisplayName == IntentNames.Fallback && chatContext.IntentName == string.Empty)
             {

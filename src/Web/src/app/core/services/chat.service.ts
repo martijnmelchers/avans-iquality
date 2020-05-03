@@ -10,6 +10,7 @@ import {TextMessage} from "@IQuality/core/models/messages/text-message";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {environment} from "../../../environments/environment";
 import {BotMessage} from "@IQuality/core/models/messages/bot-message";
+import {ChatContext} from "@IQuality/core/models/chat-context";
 
 
 @Injectable({
@@ -18,7 +19,7 @@ import {BotMessage} from "@IQuality/core/models/messages/bot-message";
 export class ChatService {
   public chatWithBot: boolean;
 
-  public selected: BaseChat;
+  public selected: ChatContext;
 
   //Messages zijn voor alles om te laten zien
   public messages: Array<Message> = [];
@@ -34,9 +35,12 @@ export class ChatService {
 
   public async sendMessage(content: string) {
     if (this.chatWithBot) {
+
       const patientMessage = new TextMessage();
-      patientMessage.roomId = this.selected.id;
-      patientMessage.text = content;
+      patientMessage.chatId = this.selected.chat.id;
+      patientMessage.content = content;
+
+      console.log(patientMessage);
 
       this.messages.push(this.createMessage(content));
 
@@ -44,11 +48,11 @@ export class ChatService {
       this.messages.push(response);
 
     } else {
-      await this.connection.send("newMessage", this.selected.id, content);
+      await this.connection.send("newMessage", this.selected.chat.id, content);
     }
   }
 
-  public async createBuddychat(name: string, isBuddyChat: boolean): Promise<BaseChat> {
+  public async createBuddychat(name: string, isBuddyChat: boolean): Promise<ChatContext> {
     let chat;
 
     if (isBuddyChat) {
@@ -61,13 +65,13 @@ export class ChatService {
     return chat;
   }
 
-  public async getChats(): Promise<Array<BaseChat>> {
-    return await this._api.get<Array<BaseChat>>('/chats');
+  public async getChats(): Promise<Array<ChatContext>> {
+    return await this._api.get<Array<ChatContext>>('/chats');
   }
 
-  public async selectChatWithId(id: string): Promise<BaseChat> {
+  public async selectChatWithId(id: string): Promise<ChatContext> {
     this.chatWithBot = false;
-    this.selected = await this._api.get<BaseChat>(`/chats/${id}`);
+    this.selected = await this._api.get<ChatContext>(`/chats/${id}`);
 
     this.messages = this.selected.messages;
     this.onChatSelected.forEach(value => {
@@ -90,6 +94,7 @@ export class ChatService {
 
   private createMessage(content: string) {
     let message = new TextMessage();
+    message.chatId = this.selected.chat.id;
     message.senderId = this.auth.getNameIdentifier;
     message.senderName = this.auth.getName;
     message.content = content;
@@ -106,7 +111,7 @@ export class ChatService {
       }).configureLogging(LogLevel.Warning).build();
 
     this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
-      if (chatId === this.selected.id) {
+      if (chatId === this.selected.chat.id) {
         this.messages.push(this.createMessage(content));
       }
     });
@@ -114,8 +119,8 @@ export class ChatService {
     this.connection.start().then(() => {
       const response = this.getChats();
       response.then((chats) => {
-        for (const chat of chats) {
-          this.hubJoinGroup(chat.id);
+        for (const context of chats) {
+          this.hubJoinGroup(context.chat.id);
         }
       })
     }).catch(err => {
