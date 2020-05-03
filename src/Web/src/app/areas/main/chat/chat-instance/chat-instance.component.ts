@@ -36,7 +36,10 @@ export class ChatInstanceComponent implements OnInit {
     const message = this.messageFormGroup.getRawValue().message;
     if (!message || message === "") return;
 
-    this.chatService.sendMessage(message);
+    this.chatService.sendMessage(message).then(() =>{
+      const el: HTMLDivElement = this.chatScrollContainer.nativeElement;
+      el.scrollTop = Math.max(0, el.scrollHeight - el.offsetHeight);
+    });
 
     this.messageControl.setValue("");
     if (e) {
@@ -45,26 +48,11 @@ export class ChatInstanceComponent implements OnInit {
   }
 
 
-  private initializeScrollContainer() {
-
-    if (!this.chatScrollContainer) return;
-
-    const scrollTop = this.chatScrollContainer.nativeElement.scrollTop;
-    const scrollHeight = this.chatScrollContainer.nativeElement.scrollHeight;
-
-    if (scrollTop !== scrollHeight) {
-      this.chatScrollContainer.nativeElement.scrollTop = this.chatScrollContainer.nativeElement.scrollHeight;
-    }
-  }
-
   public onChatLoaded() {
-    this.initializeScrollContainer();
+    this.chatScrollContainer.nativeElement.scrollTop = this.chatScrollContainer.nativeElement.scrollHeight;
   }
 
   public onChatToggle(chatWithBot: boolean) {
-    this.chatService.messages = [];
-    if (!chatWithBot) {
-      this.chatService.messages = this.chatService.databaseMessages;
-    }
+
   }
 }

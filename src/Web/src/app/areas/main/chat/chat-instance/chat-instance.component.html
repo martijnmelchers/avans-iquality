@@ -7,7 +7,7 @@
   <div ibmRow>
     <div ibmCol>
       <div  ibmGrid style="overflow-y: auto; height: 75vh">
-        <div (load)="onChatLoaded()" #chatScroll *ngFor="let message of chatService.messages" [gutter]="false"  ibmRow>
+        <div (load)="onChatLoaded()" #chatScroll style="overflow: scroll;" *ngFor="let message of chatService.messages" [gutter]="false"  ibmRow>
           <div ibmCol>
             <app-message [message]="message"></app-message>
           </div>

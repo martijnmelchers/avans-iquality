@@ -52,7 +52,7 @@ namespace IQuality.Infrastructure.Dialogflow
             if (
                 chat.IntentName == string.Empty || 
                 result.Intent.DisplayName == IntentNames.Cancel ||
-                result.Intent.DisplayName == IntentNames.Fallback)
+                result.Intent.DisplayName == IntentNames.Fallback && chat.IntentName == string.Empty)
             {
                 chat.IntentName = result.Intent.DisplayName;
 

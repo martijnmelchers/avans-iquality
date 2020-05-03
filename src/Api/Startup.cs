@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using IQuality.Api.Extensions;
 using IQuality.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -21,6 +23,7 @@ using IQuality.Api.Hubs;
 using IQuality.Models.Authentication;
 using IQuality.Models.Chat;
 using IQuality.Models.Chat.Messages;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using IdentityRole = Raven.Identity.IdentityRole;
 
@@ -99,6 +102,41 @@ namespace IQuality.Api
                         IssuerSigningKey = new SymmetricSecurityKey(key),
                         ValidateIssuer = false,
                         ValidateAudience = false
+                    };
+                    
+                    x.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+
+                            var path = context.HttpContext.Request.Path;
+
+                            if (string.IsNullOrWhiteSpace(accessToken)) return Task.CompletedTask;
+
+                            // SignalR chat hub correct token
+                            if (path.StartsWithSegments("/hub"))
+                                context.Token = accessToken;
+
+                            return Task.CompletedTask;
+                        },
+                        OnAuthenticationFailed = context =>
+                        {
+                            context.HttpContext.Items.Add("token_error", true);
+                            return Task.CompletedTask;
+                        },
+                        OnChallenge = context =>
+                        {
+                            context.HandleResponse();
+                            if (context.HttpContext.Items.All(t => t.Key.ToString() != "token_error"))
+                                return Task.CompletedTask;
+
+                            context.Response.StatusCode = 401;
+                            context.Response.ContentType = "application/json";
+                            context.Response.WriteAsync(JsonConvert.SerializeObject(new
+                                { key = "UnknownToken", message = "Invalid token provided." })).Wait();
+                            return Task.CompletedTask;
+                        }
                     };
                 });
             //

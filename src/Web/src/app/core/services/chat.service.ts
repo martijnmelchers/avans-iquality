@@ -5,7 +5,7 @@ import * as signalR from "@microsoft/signalr";
 import {LogLevel} from "@microsoft/signalr";
 
 import {Message} from "@IQuality/core/models/messages/message";
-import {PatientMessage} from "@IQuality/core/models/messages/patient-message";
+import {TextMessage} from "@IQuality/core/models/messages/text-message";
 
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {environment} from "../../../environments/environment";
@@ -18,16 +18,11 @@ import {BotMessage} from "@IQuality/core/models/messages/bot-message";
 export class ChatService {
   public chatWithBot: boolean;
 
-  public isChatWithBot() {
-    return this.chatWithBot;
-  }
-
   public selected: BaseChat;
 
   //Messages zijn voor alles om te laten zien
   public messages: Array<Message> = [];
   //Database messages zijn de messages die opgeslagen zijn in de database
-  public databaseMessages: Array<Message> = [];
 
   public onChatSelected: Array<() => void> = [];
 
@@ -37,22 +32,17 @@ export class ChatService {
     this.setUpSocketConnection(auth)
   }
 
-  //TODO: Bot geeft altijd goals terug zelfs als er niet om gevraagd is
-  public sendMessage(content: string) {
+  public async sendMessage(content: string) {
     if (this.chatWithBot) {
-      const patientMessage = new PatientMessage();
+      const patientMessage = new TextMessage();
       patientMessage.roomId = this.selected.id;
       patientMessage.text = content;
 
-      this._api.post<any>("/dialogflow/patient", patientMessage).then((response) => {
-        this.messages.push(this.createMessage(content));
+      this.messages.push(this.createMessage(content));
 
-        let botMessage = new BotMessage();
-        if (response.queryResult != null) {
-          botMessage = response.botMessage;
-          this.messages.push(botMessage);
-        }
-      });
+      const response = await this._api.post<BotMessage>("/dialogflow/patient", patientMessage, null, {disableRequestLoader: true});
+      this.messages.push(response);
+
     } else {
       this.connection.send("newMessage", this.selected.id, content);
     }
@@ -79,7 +69,7 @@ export class ChatService {
     this.chatWithBot = false;
     this.selected = await this._api.get<BaseChat>(`/chats/${id}`);
 
-    this.messages = this.databaseMessages = this.selected.messages;
+    this.messages = this.selected.messages;
     this.onChatSelected.forEach(value => {
       value();
     });
@@ -99,7 +89,7 @@ export class ChatService {
   }
 
   private createMessage(content: string) {
-    let message = new PatientMessage();
+    let message = new TextMessage();
     message.senderId = this.auth.getNameIdentifier;
     message.senderName = this.auth.getName;
     message.content = content;
@@ -117,7 +107,7 @@ export class ChatService {
 
     this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
       if (chatId === this.selected.id) {
-        this.databaseMessages.push(this.createMessage(content));
+        this.messages.push(this.createMessage(content));
       }
     });
 
