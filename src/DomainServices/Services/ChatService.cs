@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories.Interface;
@@ -19,25 +20,29 @@ namespace IQuality.DomainServices.Services
             _chatRepository = chatRepository;
         }
 
-        public async Task<BaseChat> GetChatAsync(string id)
+        public async Task<ChatContext<BaseChat>> GetChatAsync(string id)
         {
             return await _chatRepository.GetByIdAsync(id);
         }
 
-        public async Task<List<BaseChat>> GetChatsAsync()
+        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync()
         {
-            return await _chatRepository.GetChatsAsync<BaseChat>();
+            return await _chatRepository.GetChatsAsync(0, 10);
         }
 
-        public async Task<List<BaseChat>> GetChatsAsync(int skip, int take)
+        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync(int skip, int take)
         {
-            return await _chatRepository.GetChatsAsync<BaseChat>(skip, take);
+            return await _chatRepository.GetChatsAsync(skip, take);
         }
-
-        public async Task<BaseChat> CreateChatAsync(BaseChat baseChat)
+        
+        public async Task<ChatContext<BaseChat>> CreateChatAsync(BaseChat baseChat)
         {
-            await _chatRepository.SaveAsync(baseChat);
-            return baseChat;
+            var context = new ChatContext<BaseChat>()
+            {
+                Chat = baseChat
+            };
+            await _chatRepository.SaveAsync(context);
+            return context;
         }
 
         public async Task<bool> UserCanJoinChat(string userId, string chatId)
@@ -45,7 +50,7 @@ namespace IQuality.DomainServices.Services
             BaseChat baseChat;
             try
             {
-                 baseChat = await GetChatAsync(chatId);
+                 baseChat = (await GetChatAsync(chatId)).Chat;
             }
             catch (Exception e)
             {
@@ -59,13 +64,7 @@ namespace IQuality.DomainServices.Services
 
             if (baseChat.ParticipatorIds != null && baseChat.ParticipatorIds.Count != 0)
             {
-                foreach (string participator in baseChat.ParticipatorIds)
-                {
-                    if (participator == userId)
-                    {
-                        return true;
-                    }
-                }
+                return baseChat.ParticipatorIds.Any(participator => participator == userId);
             }
 
             return false;
@@ -73,8 +72,7 @@ namespace IQuality.DomainServices.Services
 
         public async void DeleteChatAsync(string id)
         {
-            BaseChat chat = await _chatRepository.GetByIdAsync(id);
-            _chatRepository.Delete(chat);
+            _chatRepository.Delete(await _chatRepository.GetByIdAsync(id));
         }
     }
 }

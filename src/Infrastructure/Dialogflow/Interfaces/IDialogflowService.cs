@@ -8,6 +8,5 @@ namespace IQuality.Infrastructure.Dialogflow.Interfaces
     public interface IDialogflowService
     {
         Task<BotMessage> ProcessClientRequest(string text, string chatId);
-        Task ProcessWebhookRequest(WebhookRequest request);
     }
 }

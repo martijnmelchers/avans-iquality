@@ -8,6 +8,7 @@ namespace IQuality.Models.Goals
     public class Goal : IAggregateRoot, IListable
     {
         public string Id { get; private set; }
+        public string ChatId { get; set; }
         public GoalType Type { get; set; }
         public string Description { get; set; }
         public Interval Reminders { get; set; }

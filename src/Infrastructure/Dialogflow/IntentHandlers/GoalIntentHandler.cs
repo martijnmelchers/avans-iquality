@@ -75,11 +75,12 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
         {
             Goal goal = new Goal
             {
+                ChatId = chat.Id,
                 Description = goalDescription
             };
+            
             await _goalRepository.SaveAsync(goal);
-
-            chat.GoalId.Add(goal.Id);
+            
             chat.IntentName = "";
             chat.IntentType = "";
         }

@@ -2,17 +2,18 @@
 using System.Threading.Tasks;
 using Google.Cloud.Dialogflow.V2;
 using Google.Protobuf.WellKnownTypes;
+using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Infrastructure.Dialogflow.Interfaces;
 using IQuality.Models.Chat;
 using IQuality.Models.Chat.Messages;
 using IQuality.Models.Dialogflow;
+using IQuality.Models.Dialogflow.Exceptions;
 using IQuality.Models.Forms;
 using IQuality.Models.Helpers;
-using IQuality.DomainServices.Interfaces;
-using IQuality.Models.Dialogflow.Exceptions;
+using Microsoft.AspNetCore.Http;
 
-namespace IQuality.Infrastructure.Dialogflow
+namespace IQuality.DomainServices.Services
 {
     [Injectable]
     public class DialogflowService : IDialogflowService
@@ -46,26 +47,26 @@ namespace IQuality.Infrastructure.Dialogflow
 
         public async Task<BotMessage> ProcessClientRequest(string text, string chatId)
         {
-            var chat = await _chatRepository.GetPatientChatIncludeGoalsAsync(chatId);
+            var chatContext = await _chatRepository.GetPatientChatAsync(chatId);
             var result = await _responseBuilderService.BuildTextResponse(text, IntentNames.Default);
             
             if (
-                chat.IntentName == string.Empty || 
+                chatContext.IntentName == string.Empty || 
                 result.Intent.DisplayName == IntentNames.Cancel ||
-                result.Intent.DisplayName == IntentNames.Fallback && chat.IntentName == string.Empty)
+                result.Intent.DisplayName == IntentNames.Fallback && chatContext.IntentName == string.Empty)
             {
-                chat.IntentName = result.Intent.DisplayName;
+                chatContext.IntentName = result.Intent.DisplayName;
 
-                result.Parameters.Fields.TryGetValue("intentType", out var intentType);
-                chat.IntentType = intentType?.StringValue ?? IntentTypes.Fallback;
+                result.Parameters.Fields.TryGetValue("intentType", out Value intentType);
+                chatContext.IntentType = intentType?.StringValue ?? IntentTypes.Fallback;
             }
 
-            var message = chat.IntentType switch
+            var message = chatContext.IntentType switch
             {
-                IntentTypes.Goal => await _goalIntentHandler.HandleClientIntent(chat, text, result),
-                IntentTypes.Action => await _actionIntentHandler.HandleClientIntent(chat, text, result),
-                IntentTypes.Cancel => SendDefaultResponse(chat, result),
-                IntentTypes.Fallback => SendDefaultResponse(chat, result),
+                IntentTypes.Goal => await _goalIntentHandler.HandleClientIntent(chatContext, text, result),
+                IntentTypes.Action => await _actionIntentHandler.HandleClientIntent(chatContext, text, result),
+                IntentTypes.Cancel => SendDefaultResponse(chatContext, result),
+                IntentTypes.Fallback => SendDefaultResponse(chatContext, result),
                 _ => throw new UnknownIntentException()
             };
 
@@ -81,15 +82,6 @@ namespace IQuality.Infrastructure.Dialogflow
                 Content = result.FulfillmentText,
                 ResponseType = ResponseType.Text
             };
-        }
-
-        public async Task ProcessWebhookRequest(WebhookRequest request)
-        {
-            var roomId = request.QueryResult.Parameters.Fields["roomId"].StringValue;
-            var patientChat = await _chatRepository.GetChatAsync<PatientChat>(roomId);
-
-            patientChat.IntentType = request.QueryResult.Parameters.Fields["intentType"].StringValue;
-            patientChat.IntentName = request.QueryResult.Intent.DisplayName;
         }
     }
 }
