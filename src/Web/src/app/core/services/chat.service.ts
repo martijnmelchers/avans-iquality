@@ -34,22 +34,19 @@ export class ChatService {
   }
 
   public async sendMessage(content: string) {
+
+    await this.connection.send("newMessage", this.selected.chat.id, content);
     if (this.chatWithBot) {
 
       const patientMessage = new TextMessage();
       patientMessage.chatId = this.selected.chat.id;
       patientMessage.content = content;
 
-      console.log(patientMessage);
-
-      this.messages.push(this.createMessage(content));
-
       const response = await this._api.post<BotMessage>("/dialogflow/patient", patientMessage, null, {disableRequestLoader: true});
       this.messages.push(response);
 
-    } else {
-      await this.connection.send("newMessage", this.selected.chat.id, content);
     }
+
   }
 
   public async createBuddychat(name: string, isBuddyChat: boolean): Promise<ChatContext> {
@@ -73,6 +70,7 @@ export class ChatService {
     this.chatWithBot = false;
     this.selected = await this._api.get<ChatContext>(`/chats/${id}`);
 
+    console.log(this.selected.messages);
     this.messages = this.selected.messages;
     this.onChatSelected.forEach(value => {
       value();
