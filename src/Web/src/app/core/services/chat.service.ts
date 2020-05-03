@@ -56,6 +56,12 @@ export class ChatService {
     }
   }
 
+  public customBotMessage(content: string) {
+    let botMessage = new Message();
+    botMessage.content = content;
+    this.messages.push(botMessage);
+  }
+
   public async createBuddychat(name: string, isBuddyChat: boolean): Promise<BaseChat> {
     let chat;
 

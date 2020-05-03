@@ -1,6 +1,8 @@
 ﻿import {AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ChatService} from "@IQuality/core/services/chat.service";
+import { ApiService } from '@IQuality/core/services/api.service';
+import { Reminder } from '@IQuality/core/models/reminder';
 
 @Component({
   selector: 'app-chat',
@@ -12,7 +14,8 @@ export class ChatComponent {
   public messageControl: FormControl;
   @ViewChild('chatScroll') private chatScrollContainer: ElementRef;
 
-  constructor(private formBuilder: FormBuilder, public chatService: ChatService) {
+  constructor(private formBuilder: FormBuilder, public chatService: ChatService,
+              private apiService: ApiService) {
 
     this.messageControl = new FormControl();
     this.messageFormGroup = this.formBuilder.group({
@@ -54,14 +57,29 @@ export class ChatComponent {
     this.initializeScrollContainer();
   }
 
-  public onChatToggle(chatWithBot: boolean) {
+  public async onChatToggle(chatWithBot: boolean) {
     this.chatService.messages = [];
     if (!chatWithBot) {
       this.chatService.messages = this.chatService.databaseMessages;
     }
+
+    let remindersOfToday = await this.retrieveRemindersOfToday();
+    remindersOfToday.forEach(element => {
+      this.chatService.customBotMessage(element.actionDescription);
+    })
+
+    let allRemindersOfToday = await this.retrieveAllRemindersOfToday();
   }
 
   public closeChat() {
     this.chatService.selected = undefined;
+  }
+
+  public async retrieveRemindersOfToday(): Promise<Reminder[]> {
+    return await this.apiService.get<Reminder[]>('/reminder/todaysreminders');
+  }
+
+  public async retrieveAllRemindersOfToday(): Promise<Reminder[]> {
+    return await this.apiService.get<Reminder[]>('/reminder/alloftodaysreminders');
   }
 }

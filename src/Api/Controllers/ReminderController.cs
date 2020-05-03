@@ -24,12 +24,22 @@ namespace IQuality.Api.Controllers
             _reminderService = reminderService;
         }
 
-        [HttpGet, Authorize(Roles = Roles.Patient)]
-        public async Task<IActionResult> GetReminders()
+        [HttpGet("alloftodaysreminders"), Authorize(Roles = Roles.Patient)]
+        public async Task<IActionResult> GetAllRemindersOfToday()
         {
             var userId = HttpContext.User.GetUserId();
 
-            var remindersList = await _reminderService.GetRemindersAsync(userId);
+            var remindersList = await _reminderService.GetAllRemindersOfTodayAsync(userId);
+
+            return Ok(remindersList);
+        }
+
+        [HttpGet("todaysreminders"), Authorize(Roles = Roles.Patient)]
+        public async Task<IActionResult> GetRemindersOfToday()
+        {
+            var userId = HttpContext.User.GetUserId();
+
+            var remindersList = await _reminderService.GetRemindersOfTodayAsync(userId);
 
             return Ok(remindersList);
         }
@@ -38,11 +48,13 @@ namespace IQuality.Api.Controllers
         public async Task<IActionResult> CreateReminder([FromBody] string actionDescription)
         {
             var userId = HttpContext.User.GetUserId();
+            string todaysDate = DateTime.Today.ToString();
 
             Reminder reminder = new Reminder
             {
                 ActionDescription = actionDescription,
-                UserId = userId
+                UserId = userId,
+                Date = todaysDate
             };
 
             var createdReminder = await _reminderService.CreateReminderAsync(reminder);

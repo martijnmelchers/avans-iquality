@@ -8,6 +8,7 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
 {
     public interface IReminderRepository : IBaseRavenRepository<Reminder>
     {
-        Task<List<Reminder>> GetRemindersByUserIdAsync(string userId);
+        Task<List<Reminder>> GetAllRemindersOfTodayAsync(string userId);
+        Task<List<Reminder>> GetRemindersOfTodayAsync(string userId);
     }
 }

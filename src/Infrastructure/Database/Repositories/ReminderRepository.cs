@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Raven.Client.Documents;
+using System.Globalization;
 
 namespace IQuality.Infrastructure.Database.Repositories
 {
@@ -41,10 +42,30 @@ namespace IQuality.Infrastructure.Database.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<List<Reminder>> GetRemindersByUserIdAsync(string userId)
+        public async Task<List<Reminder>> GetAllRemindersOfTodayAsync(string userId)
         {
-            var result = await Session.Query<Reminder>().Where(i => i.UserId == userId).ToListAsync();
+            DateTime todaysDate = DateTime.Today;
+            return await Session.Query<Reminder>().Where(i => i.UserId == userId && i.Date == todaysDate.ToString()).ToListAsync();
+        }
+
+        public async Task<List<Reminder>> GetRemindersOfTodayAsync(string userId)
+        {
+            DateTime todaysDate = DateTime.Today;
+            var result = await Session.Query<Reminder>().Where(i => i.UserId == userId && i.Date == todaysDate.ToString() && i.IsReminded == false).ToListAsync();
+
+            // set IsReminded of Reminders on true, because they are retrieved.
+            SetIsRemindedOnTrue(result);
+
             return result;
+        }
+
+        private void SetIsRemindedOnTrue(List<Reminder> reminders)
+        {
+            reminders.ForEach(element =>
+            {
+                element.IsReminded = true;
+                Session.StoreAsync(element);
+            });
         }
 
         public Task<Reminder> GetWhereAsync(Expression<Func<Reminder, bool>> expression)

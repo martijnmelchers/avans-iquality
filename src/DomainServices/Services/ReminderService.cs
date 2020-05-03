@@ -19,9 +19,9 @@ namespace IQuality.DomainServices.Services
             _reminderRepository = reminderRepository;
         }
 
-        public async Task<List<Reminder>> GetRemindersAsync(string userId)
+        public async Task<List<Reminder>> GetAllRemindersOfTodayAsync(string userId)
         {
-            return await _reminderRepository.GetRemindersByUserIdAsync(userId);
+            return await _reminderRepository.GetAllRemindersOfTodayAsync(userId);
         }
 
         public async Task<Reminder> CreateReminderAsync(Reminder reminder)
@@ -29,6 +29,11 @@ namespace IQuality.DomainServices.Services
             await _reminderRepository.SaveAsync(reminder);
 
             return reminder;
+        }
+
+        public async Task<List<Reminder>> GetRemindersOfTodayAsync(string userId)
+        {
+            return await _reminderRepository.GetRemindersOfTodayAsync(userId);
         }
     }
 }

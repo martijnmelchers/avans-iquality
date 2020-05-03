@@ -8,7 +8,8 @@ namespace IQuality.DomainServices.Interfaces
 {
     public interface IReminderService
     {
-        Task<List<Reminder>> GetRemindersAsync(string userId);
+        Task<List<Reminder>> GetAllRemindersOfTodayAsync(string userId);
         Task<Reminder> CreateReminderAsync(Reminder reminder);
+        Task<List<Reminder>> GetRemindersOfTodayAsync(string userId);
     }
 }
