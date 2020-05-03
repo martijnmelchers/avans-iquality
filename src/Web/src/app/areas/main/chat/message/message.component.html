@@ -18,13 +18,16 @@
         {{message.content}}
       </div>
     </span>
-    <ibm-structured-list *ngIf="message.listData.length > 0" border="false" condensed="true" style="margin-bottom: 0 !important">
-      <ibm-list-header>
-        <ibm-list-row *ngFor="let data of message.listData">
-          <ibm-list-column>{{data.text}}</ibm-list-column>
-        </ibm-list-row>
-      </ibm-list-header>
-    </ibm-structured-list>
+    <div ibmGrid *ngIf="message.listData.length > 0">
+      <div ibmRow *ngFor="let data of message.listData" class="row-list">
+        <div ibmCol>
+          {{data.text}}
+        </div>
+        <div ibmCol [columnNumbers]="{'sm': 1}" style="text-align: center">
+          <ibm-icon-trash-can size="20" (click)="onClickDelete(data.text)"></ibm-icon-trash-can>
+        </div>
+      </div>
+    </div>
     <span>
         <ul>
           <ibm-tag *ngFor="let suggestion of suggestions" style="cursor: pointer" (click)="onSuggestionClicked(suggestion)">

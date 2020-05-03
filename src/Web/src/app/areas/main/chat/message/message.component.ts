@@ -24,4 +24,8 @@ export class MessageComponent implements OnInit {
   public onSuggestionClicked(suggestion : Suggestion) {
       this.chatService.sendMessage(suggestion.value);
   }
+
+  onClickDelete(title: string) {
+
+  }
 }
