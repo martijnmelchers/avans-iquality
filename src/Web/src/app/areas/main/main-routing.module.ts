@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from "./home/home.component";
 import { ChatComponent } from "./chat/chat.component";
 import {InviteComponent} from "@IQuality/areas/main/invite/invite.component";
+import {DoctorComponent} from '@IQuality/areas/main/doctor/doctor.component';
+import {ChatInstanceComponent} from "@IQuality/areas/main/chat/chat-instance/chat-instance.component";
 
 const routes: Routes = [
   {
@@ -14,8 +16,16 @@ const routes: Routes = [
     component: ChatComponent
   },
   {
+    path: 'chat/:chatId',
+    component: ChatInstanceComponent
+  },
+  {
     path: 'invite',
     component: InviteComponent
+  },
+  {
+    path: 'doctor',
+    component: DoctorComponent
   }
 ];
 
