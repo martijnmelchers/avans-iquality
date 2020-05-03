@@ -36,6 +36,7 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
 
             switch (chat.IntentName)
             {
+                // Create Goal
                 case GoalIntentNames.CreateGoal:
                     chat.IntentName = GoalIntentNames.CreateGoalText;
                     response.Content = queryResult.FulfillmentText;
@@ -58,6 +59,7 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
                     
                     chat.ClearIntent();
                     break;
+                //
                 case GoalIntentNames.GetGoals:
                     var goals = await GetGoals(chat);
 
@@ -82,7 +84,7 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
 
                     chat.IntentName = GoalIntentNames.UpdateGoalUpdate;
                     chat.UpdateSelectedGoal = userText;
-                    response.Content = "What is the new description?";
+                    response.Content = "What is the new description of your Goal?";
                     break;
                 case GoalIntentNames.UpdateGoalUpdate:
                     await UpdateGoal(chat.UpdateSelectedGoal, userText);
@@ -96,6 +98,7 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
                         .FulfillmentText;
                         
                     break;
+                //
             }
 
             return response;
@@ -135,7 +138,7 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
 
         public async Task<bool> GoalDescriptionExists(string description)
         {
-            return _goalRepository.GetWhereDescription(description) != null;
+            return await _goalRepository.GetWhereDescription(description) != null;
         } 
     }
 
