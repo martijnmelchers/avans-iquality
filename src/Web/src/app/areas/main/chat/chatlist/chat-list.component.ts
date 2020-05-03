@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {BaseChat} from "@IQuality/core/models/base-chat";
 import {ChatService} from "@IQuality/core/services/chat.service";
+import {ChatContext} from "@IQuality/core/models/chat-context";
 
 @Component({
   selector: 'app-chat-list',
@@ -8,7 +8,7 @@ import {ChatService} from "@IQuality/core/services/chat.service";
   styleUrls: ['./chat-list.component.scss']
 })
 export class ChatListComponent implements OnInit {
-  chats: Array<BaseChat> = [];
+  chats: Array<ChatContext> = [];
   chatName: string;
 
   constructor(public chatService: ChatService) {

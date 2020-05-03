@@ -31,7 +31,7 @@ namespace IQuality.Infrastructure.Database.Repositories
 
         public override async Task SaveAsync(ChatContext<BaseChat> entity)
         {
-            await Session.StoreAsync(entity);
+            await Session.StoreAsync(entity.Chat);
         }
 
         public override void Delete(ChatContext<BaseChat> entity)

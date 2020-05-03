@@ -18,9 +18,11 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {InviteComponent} from "@IQuality/areas/main/invite/invite.component";
 import {ChatListComponent} from './chat/chatlist/chat-list.component';
 import {AddModule, CloseModule, ColumnModule, DotMarkModule, SendAltModule} from "@carbon/icons-angular";
+import {DoctorComponent} from "@IQuality/areas/main/doctor/doctor.component";
+import { ChatInstanceComponent } from './chat/chat-instance/chat-instance.component';
 
 @NgModule({
-  declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatListComponent],
+  declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatListComponent, DoctorComponent, ChatInstanceComponent],
     imports: [
         CommonModule,
         MainRoutingModule,

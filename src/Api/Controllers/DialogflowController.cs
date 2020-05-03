@@ -9,6 +9,7 @@ using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Dialogflow.Interfaces;
 using IQuality.Models.Authentication;
+using IQuality.Models.Chat.Messages;
 using IQuality.Models.Forms;
 using IQuality.Models.Helpers;
 using Raven.Client.Documents.Session;
@@ -44,9 +45,9 @@ namespace IQuality.Api.Controllers
         }*/
         
         [HttpPost, Route("patient"), Authorize]
-        public async Task<IActionResult> Set([FromBody] PatientMessage patientMessage)
+        public async Task<IActionResult> Set([FromBody] TextMessage textMessage)
         {
-            return Ok(await _dialogflowService.ProcessClientRequest(patientMessage.text, patientMessage.roomId));
+            return Ok(await _dialogflowService.ProcessClientRequest(textMessage.Content, textMessage.ChatId));
         }
 
         [HttpDelete, Route("deleteGoal"), Authorize]
