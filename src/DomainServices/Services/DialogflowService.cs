@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Google.Cloud.Dialogflow.V2;
+using Google.Protobuf.WellKnownTypes;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Infrastructure.Dialogflow.Interfaces;
 using IQuality.Models.Chat;
@@ -54,7 +55,9 @@ namespace IQuality.Infrastructure.Dialogflow
                 result.Intent.DisplayName == IntentNames.Fallback)
             {
                 chat.IntentName = result.Intent.DisplayName;
-                chat.IntentType = result.Parameters.Fields["intentType"].StringValue ?? IntentTypes.Fallback;
+
+                result.Parameters.Fields.TryGetValue("intentType", out var intentType);
+                chat.IntentType = intentType?.StringValue ?? IntentTypes.Fallback;
             }
 
             var message = chat.IntentType switch
