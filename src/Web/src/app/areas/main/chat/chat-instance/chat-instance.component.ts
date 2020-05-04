@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { ChatService } from "@IQuality/core/services/chat.service";
 import { ActivatedRoute } from "@angular/router";
@@ -8,7 +8,7 @@ import { ActivatedRoute } from "@angular/router";
   templateUrl: './chat-instance.component.html',
   styleUrls: ['./chat-instance.component.scss']
 })
-export class ChatInstanceComponent implements OnInit {
+export class ChatInstanceComponent implements OnInit, AfterViewInit {
   public messageFormGroup: FormGroup;
   public messageControl: FormControl;
 
@@ -36,16 +36,19 @@ export class ChatInstanceComponent implements OnInit {
 
   async initializeChat(chatId: string) {
     await this.chatService.selectChatWithId(chatId);
+    this.chatService.messageSubject.subscribe(() => {
+      setTimeout(() => this.scrollToBottom(), 100);
+    });
+  }
 
+  private scrollToBottom() {
+    this.chatScrollContainer.nativeElement.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
   }
 
   async onSubmit(e): Promise<void> {
     const message = this.messageFormGroup.getRawValue().message;
     if (!message || message === "") return;
-
-
     await this.chatService.sendMessage(message)
-    this.chatScrollContainer.nativeElement.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
 
 
     this.messageControl.setValue("");
@@ -54,6 +57,7 @@ export class ChatInstanceComponent implements OnInit {
     }
   }
 
-  public onChatToggle(chatWithBot: boolean) {
+  ngAfterViewInit(): void {
+    setTimeout(() => this.scrollToBottom(), 100);
   }
 }
