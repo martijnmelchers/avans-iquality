@@ -7,7 +7,7 @@ import {
   ButtonModule,
   GridModule,
   InputModule,
-  ListModule,
+  ListModule, NotificationModule, NotificationService,
   StructuredListModule,
   TableModule, TagModule,
   TilesModule, ToggleModule,
@@ -51,7 +51,10 @@ import { ChatInstanceComponent } from './chat/chat-instance/chat-instance.compon
     DotMarkModule,
     TrashCanModule,
     DeleteModule,
-  ]
+    NotificationModule,
+
+  ],
+  providers: []
 })
 export class MainModule {
 }

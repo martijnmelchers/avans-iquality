@@ -11,20 +11,13 @@
           <ibm-list-column>
             {{item.chat.name}}
           </ibm-list-column>
+          <ibm-list-row *ngIf="this.getLastMessage(item)">
+            <ibm-list-column>
+              {{this.getLastMessage(item).content}}
+            </ibm-list-column>
+          </ibm-list-row>
         </ibm-list-row>
       </ibm-structured-list>
     </div>
-  </div>
-  <div ibmRow>
-    <button ibmCol ibmButton (click)="onBuddyChatCreate(true)">
-      Create Buddychat
-    </button>
-    <button ibmCol ibmButton (click)="onBuddyChatCreate(false)">
-      Create Patientchat
-    </button>
-    <label>
-      Name
-      <input ibmText [(ngModel)]="chatName">
-    </label>
   </div>
 </div>

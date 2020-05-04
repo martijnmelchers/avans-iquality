@@ -11,6 +11,9 @@ import {AuthenticationService} from "@IQuality/core/services/authentication.serv
 import {environment} from "../../../environments/environment";
 import {BotMessage} from "@IQuality/core/models/messages/bot-message";
 import {ChatContext} from "@IQuality/core/models/chat-context";
+import {DEBUG} from "@angular/compiler-cli/ngcc/src/logging/console_logger";
+import {NotificationService} from "carbon-components-angular";
+import {Observable} from "rxjs";
 import {Listable} from "@IQuality/core/models/listable";
 
 
@@ -19,7 +22,6 @@ import {Listable} from "@IQuality/core/models/listable";
 })
 export class ChatService {
   public chatWithBot: boolean;
-
   public selected: ChatContext;
 
   //Messages zijn voor alles om te laten zien
@@ -30,7 +32,9 @@ export class ChatService {
 
   private connection: signalR.HubConnection;
 
-  constructor(private _api: ApiService, private auth: AuthenticationService) {
+
+  private _chats: Array<ChatContext>;
+  constructor(private _api: ApiService, private auth: AuthenticationService, private _notificationService: NotificationService) {
     this.setUpSocketConnection(auth)
   }
 
@@ -107,14 +111,18 @@ export class ChatService {
       }).configureLogging(LogLevel.Warning).build();
 
     this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
-      if (chatId === this.selected.chat.id) {
-        this.messages.push(this.createMessage(content));
+      if(this.selected){
+        if (chatId === this.selected.chat.id) {
+          this.messages.push(this.createMessage(content));
+        }
       }
     });
 
     this.connection.start().then(() => {
       const response = this.getChats();
       response.then((chats) => {
+
+        this._chats = chats;
         for (const context of chats) {
           this.hubJoinGroup(context.chat.id);
         }
@@ -122,6 +130,23 @@ export class ChatService {
     }).catch(err => {
       console.log("Connection error", err);
     });
+  }
+
+  public GetChatObservable(): Observable<any>{
+    return new Observable<any>((observer) => {
+      this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
+        const chat = this._chats.find((chat) => chat.chat.id === chatId);
+        const  message = {
+          senderId: userId,
+          userName: userName,
+          chatId: chatId,
+          content: content,
+          chatName: chat.chat.name
+        };
+        console.log(message);
+        observer.next(message)
+      });
+    })
   }
 
   deleteGoal(message: TextMessage, data: Listable) {
