@@ -3,6 +3,7 @@ import {AuthenticationService} from "@IQuality/core/services/authentication.serv
 import {Suggestion} from "@IQuality/core/models/suggestion";
 import {ChatService} from "@IQuality/core/services/chat.service";
 import {TextMessage} from "@IQuality/core/models/messages/text-message";
+import {Listable} from "@IQuality/core/models/listable";
 
 @Component({
   selector: 'app-message',
@@ -25,7 +26,7 @@ export class MessageComponent implements OnInit {
       this.chatService.sendMessage(suggestion.value);
   }
 
-  onClickDelete(title: string) {
-
+  onClickDelete(message: TextMessage, data: Listable) {
+    this.chatService.deleteGoal(message, data);
   }
 }

@@ -24,7 +24,7 @@
           {{data.text}}
         </div>
         <div ibmCol [columnNumbers]="{'sm': 1}" style="text-align: center">
-          <ibm-icon-trash-can size="20" (click)="onClickDelete(data.text)"></ibm-icon-trash-can>
+          <ibm-icon-trash-can size="20" (click)="onClickDelete(message, data)"></ibm-icon-trash-can>
         </div>
       </div>
     </div>
