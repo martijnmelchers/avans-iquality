@@ -51,9 +51,9 @@ namespace IQuality.Api.Controllers
         }
 
         [HttpDelete, Route("deleteGoal"), Authorize]
-        public IActionResult DeleteGoal(string goalId)
+        public async Task<IActionResult> DeleteGoal(string goalId)
         {
-            _goalIntentHandler.DeleteGoal(goalId);
+            await _goalIntentHandler.DeleteGoal(goalId);
             return Ok();
         }
     }
