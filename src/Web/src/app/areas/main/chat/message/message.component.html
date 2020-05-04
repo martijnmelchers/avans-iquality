@@ -1,0 +1,51 @@
+<div *ngIf="message.senderId === auth.getNameIdentifier">
+  <div class="message-box my-message-box">
+    <p class="my-p">{{message.senderName || message.senderId}}</p>
+    <span class="text my-text">
+      {{message.content}}
+      <div class="message-time my-time">
+        <p>{{ message.sendDate | date:"HH:mm"}}</p>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div *ngIf="!message.senderId" >
+  <div class="message-box other-message-box">
+    <p class="other-p">BuddyBot</p>
+    <span class="text bot-text">
+      <div class="bot-border">
+        {{message.content}}
+      </div>
+    </span>
+    <div ibmGrid *ngIf="message.listData.length > 0">
+      <div ibmRow *ngFor="let data of message.listData" class="row-list">
+        <div ibmCol>
+          {{data.text}}
+        </div>
+        <div ibmCol [columnNumbers]="{'sm': 1}" style="text-align: center">
+          <ibm-icon-trash-can size="20" (click)="onClickDelete(message, data)"></ibm-icon-trash-can>
+        </div>
+      </div>
+    </div>
+    <span>
+        <ul>
+          <ibm-tag *ngFor="let suggestion of suggestions" style="cursor: pointer" (click)="onSuggestionClicked(suggestion)">
+              {{suggestion.text}}
+          </ibm-tag>
+        </ul>
+    </span>
+  </div>
+</div>
+
+<div *ngIf="message.senderId && message.senderId !== auth.getNameIdentifier">
+  <div class="message-box other-message-box">
+    <p class="other-p">{{message.senderName || message.senderId}}</p>
+    <span class="text other-text">
+        {{message.content}}
+      <div class="message-time other-time">
+        <p>15:39</p>
+      </div>
+    </span>
+  </div>
+</div>

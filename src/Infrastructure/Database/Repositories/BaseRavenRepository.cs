@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using IQuality.Infrastructure.Database.Repositories.Interface;
@@ -7,8 +8,8 @@ using IQuality.Models.Interfaces;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
-
 namespace IQuality.Infrastructure.Database.Repositories
+
 {
     public abstract class BaseRavenRepository<TOut, TStorage> : IBaseRavenRepository<TOut, TStorage>
         where TStorage : IAggregateRoot
@@ -27,7 +28,7 @@ namespace IQuality.Infrastructure.Database.Repositories
 
         public async Task<List<TOut>> GetByIdsAsync(IEnumerable<string> ids)
         {
-            return await ConvertAsync((await Session.LoadAsync<TStorage>(ids)).Values);
+            return await ConvertAsync((await Session.LoadAsync<TStorage>(ids)).Values.ToList());
         }
 
         public async Task<TOut> GetWhereAsync(Expression<Func<TStorage, bool>> expression)
@@ -44,8 +45,8 @@ namespace IQuality.Infrastructure.Database.Repositories
         }
 
         public abstract Task SaveAsync(TOut entity);
-        public abstract Task DeleteAsync(TOut entity);
-        protected abstract Task<List<TOut>> ConvertAsync(IEnumerable<TStorage> storage);
+        public abstract void Delete(TOut entity);
+        protected abstract Task<List<TOut>> ConvertAsync(List<TStorage> storage);
     }
 
     public abstract class BaseRavenRepository<TOut> : BaseRavenRepository<TOut, TOut> where TOut : IAggregateRoot

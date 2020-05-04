@@ -9,7 +9,6 @@ using IQuality.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,6 +19,13 @@ using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
 using Raven.DependencyInjection;
 using Raven.Identity;
+using IQuality.Api.Hubs;
+using IQuality.Models.Authentication;
+using IQuality.Models.Chat;
+using IQuality.Models.Chat.Messages;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using IdentityRole = Raven.Identity.IdentityRole;
 
 namespace IQuality.Api
 {
@@ -37,7 +43,9 @@ namespace IQuality.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddCors();
+            services.AddControllers().AddNewtonsoftJson(o => { o.SerializerSettings.CheckAdditionalContent = true; });
+            services.AddSignalR();
 
             var documentStore = new DocumentStore
             {
@@ -54,12 +62,22 @@ namespace IQuality.Api
                     {
                         serializer.ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor;
                         serializer.CheckAdditionalContent = true;
+                    },
+                    FindCollectionName = type =>
+                    {
+                        if (typeof(BaseMessage).IsAssignableFrom(type))
+                            return "Message";
+
+                        if (typeof(BaseChat).IsAssignableFrom(type))
+                            return "Chat";
+
+                        return DocumentConventions.DefaultGetCollectionName(type);
                     }
                 }
             }.Initialize();
 
             services.AddDependencies(Environment);
-            
+
             // Setup RavenDB session and authorization
             services
                 .AddSingleton(documentStore)
@@ -68,25 +86,56 @@ namespace IQuality.Api
                 .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddRavenDbIdentityStores<ApplicationUser>();
 
-            services
-                .AddAuthentication(o =>
+            var key = Encoding.ASCII.GetBytes(Configuration["Jwt:AudienceSecret"]);
+            services.AddAuthentication(x =>
                 {
-                    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                }).AddJwtBearer(o =>
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(x =>
                 {
-                    o.RequireHttpsMetadata = false;
-                    o.SaveToken = true;
-                    o.TokenValidationParameters = new TokenValidationParameters
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Jwt:Issuer"],
-                        ValidAudience = Configuration["Jwt:AudienceId"],
-                        IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:AudienceSecret"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                    x.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+
+                            var path = context.HttpContext.Request.Path;
+
+                            if (string.IsNullOrWhiteSpace(accessToken)) return Task.CompletedTask;
+
+                            // SignalR chat hub correct token
+                            if (path.StartsWithSegments("/hub"))
+                                context.Token = accessToken;
+
+                            return Task.CompletedTask;
+                        },
+                        OnAuthenticationFailed = context =>
+                        {
+                            context.HttpContext.Items.Add("token_error", true);
+                            return Task.CompletedTask;
+                        },
+                        OnChallenge = context =>
+                        {
+                            context.HandleResponse();
+                            if (context.HttpContext.Items.All(t => t.Key.ToString() != "token_error"))
+                                return Task.CompletedTask;
+
+                            context.Response.StatusCode = 401;
+                            context.Response.ContentType = "application/json";
+                            context.Response.WriteAsync(JsonConvert.SerializeObject(new
+                                { key = "UnknownToken", message = "Invalid token provided." })).Wait();
+                            return Task.CompletedTask;
+                        }
                     };
                 });
             //
@@ -108,58 +157,38 @@ namespace IQuality.Api
             //                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:AudienceSecret"]))
             //         };
             //
-            //         o.Events = new JwtBearerEvents
-            //         {
-            //             OnMessageReceived = context =>
-            //             {
-            //                 var accessToken = context.Request.Query["access_token"];
-            //
-            //                 var path = context.HttpContext.Request.Path;
-            //
-            //                 if (string.IsNullOrWhiteSpace(accessToken)) return Task.CompletedTask;
-            //
-            //                 // SignalR chat hub correct token
-            //                 if (path.StartsWithSegments("/chatHub"))
-            //                     context.Token = accessToken;
-            //
-            //                 return Task.CompletedTask;
-            //             },
-            //             OnAuthenticationFailed = context =>
-            //             {
-            //                 context.HttpContext.Items.Add("token_error", true);
-            //                 return Task.CompletedTask;
-            //             },
-            //             OnChallenge = context =>
-            //             {
-            //                 context.HandleResponse();
-            //                 if (context.HttpContext.Items.All(t => t.Key.ToString() != "token_error"))
-            //                     return Task.CompletedTask;
-            //
-            //                 context.Response.StatusCode = 401;
-            //                 context.Response.ContentType = "application/json";
-            //                 context.Response.WriteAsync(JsonConvert.SerializeObject(new
-            //                     { key = "UnknownToken", message = "Invalid token provided." })).Wait();
-            //                 return Task.CompletedTask;
-            //
-            //             }
-            //         };
+            //         
             //     });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            UserManager<ApplicationUser> userManager)
         {
+            IdentityDataInitializer.SeedUsers(Configuration, userManager);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+
             app.UseRouting();
 
-            app.UseAuthorization();
-            app.UseAuthentication();
+            // global cors policy1
+            app.UseCors(x => x
+                .WithOrigins("http://localhost:4200")
+                .AllowCredentials()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/hub");
+            });
         }
     }
 
@@ -173,6 +202,42 @@ namespace IQuality.Api
             members.AddRange(type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance));
 
             return members;
+        }
+    }
+
+    public static class IdentityDataInitializer
+    {
+        public static void SeedUsers(IConfiguration config, UserManager<ApplicationUser> userManager)
+        {
+            var user = new ApplicationUser
+            {
+                UserName = config["DefaultAccount:Email"],
+                Email = config["DefaultAccount:Email"],
+                EmailConfirmed = true,
+                Address = new Address
+                {
+                    City = config["DefaultAccount:Address:City"],
+                    Country = config["DefaultAccount:Address:Country"],
+                    HouseNumber = int.Parse(config["DefaultAccount:Address:HouseNumber"]),
+                    StreetName = config["DefaultAccount:Address:StreetName"],
+                    ZipCode = config["DefaultAccount:Address:ZipCode"]
+                },
+                Name = new FullName
+                {
+                    First = config["DefaultAccount:Name:First"],
+                    Last = config["DefaultAccount:Name:Last"]
+                }
+            };
+
+            // If the default account exists, we don't have to create it again!
+            if (userManager.FindByEmailAsync(user.Email).Result != null) return;
+
+            IdentityResult result = userManager.CreateAsync(user, config["DefaultAccount:Password"]).Result;
+
+            if (result.Succeeded)
+            {
+                userManager.AddToRoleAsync(user, Roles.Admin);
+            }
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿using IQuality.Models.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using IQuality.Models.Authentication.Settings;
+using IQuality.Models.Interfaces;
+using IQuality.Models.Measurements;
 
-namespace IQuality.Models
+namespace IQuality.Models.Authentication
 {
     public class Patient : IAggregateRoot
     {
@@ -16,5 +17,11 @@ namespace IQuality.Models
         public List<Measurement> BloodSugar { get; set; }
         public List<Measurement> BloodPressure { get; set; }
         public List<Measurement> Cholesterol { get; set; }
+
+        public Patient(string applicationUserId, string doctorId)
+        {
+            ApplicationUserId = applicationUserId;
+            DoctorId = doctorId;
+        }
     }
 }

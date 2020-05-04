@@ -30,17 +30,37 @@ namespace IQuality.Api.Controllers
         public async Task<IActionResult> Login([FromBody] Login login)
         {
             var (success, user) = await _authorizationService.Login(login.Email, login.Password);
-            
+
             if (!success)
                 return Unauthorized("Invalid password and/or username");
 
             return Ok(_authorizationService.GenerateToken(user));
         }
 
-        [HttpPost, Route("register"), AllowAnonymous]
-        public async Task<IActionResult> Register()
+        [HttpPost, Route("register/buddy/{inviteToken}"), AllowAnonymous]
+        public async Task<IActionResult> RegisterAsBuddy(string inviteToken, [FromBody] UserRegister register)
         {
-            return BadRequest();
+           await _authorizationService.Register(inviteToken, register);
+
+            return Ok("User created :-)");
+        }
+
+        [HttpPost, Route("register/patient"), AllowAnonymous]
+        public async Task<IActionResult> RegisterAsPatient(string inviteToken, [FromBody] PatientRegister register)
+        {
+            return Ok();
+        }
+
+        [HttpPost, Route("register/doctor"), AllowAnonymous]
+        public async Task<IActionResult> RegisterAsDoctor(string inviteToken, [FromBody] DoctorRegister register)
+        {
+            return Ok();
+        }
+
+        [HttpGet, Route("verifyToken"), Authorize]
+        public IActionResult VerifyToken()
+        {
+            return Ok("Seems to me like you're logged in!");
         }
     }
 }

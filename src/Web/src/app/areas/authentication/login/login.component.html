@@ -1,0 +1,61 @@
+<div ibmGrid>
+  <div ibmRow>
+    <div ibmCol [offsets]="{ lg: 4 }" [columnNumbers]="{ lg: 4 }">
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <h1 class="mb-01">Login</h1>
+
+        <p class="mb-07">
+          Use your credentials you used during registration to login.
+          If you don't have an account ask your doctor or friend to send you an invite.
+        </p>
+
+        <div [hidden]="!hasError">
+          <ibm-notification [notificationObj]="{
+				type: 'error',
+				title: 'Oops! Something went wrong...',
+				message: 'Invalid username/password, please check your credentials and try again...',
+				showClose: false,
+				lowContrast: true}">
+          </ibm-notification>
+        </div>
+
+
+        <fieldset class="mb-06">
+          <ibm-label
+            helperText="The email you used during sign-up"
+            [invalid]="isInvalid('email')"
+            invalidText="Please enter a valid email">
+            Email
+            <input ibmText formControlName="email" name="email">
+          </ibm-label>
+        </fieldset>
+
+        <fieldset class="mb-06">
+          <ibm-label
+            helperText="Use the password you set during sign-up"
+            [invalid]="isInvalid('password')"
+            invalidText="Please enter a valid password">
+            Password
+            <input ibmText type="password" formControlName="password" name="password">
+          </ibm-label>
+        </fieldset>
+
+        <fieldset class="mb-07">
+          <ibm-label
+            helperText="Check this box if you want to stay logged in, only check this on trusted devices!">
+            <ibm-checkbox formControlName="rememberMe">
+              Remember me
+            </ibm-checkbox>
+          </ibm-label>
+        </fieldset>
+
+        <button ibmButton [disabled]="!form.valid" class="mb-04">Login</button>
+        <p>
+          Forgot your password?
+          <a routerLink="forgot-password">Reset it here!</a>
+
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

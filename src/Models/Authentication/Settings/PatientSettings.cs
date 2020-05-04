@@ -1,6 +1,4 @@
-﻿using IQuality.Models.Goals;
-
-namespace IQuality.Models
+﻿namespace IQuality.Models.Authentication.Settings
 {
     public class PatientSettings
     {

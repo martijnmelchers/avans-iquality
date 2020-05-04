@@ -1,0 +1,11 @@
+<div class="send" *ngIf="isSend">
+  <h1>Invite Buddy</h1>
+  <input ibmText id="copyText">
+  <button ibmButton="primary" size="normal" (click)="createInvite()">Generate invite link</button>
+</div>
+
+<div class="accept" *ngIf="!isSend">
+  <h3>Invite from: Sascha</h3>
+  <button ibmButton="primary" size="normal">Accept</button>
+</div>
+

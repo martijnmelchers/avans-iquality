@@ -1,0 +1,30 @@
+<div ibmGrid>
+  <div ibmRow [gutter]="false">
+    <div ibmCol>
+      <ibm-structured-list [border]="true"
+                           [condensed]="false"
+                           [nowrap]="false">
+        <ibm-list-header>
+          <ibm-list-column>Gesprekken</ibm-list-column>
+        </ibm-list-header>
+        <ibm-list-row *ngFor="let item of chats" [routerLink]="['/chat/', item.chat.id]">
+          <ibm-list-column>
+            {{item.chat.name}}
+          </ibm-list-column>
+        </ibm-list-row>
+      </ibm-structured-list>
+    </div>
+  </div>
+  <div ibmRow>
+    <button ibmCol ibmButton (click)="onBuddyChatCreate(true)">
+      Create Buddychat
+    </button>
+    <button ibmCol ibmButton (click)="onBuddyChatCreate(false)">
+      Create Patientchat
+    </button>
+    <label>
+      Name
+      <input ibmText [(ngModel)]="chatName">
+    </label>
+  </div>
+</div>
