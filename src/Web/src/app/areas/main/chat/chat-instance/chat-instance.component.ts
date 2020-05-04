@@ -36,6 +36,7 @@ export class ChatInstanceComponent implements OnInit {
 
   async initializeChat(chatId: string) {
     await this.chatService.selectChatWithId(chatId);
+
   }
 
   async onSubmit(e): Promise<void> {

@@ -9,7 +9,7 @@
     <div ibmCol>
       <div ibmGrid>
         <div #chatScroll [scrollTop]="scrollHeight">
-          <div *ngFor="let message of chatService.messages"  [gutter]="false" ibmRow>
+          <div *ngFor="let message of chatService.messages" [gutter]="false" ibmRow>
             <div ibmCol>
               <app-message [message]="message"></app-message>
             </div>
