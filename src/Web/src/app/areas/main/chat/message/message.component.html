@@ -20,7 +20,7 @@
     </span>
     <div ibmGrid *ngIf="message.listData.length > 0">
       <div ibmRow *ngFor="let data of message.listData" class="row-list">
-        <div ibmCol>
+        <div (click)="onClickSayText(data.text)" ibmCol>
           {{data.text}}
         </div>
         <div ibmCol [columnNumbers]="{'sm': 1}" style="text-align: center">
