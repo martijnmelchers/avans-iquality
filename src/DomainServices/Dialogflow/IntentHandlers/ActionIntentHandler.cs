@@ -33,7 +33,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                 case "start_create_action":
                     chat.Intent.Name = "select_goal_for_action";
 
-                    response.RespondList(queryResult.FulfillmentText, (await _goalService.GetGoals(chat.Id)).ToListable());
+                    response.RespondList(queryResult.FulfillmentText, (await _goalService.GetGoals(chat.Id)).ToListable(true));
                     break;
                 
                 case "select_goal_for_action":
@@ -70,7 +70,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                         break;
                     }
                     
-                    response.ListData = actions.ToListable();
+                    response.ListData = actions.ToListable(true, true);
                     response.ResponseType = ResponseType.List;
                     response.Content = queryResult.FulfillmentText;
 

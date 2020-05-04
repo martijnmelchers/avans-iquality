@@ -30,7 +30,7 @@ export class MessageComponent implements OnInit {
     this.chatService.deleteGoal(message, data);
   }
 
-  onClickSayText(text: string) {
-    this.chatService.sendMessage(text);
+  onClickSayText(data : Listable) {
+    if(data.isClickable) this.chatService.sendMessage(data.text);
   }
 }

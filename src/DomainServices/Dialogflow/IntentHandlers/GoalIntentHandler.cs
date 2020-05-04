@@ -57,7 +57,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                 case GoalIntentNames.GetGoals:
                     List<Goal> goals = await _goalService.GetGoals(chat.Id);
 
-                    response.ListData = goals.ToListable();
+                    response.ListData = goals.ToListable(false, true);
                     response.ResponseType = ResponseType.List;
                     response.Content = queryResult.FulfillmentText;
 

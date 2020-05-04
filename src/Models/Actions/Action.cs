@@ -12,6 +12,6 @@ namespace IQuality.Models.Actions
         public string GoalId { get; set; }
         public ActionType Type { get; set; }
         public string Description { get; set; }
-        public Listable ToListable() => new Listable(Description, Id);
+        public Listable ToListable(bool clickable = false, bool removable = false)  => new Listable(Description, Id, clickable, removable);
     }
 }
