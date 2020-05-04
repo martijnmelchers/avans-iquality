@@ -69,7 +69,7 @@ export class ChatService {
     this.chatWithBot = false;
     this.selected = await this._api.get<ChatContext>(`/chats/${id}`);
 
-    this.messages = this.selected.messages;
+    this.messages = this.selected.messages.reverse();
     this.onChatSelected.forEach(value => {
       value();
     });
