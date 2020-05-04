@@ -1,4 +1,6 @@
+
 using System;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
@@ -22,20 +24,36 @@ namespace IQuality.DomainServices.Services
             _reminderRepository = reminderRepository;
         }
         
-        public async Task CreateAction(string chatId, string description, string userId)
+
+        public async Task<Action> CreateAction(string chatId, string goalId, string description, string actionType, string userId = null)
         {
+            ActionType type;
+            ActionType.TryParse(actionType, out type);
             var action = new Action
             {
-                // TODO: Make dynamic
-                Type = ActionType.Weight,
+                Type =  type,
                 Description = description,
-                ChatId = chatId,
-                ReminderInterval = Interval.Daily
+                ReminderInterval = Interval.Daily,
+                GoalId = goalId,
+                ChatId = chatId
             };
 
             await _reminderRepository.GenenerateReminders(userId, action.Id, action.Description);
 
             await _actionRepository.SaveAsync(action);
+            return action;
         }
+
+        public async Task<List<Action>> GetActions(string chatId)
+        {
+           List<Action> results  = await _actionRepository.GetAllWhereAsync(p => p.ChatId == chatId);
+           return results;
+        }
+
+        public Task<bool> DeleteAction(string actionId)
+        {
+            throw new System.NotImplementedException();
+        }
+        
     }
 }
