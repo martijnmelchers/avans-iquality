@@ -44,10 +44,11 @@ namespace IQuality.Infrastructure.Database.Repositories
             List<ChatContext<BaseChat>> chatContexts = new List<ChatContext<BaseChat>>();
             foreach (var chat in storage.ToList())
             {
-                chatContexts.Add(new ChatContext<BaseChat>()
+                chatContexts.Add(new ChatContext<BaseChat>
                 {
                     Chat =  chat,
-                    Messages =   await Queryable.Take(Session.Query<BaseMessage>().Where(x => x.ChatId == chat.Id), 20)
+                    Messages =   await Queryable
+                        .Take(Session.Query<BaseMessage>().Where(x => x.ChatId == chat.Id).OrderByDescending(x => x.SendDate), 20)
                         .ToListAsync()
                 });
             }
