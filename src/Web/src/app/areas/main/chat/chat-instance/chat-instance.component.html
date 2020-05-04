@@ -9,7 +9,7 @@
     <div ibmCol>
       <div ibmGrid>
         <div #chatScroll [scrollTop]="scrollHeight">
-          <div *ngFor="let message of chatService.messages"  [gutter]="false" ibmRow>
+          <div *ngFor="let message of chatService.messages" [gutter]="false" ibmRow>
             <div ibmCol>
               <app-message [message]="message"></app-message>
             </div>
@@ -19,19 +19,18 @@
     </div>
   </div>
 
-  <form (ngSubmit)="onSubmit(null)" [formGroup]="messageFormGroup" class="type-bar">
+  <form (ngSubmit)="onSubmit($event)" [formGroup]="messageFormGroup" class="type-bar">
     <div ibmRow gutter="true" condensed="true">
 
       <div ibmCol [columnNumbers]="{ 'lg': 1, 'md': 1, 'sm': 1}">
         <ibm-toggle
           offText="Bot"
           onText="Bot"
-          (click)="onChatToggle(chatService.chatWithBot)"
           [(checked)]="chatService.chatWithBot">
         </ibm-toggle>
       </div>
       <div ibmCol [columnNumbers]="{ 'lg': 5, 'md': 4, 'sm': 2}">
-        <ibm-label (keyup.enter)="onSubmit($event)">
+        <ibm-label>
           <input aria-label="textarea" formControlName="message"
                  ibmTextArea
                  placeholder="Messages"/>

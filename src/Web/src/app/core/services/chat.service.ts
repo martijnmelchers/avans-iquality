@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import {ApiService} from "@IQuality/core/services/api.service";
 import {BaseChat} from "@IQuality/core/models/base-chat";
 import * as signalR from "@microsoft/signalr";
@@ -13,7 +13,7 @@ import {BotMessage} from "@IQuality/core/models/messages/bot-message";
 import {ChatContext} from "@IQuality/core/models/chat-context";
 import {DEBUG} from "@angular/compiler-cli/ngcc/src/logging/console_logger";
 import {NotificationService} from "carbon-components-angular";
-import {Observable} from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import {Listable} from "@IQuality/core/models/listable";
 
 
@@ -26,6 +26,7 @@ export class ChatService {
 
   //Messages zijn voor alles om te laten zien
   public messages: Array<Message> = [];
+  public messageSubject: EventEmitter<void> = new EventEmitter<void>(null);
   //Database messages zijn de messages die opgeslagen zijn in de database
 
   public onChatSelected: Array<() => void> = [];
@@ -49,6 +50,7 @@ export class ChatService {
 
       const response = await this._api.post<BotMessage>("/dialogflow/patient", patientMessage, null, {disableRequestLoader: true});
       this.messages.push(response);
+      this.messageSubject.next()
     }
   }
 
@@ -73,7 +75,9 @@ export class ChatService {
     this.chatWithBot = false;
     this.selected = await this._api.get<ChatContext>(`/chats/${id}`);
 
-    this.messages = this.selected.messages;
+    this.messages = this.selected.messages.reverse();
+    this.messageSubject.next();
+
     this.onChatSelected.forEach(value => {
       value();
     });
@@ -113,7 +117,10 @@ export class ChatService {
     this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
       if(this.selected){
         if (chatId === this.selected.chat.id) {
-          this.messages.push(this.createMessage(content));
+          const message = this.createMessage(content);
+
+          this.messages.push(message);
+          this.messageSubject.next();
         }
       }
     });
@@ -124,7 +131,6 @@ export class ChatService {
 
         this._chats = chats;
         for (const context of chats) {
-          console.log(context.chat.id);
           this.hubJoinGroup(context.chat.id);
         }
       })
@@ -144,14 +150,13 @@ export class ChatService {
           content: content,
           chatName: chat.chat.name
         };
-        console.log(message);
         observer.next(message)
       });
     })
   }
 
   deleteGoal(message: TextMessage, data: Listable) {
-    this._api.delete("/dialogflow/deleteGoal", {goalId: data.id}).then(() => {
+    this._api.delete(`/dialogflow/goal/${data.id}`).then(() => {
       const index = message.listData.indexOf(data, 0);
       if (index > -1) {
         message.listData.splice(index, 1);
