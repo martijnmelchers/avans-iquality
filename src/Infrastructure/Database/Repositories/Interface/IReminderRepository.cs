@@ -10,5 +10,6 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
     {
         Task<List<Reminder>> GetAllRemindersOfTodayAsync(string userId);
         Task<List<Reminder>> GetRemindersOfTodayAsync(string userId);
+        Task GenenerateReminders(string userId, string actionId, string description);
     }
 }

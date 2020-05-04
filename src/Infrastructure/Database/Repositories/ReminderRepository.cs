@@ -19,27 +19,6 @@ namespace IQuality.Infrastructure.Database.Repositories
 
         public ReminderRepository(IAsyncDocumentSession session) : base(session)
         {
-
-        }
-
-        public override void Delete(Reminder entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Reminder>> GetAllWhereAsync(Expression<Func<Reminder, bool>> expression)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Reminder> GetByIdAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Reminder>> GetByIdsAsync(IEnumerable<string> ids)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<List<Reminder>> GetAllRemindersOfTodayAsync(string userId)
@@ -68,6 +47,25 @@ namespace IQuality.Infrastructure.Database.Repositories
             });
         }
 
+        public async Task GenenerateReminders(string userId, string actionId, string description)
+        {
+            for (int i = 0; i < 30; i++) {
+                var date = DateTime.Today;
+                date.AddDays(i);
+                var stringDate = date.ToString();
+
+                Reminder reminder = new Reminder
+                {
+                    UserId = userId,
+                    ActionId = actionId,
+                    ActionDescription = description,
+                    Date = stringDate
+                };
+
+                await Session.StoreAsync(reminder);
+            }
+        }
+
         public Task<Reminder> GetWhereAsync(Expression<Func<Reminder, bool>> expression)
         {
             throw new NotImplementedException();
@@ -79,6 +77,26 @@ namespace IQuality.Infrastructure.Database.Repositories
         }
 
         protected override Task<List<Reminder>> ConvertAsync(List<Reminder> storage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Delete(Reminder entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Reminder>> GetAllWhereAsync(Expression<Func<Reminder, bool>> expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Reminder> GetByIdAsync(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Reminder>> GetByIdsAsync(IEnumerable<string> ids)
         {
             throw new NotImplementedException();
         }

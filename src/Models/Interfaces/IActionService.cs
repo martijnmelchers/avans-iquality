@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace IQuality.Models.Interfaces
 {
     public interface IActionService
     {
-        Task CreateAction(string chatId, string description);
+        Task CreateAction(string chatId, string description, string userId);
     }
 }

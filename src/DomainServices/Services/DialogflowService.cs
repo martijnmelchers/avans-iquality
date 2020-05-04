@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Google.Cloud.Dialogflow.V2;
 using Google.Protobuf.WellKnownTypes;
@@ -45,7 +45,7 @@ namespace IQuality.DomainServices.Services
                 "dialogflow.config.json");
         }
 
-        public async Task<BotMessage> ProcessClientRequest(string text, string chatId)
+        public async Task<BotMessage> ProcessClientRequest(string text, string chatId, string? userId)
         {
             var chatContext = await _chatRepository.GetPatientChatAsync(chatId);
             var result = await _responseBuilderService.BuildTextResponse(text, IntentNames.Default);
@@ -64,7 +64,7 @@ namespace IQuality.DomainServices.Services
             var message = chatContext.Intent.Type switch
             {
                 IntentTypes.Goal => await _goalIntentHandler.HandleClientIntent(chatContext, text, result),
-                IntentTypes.Action => await _actionIntentHandler.HandleClientIntent(chatContext, text, result),
+                IntentTypes.Action => await _actionIntentHandler.HandleClientIntent(chatContext, text, result, userId),
                 IntentTypes.Cancel => SendDefaultResponse(chatContext, result),
                 IntentTypes.Fallback => SendDefaultResponse(chatContext, result),
                 _ => throw new UnknownIntentException()

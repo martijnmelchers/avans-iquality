@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -33,7 +33,9 @@ namespace IQuality.Api.Controllers
         [HttpPost, Route("patient"), Authorize]
         public async Task<IActionResult> Set([FromBody] TextMessage textMessage)
         {
-            return Ok(await _dialogflowService.ProcessClientRequest(textMessage.Content, textMessage.ChatId));
+            var userId = HttpContext.User.GetUserId();
+
+            return Ok(await _dialogflowService.ProcessClientRequest(textMessage.Content, textMessage.ChatId, userId));
         }
 
         

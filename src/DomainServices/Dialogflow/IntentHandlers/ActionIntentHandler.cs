@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Google.Cloud.Dialogflow.V2;
 using IQuality.DomainServices.Dialogflow.Interfaces;
 using IQuality.DomainServices.Interfaces;
@@ -20,7 +20,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
             _goalService = goalService;
             _actionService = actionService;
         }
-        public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userInput, QueryResult queryResult)
+        public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userInput, QueryResult queryResult, string userId = null)
         {
             var response = new BotMessage();
 
@@ -51,7 +51,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                     }
 
                     chat.Intent.Clear();
-                    await _actionService.CreateAction(chat.Id, userInput);
+                    await _actionService.CreateAction(chat.Id, userInput, userId);
                     
                     response.RespondText("I created a new action!");
                     

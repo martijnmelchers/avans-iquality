@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Google.Cloud.Dialogflow.V2;
 using IQuality.DomainServices.Dialogflow.Interfaces;
@@ -24,7 +24,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
             _goalService = goalService;
         }
 
-        public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userInput, QueryResult queryResult)
+        public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userInput, QueryResult queryResult, string userId = null)
         {
             var response = new BotMessage();
 
