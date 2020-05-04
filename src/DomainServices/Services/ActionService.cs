@@ -18,12 +18,13 @@ namespace IQuality.DomainServices.Services
             _actionRepository = actionRepository;
         }
         
-        public async Task<Action> CreateAction(string chatId, string goalId, string description)
+        public async Task<Action> CreateAction(string chatId, string goalId, string description, string actionType)
         {
+            ActionType type;
+            ActionType.TryParse(actionType, out type);
             var action = new Action
             {
-                // TODO: Make dynamic
-                Type = ActionType.Weight,
+                Type =  type,
                 Description = description,
                 GoalId = goalId,
                 ChatId = chatId

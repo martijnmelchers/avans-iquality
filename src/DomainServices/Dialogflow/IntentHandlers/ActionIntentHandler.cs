@@ -43,8 +43,14 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                         break;
                     }
 
-                    chat.Intent.Name = "create_action";
+                    chat.Intent.Name = "select_type_for_action";
                     chat.Intent.SelectedItem = userInput;
+                    response.RespondList("What type of action did you have in mind?", (ActionTypes.GetActionTypes.ToListable(true)));
+                    break;
+                
+                case "select_type_for_action":
+                    chat.Intent.Name = "create_action";
+                    chat.Intent.SelectedActionType = userInput;
                     response.RespondText($"Adding an action to {userInput}, what do you want to do?");
                     break;
                 case "create_action":
@@ -53,9 +59,8 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                         response.RespondText("I'm sorry but I can't find that goal, check the spelling and try again.");
                         break;
                     }
-                    
                     Goal goal = await _goalService.GetGoalByDescription(chat.Id, chat.Intent.SelectedItem);
-                    await _actionService.CreateAction(chat.Id, goal.Id,userInput);
+                    await _actionService.CreateAction(chat.Id, goal.Id,userInput, chat.Intent.SelectedActionType);
                     
                     response.RespondText("I created a new action!");
                     chat.Intent.Clear();

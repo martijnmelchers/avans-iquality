@@ -8,6 +8,7 @@ namespace IQuality.Models.Chat
         public DateTime StartDate { get; set; }
         public string Type { get; set; }
         public string SelectedItem { get; set; }
+        public string SelectedActionType { get; set; }
         
         public void Clear()
         {
@@ -15,6 +16,7 @@ namespace IQuality.Models.Chat
             Type = string.Empty;
             SelectedItem = string.Empty;
             StartDate = DateTime.MinValue;
+            SelectedActionType = string.Empty;
         }
     }
 }
