@@ -49,9 +49,7 @@ export class ChatService {
 
       const response = await this._api.post<BotMessage>("/dialogflow/patient", patientMessage, null, {disableRequestLoader: true});
       this.messages.push(response);
-
     }
-
   }
 
   public async createBuddychat(name: string, isBuddyChat: boolean): Promise<ChatContext> {
@@ -75,7 +73,6 @@ export class ChatService {
     this.chatWithBot = false;
     this.selected = await this._api.get<ChatContext>(`/chats/${id}`);
 
-    console.log(this.selected.messages);
     this.messages = this.selected.messages;
     this.onChatSelected.forEach(value => {
       value();

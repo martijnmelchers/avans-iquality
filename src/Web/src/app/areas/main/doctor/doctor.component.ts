@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {NotificationService} from "carbon-components-angular";
+import {ModalService, NotificationService, PlaceholderService} from "carbon-components-angular";
 import {ChatService} from "@IQuality/core/services/chat.service";
 
 @Component({
   selector: 'app-doctor',
   templateUrl: './doctor.component.html',
-  styleUrls: ['./doctor.component.scss']
+  styleUrls: ['./doctor.component.scss'],
+  providers: [ModalService, PlaceholderService]
 })
 export class DoctorComponent implements OnInit {
 
@@ -25,4 +26,7 @@ export class DoctorComponent implements OnInit {
     });
   }
 
+  invitePatient(): void {
+
+  }
 }

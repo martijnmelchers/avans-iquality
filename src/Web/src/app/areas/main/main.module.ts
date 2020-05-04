@@ -7,7 +7,7 @@ import {
   ButtonModule,
   GridModule,
   InputModule,
-  ListModule, NotificationModule, NotificationService,
+  ListModule, ModalModule, NotificationModule, NotificationService, PlaceholderModule, PlaceholderService,
   StructuredListModule,
   TableModule, TagModule,
   TilesModule, ToggleModule,
@@ -52,6 +52,8 @@ import { ChatInstanceComponent } from './chat/chat-instance/chat-instance.compon
     TrashCanModule,
     DeleteModule,
     NotificationModule,
+    ModalModule,
+
 
   ],
   providers: []
