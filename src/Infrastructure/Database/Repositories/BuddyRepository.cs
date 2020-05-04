@@ -44,12 +44,6 @@ namespace IQuality.Infrastructure.Database.Repositories
             return await _session.LoadAsync<Buddy>(id);
         }
 
-        public override async Task SaveAsync(Buddy entity)
-        {
-            await _session.StoreAsync(entity);
-            return;
-        }
-
         public override void Delete(Buddy entity)
         {
             throw new NotImplementedException();

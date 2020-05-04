@@ -44,8 +44,15 @@ namespace IQuality.Infrastructure.Database.Repositories
             return await ConvertAsync(await Session.Stream(Session.Query<TStorage>().Where(expression)));
         }
 
-        public abstract Task SaveAsync(TOut entity);
-        public abstract void Delete(TOut entity);
+        public virtual async Task SaveAsync(TOut entity)
+        {
+            await Session.StoreAsync(entity);
+        }
+
+        public virtual void Delete(TOut entity)
+        {
+            Session.Delete(entity);
+        }
         protected abstract Task<List<TOut>> ConvertAsync(List<TStorage> storage);
     }
 
