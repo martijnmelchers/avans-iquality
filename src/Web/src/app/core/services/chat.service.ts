@@ -11,7 +11,6 @@ import {AuthenticationService} from "@IQuality/core/services/authentication.serv
 import {environment} from "../../../environments/environment";
 import {BotMessage} from "@IQuality/core/models/messages/bot-message";
 import {ChatContext} from "@IQuality/core/models/chat-context";
-import {DEBUG} from "@angular/compiler-cli/ngcc/src/logging/console_logger";
 import {Listable} from "@IQuality/core/models/listable";
 
 
@@ -46,9 +45,7 @@ export class ChatService {
 
       const response = await this._api.post<BotMessage>("/dialogflow/patient", patientMessage, null, {disableRequestLoader: true});
       this.messages.push(response);
-
     }
-
   }
 
   public async createBuddychat(name: string, isBuddyChat: boolean): Promise<ChatContext> {
