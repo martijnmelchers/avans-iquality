@@ -70,7 +70,6 @@ export class ChatService {
     this.chatWithBot = false;
     this.selected = await this._api.get<ChatContext>(`/chats/${id}`);
 
-    console.log(this.selected.messages);
     this.messages = this.selected.messages;
     this.onChatSelected.forEach(value => {
       value();
