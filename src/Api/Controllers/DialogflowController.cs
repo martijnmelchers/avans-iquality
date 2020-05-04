@@ -42,10 +42,11 @@ namespace IQuality.Api.Controllers
         public async Task<IActionResult> DeleteGoal(string goalId)
         {
             if (await _goalService.DeleteGoal(goalId))
+            {
                 return Ok("Goal has been deleted");
-            
+            }
 
-            return BadRequest("Something went wrong while deleting the Goal");
+            return NotFound("Could Not Find the Goal!");
         }
     }
 }

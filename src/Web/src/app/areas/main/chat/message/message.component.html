@@ -20,10 +20,10 @@
     </span>
     <div ibmGrid *ngIf="message.listData.length > 0">
       <div ibmRow *ngFor="let data of message.listData" class="row-list">
-        <div (click)="onClickSayText(data.text)" ibmCol>
+        <div (click)="onClickSayText(data.text)" style="cursor: pointer" ibmCol>
           {{data.text}}
         </div>
-        <div ibmCol [columnNumbers]="{'sm': 1}" style="text-align: center">
+        <div ibmCol [columnNumbers]="{'sm': 1}" style="text-align: center; cursor: pointer">
           <ibm-icon-trash-can size="20" (click)="onClickDelete(message, data)"></ibm-icon-trash-can>
         </div>
       </div>

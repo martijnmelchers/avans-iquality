@@ -1,9 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Google.Cloud.Dialogflow.V2;
 using IQuality.DomainServices.Dialogflow.Interfaces;
 using IQuality.DomainServices.Interfaces;
+using IQuality.Models.Actions;
 using IQuality.Models.Chat;
 using IQuality.Models.Chat.Messages;
+using IQuality.Models.Forms;
+using IQuality.Models.Goals;
 using IQuality.Models.Helpers;
 using IQuality.Models.Interfaces;
 
@@ -49,11 +53,28 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                         response.RespondText("I'm sorry but I can't find that goal, check the spelling and try again.");
                         break;
                     }
-
-                    chat.Intent.Clear();
-                    await _actionService.CreateAction(chat.Id, userInput);
+                    
+                    Goal goal = await _goalService.GetGoalByDescription(chat.Id, chat.Intent.SelectedItem);
+                    await _actionService.CreateAction(chat.Id, goal.Id,userInput);
                     
                     response.RespondText("I created a new action!");
+                    chat.Intent.Clear();
+                    
+                    break;
+                
+                case "get_actions":
+                    List<Action> actions = await _actionService.GetActions(chat.Id);
+                    if (actions.Count < 1)
+                    {
+                        response.RespondText("I'm sorry but it seems like you have not created any actions yet!");
+                        break;
+                    }
+                    
+                    response.ListData = actions.ToListable();
+                    response.ResponseType = ResponseType.List;
+                    response.Content = queryResult.FulfillmentText;
+
+                    chat.Intent.Clear();
                     
                     break;
             }

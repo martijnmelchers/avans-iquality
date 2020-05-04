@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models.Actions;
 using IQuality.Models.Goals;
@@ -17,17 +18,31 @@ namespace IQuality.DomainServices.Services
             _actionRepository = actionRepository;
         }
         
-        public async Task CreateAction(string chatId, string description)
+        public async Task<Action> CreateAction(string chatId, string goalId, string description)
         {
             var action = new Action
             {
                 // TODO: Make dynamic
                 Type = ActionType.Weight,
                 Description = description,
+                GoalId = goalId,
                 ChatId = chatId
             };
 
             await _actionRepository.SaveAsync(action);
+            return action;
         }
+
+        public async Task<List<Action>> GetActions(string chatId)
+        {
+           List<Action> results  = await _actionRepository.GetAllWhereAsync(p => p.ChatId == chatId);
+           return results;
+        }
+
+        public Task<bool> DeleteAction(string actionId)
+        {
+            throw new System.NotImplementedException();
+        }
+        
     }
 }

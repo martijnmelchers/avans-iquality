@@ -139,7 +139,7 @@ export class ChatService {
     });
   }
 
-  public GetChatObservable(): Observable<any>{
+  public getChatObservable(): Observable<any>{
     return new Observable<any>((observer) => {
       this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
         const chat = this._chats.find((chat) => chat.chat.id === chatId);
