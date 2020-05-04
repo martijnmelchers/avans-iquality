@@ -9,6 +9,6 @@ namespace IQuality.Infrastructure.Dialogflow.Interfaces
     {
         Task SaveGoal(string goalDescription, PatientChat chat);
         Task<List<Goal>> GetGoals(PatientChat chat);
-        Task DeleteGoal(string goalId);
+        Task<bool> DeleteGoal(string goalId);
     }
 }

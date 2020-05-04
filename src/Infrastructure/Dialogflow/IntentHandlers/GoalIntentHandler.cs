@@ -123,10 +123,18 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
             return await _goalRepository.GetGoalsOfChat(chat.Id);
         }
 
-        public async Task DeleteGoal(string goalId)
+        public async Task<bool> DeleteGoal(string goalId)
         {
             Goal goal = await _goalRepository.GetByIdAsync(goalId);
-            _goalRepository.Delete(goal);
+            if (goal != null)
+            {
+                _goalRepository.Delete(goal);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public async Task UpdateGoal(string description, string newDescription)

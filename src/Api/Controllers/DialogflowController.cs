@@ -50,11 +50,15 @@ namespace IQuality.Api.Controllers
             return Ok(await _dialogflowService.ProcessClientRequest(textMessage.Content, textMessage.ChatId));
         }
 
-        [HttpDelete, Route("deleteGoal"), Authorize]
+        [HttpDelete, Route("goal/{goalId}"), Authorize]
         public async Task<IActionResult> DeleteGoal(string goalId)
         {
-            await _goalIntentHandler.DeleteGoal(goalId);
-            return Ok();
+            if (await _goalIntentHandler.DeleteGoal(goalId))
+            {
+                return Ok();
+            }
+
+            return BadRequest("Something went wrong while deleting the Goal");
         }
     }
 }

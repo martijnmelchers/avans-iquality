@@ -129,7 +129,7 @@ export class ChatService {
   }
 
   deleteGoal(message: TextMessage, data: Listable) {
-    this._api.delete("/dialogflow/deleteGoal", {goalId: data.id}).then(() => {
+    this._api.delete(`/dialogflow/goal/${data.id}`).then(() => {
       const index = message.listData.indexOf(data, 0);
       if (index > -1) {
         message.listData.splice(index, 1);
