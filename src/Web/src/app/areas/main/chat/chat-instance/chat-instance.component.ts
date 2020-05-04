@@ -12,10 +12,14 @@ export class ChatInstanceComponent implements OnInit {
   public messageFormGroup: FormGroup;
   public messageControl: FormControl;
 
-  @ViewChild('chatScroll') private chatScrollContainer: ElementRef;
+  public scrollHeight: number;
+
+  @ViewChild('chatScroll') public chatScrollContainer: ElementRef;
   constructor(private formBuilder: FormBuilder, public chatService: ChatService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+
+    this.scrollHeight = 0;
 
     this.route.params.subscribe((params) => {
       let chatId = params.chatId;
@@ -37,8 +41,7 @@ export class ChatInstanceComponent implements OnInit {
     if (!message || message === "") return;
 
     this.chatService.sendMessage(message).then(() =>{
-      const el: HTMLDivElement = this.chatScrollContainer.nativeElement;
-      el.scrollTop = Math.max(0, el.scrollHeight - el.offsetHeight);
+      this.chatScrollContainer.nativeElement.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
     });
 
     this.messageControl.setValue("");
@@ -47,12 +50,6 @@ export class ChatInstanceComponent implements OnInit {
     }
   }
 
-
-  public onChatLoaded() {
-    this.chatScrollContainer.nativeElement.scrollTop = this.chatScrollContainer.nativeElement.scrollHeight;
-  }
-
   public onChatToggle(chatWithBot: boolean) {
-
   }
 }

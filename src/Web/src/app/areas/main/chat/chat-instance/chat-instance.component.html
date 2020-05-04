@@ -5,20 +5,22 @@
     </div>
   </div>
 
-  <div ibmRow style="overflow-y: scroll; height: 80vh;">
+  <div ibmRow style="overflow: auto; height: 75vh;">
     <div ibmCol>
       <div ibmGrid>
-        <div (load)="onChatLoaded()" #chatScroll *ngFor="let message of chatService.messages" [gutter]="false" ibmRow>
-          <div ibmCol>
-            <app-message [message]="message"></app-message>
+        <div #chatScroll [scrollTop]="scrollHeight">
+          <div *ngFor="let message of chatService.messages"  [gutter]="false" ibmRow>
+            <div ibmCol>
+              <app-message [message]="message"></app-message>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <form (ngSubmit)="onSubmit(null)" [formGroup]="messageFormGroup">
-    <div ibmRow>
+  <form (ngSubmit)="onSubmit(null)" [formGroup]="messageFormGroup" class="type-bar">
+    <div ibmRow gutter="true">
 
       <div ibmCol [columnNumbers]="{'md': 1, 'sm': 1}">
         <ibm-toggle
