@@ -12,6 +12,7 @@ import {environment} from "../../../environments/environment";
 import {BotMessage} from "@IQuality/core/models/messages/bot-message";
 import {ChatContext} from "@IQuality/core/models/chat-context";
 import {DEBUG} from "@angular/compiler-cli/ngcc/src/logging/console_logger";
+import {Listable} from "@IQuality/core/models/listable";
 
 
 @Injectable({
@@ -127,4 +128,12 @@ export class ChatService {
     });
   }
 
+  deleteGoal(message: TextMessage, data: Listable) {
+    this._api.delete("/dialogflow/deleteGoal", {goalId: data.id}).then(() => {
+      const index = message.listData.indexOf(data, 0);
+      if (index > -1) {
+        message.listData.splice(index, 1);
+      }
+    });
+  }
 }
