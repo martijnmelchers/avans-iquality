@@ -64,6 +64,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                 
                 case "get_actions":
                     List<Action> actions = await _actionService.GetActions(chat.Id);
+                   
                     if (actions.Count < 1)
                     {
                         response.RespondText("I'm sorry but it seems like you have not created any actions yet!");
