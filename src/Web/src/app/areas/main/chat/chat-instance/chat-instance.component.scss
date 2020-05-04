@@ -1,24 +1,9 @@
 .type-bar{
   width: 100vw;
   position: fixed;
-  margin: 0;
-  padding: 0;
   bottom: 10px;
   display: inline;
-}
-
-.form-inline {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-}
-
-ibm-toggle{
-  margin-right: 0;
-}
-
-.chat-box{
-  resize: none;
+  background-color: #f4f4f4;
 }
 
 .button{
