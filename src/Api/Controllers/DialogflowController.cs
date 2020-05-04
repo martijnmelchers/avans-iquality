@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Google.Cloud.Dialogflow.V2;
 using Google.Protobuf;
 using IQuality.Api.Extensions;
+using IQuality.DomainServices.Dialogflow.Interfaces;
 using IQuality.DomainServices.Interfaces;
-using IQuality.Infrastructure.Dialogflow.Interfaces;
 using IQuality.Models.Authentication;
 using IQuality.Models.Chat.Messages;
 using IQuality.Models.Forms;
@@ -21,42 +21,29 @@ namespace IQuality.Api.Controllers
     public class DialogflowController : RavenApiController
     {
         // private static readonly JsonParser jsonParser = new JsonParser(JsonParser.Settings.Default.WithIgnoreUnknownFields(true));
-        private readonly IGoalIntentHandler _goalIntentHandler;
+        private readonly IGoalService _goalService;
         private IDialogflowService _dialogflowService;
 
-        public DialogflowController(IGoalIntentHandler goalIntentHandler, IAsyncDocumentSession session, IDialogflowService dialogflowService) : base(session)
+        public DialogflowController(IGoalService goalService, IAsyncDocumentSession session, IDialogflowService dialogflowService) : base(session)
         {
-            _goalIntentHandler = goalIntentHandler;
+            _goalService = goalService;
             _dialogflowService = dialogflowService;
         }
-        
-        /*[HttpPost, Route("bot"), AllowAnonymous]
-        public async Task<IActionResult> Set()
-        {
-            WebhookRequest request;
-            using (StreamReader reader = new StreamReader(Request.Body))
-            {
-                string lines = await reader.ReadToEndAsync();
-                request = jsonParser.Parse<WebhookRequest>(lines);
-            }
-            
-            await _dialogflowService.ProcessWebhookRequest(request);
-            return Ok();
-        }*/
-        
+
         [HttpPost, Route("patient"), Authorize]
         public async Task<IActionResult> Set([FromBody] TextMessage textMessage)
         {
             return Ok(await _dialogflowService.ProcessClientRequest(textMessage.Content, textMessage.ChatId));
         }
 
+        
+        //TODO @Huseyin verplaatsen naar GoalController niet DialogflowController!
         [HttpDelete, Route("goal/{goalId}"), Authorize]
         public async Task<IActionResult> DeleteGoal(string goalId)
         {
-            if (await _goalIntentHandler.DeleteGoal(goalId))
-            {
-                return Ok();
-            }
+            if (await _goalService.DeleteGoal(goalId))
+                return Ok("Goal has been deleted");
+            
 
             return BadRequest("Something went wrong while deleting the Goal");
         }
