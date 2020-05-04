@@ -13,6 +13,5 @@ namespace IQuality.DomainServices.Interfaces
         public Task<ChatContext<BaseChat>> CreateChatAsync(BaseChat chat);
         public Task<Boolean> UserCanJoinChat(string userId, string chatId);
         public void DeleteChatAsync(string id);
-        public Task<PatientChat> GetPatientChatIncludeGoalsAsync(string chatId);
     }
 }

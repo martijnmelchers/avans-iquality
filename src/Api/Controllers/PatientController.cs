@@ -44,16 +44,5 @@ namespace IQuality.Api.Controllers
             var result = await _patientService.SetPatientSettingsAsync(settings,HttpContext.User.GetUserId());
             return Ok(result);
         }
-
-
-        [HttpPost("{chatId}"), Authorize(Roles = Roles.Patient)]
-        public async Task<IActionResult> SetGoal([FromBody] string goalDescription, [FromRoute] string chatId)
-        {
-            PatientChat chat = await _chatService.GetPatientChatIncludeGoalsAsync(chatId);
-
-            await _goalService.SaveGoal(goalDescription, chat);
-
-            return Ok();
-        }
     }
 }

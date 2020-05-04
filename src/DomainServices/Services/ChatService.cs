@@ -74,10 +74,5 @@ namespace IQuality.DomainServices.Services
         {
             _chatRepository.Delete(await _chatRepository.GetByIdAsync(id));
         }
-
-        public async Task<PatientChat> GetPatientChatIncludeGoalsAsync(string chatId)
-        {
-            return await _chatRepository.GetPatientChatIncludeGoalsAsync(chatId);
-        }
     }
 }
