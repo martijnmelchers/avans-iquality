@@ -1,54 +1,9 @@
-<div *ngIf="!chatService.selected" ibmGrid>
+<div  ibmGrid>
   <div  ibmRow>
     <div ibmCol>
       <app-chat-list></app-chat-list>
     </div>
   </div>
 </div>
-<div *ngIf="chatService.selected"  ibmGrid style="overflow-y: hidden;">
-  <div ibmRow>
-    <div ibmCol>
-      <ibm-icon-close size="32" (click)="closeChat()"></ibm-icon-close>
-    </div>
-  </div>
-  <div ibmRow>
-    <div ibmCol>
-      <div  ibmGrid style="overflow-y: auto; height: 75vh">
-        <div (load)="onChatLoaded()" #chatScroll *ngFor="let message of chatService.messages" [gutter]="false"  ibmRow>
-          <div ibmCol>
-            <app-message [message]="message"></app-message>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div ibmRow>
-    <div ibmCol>
-      <form (ngSubmit)="onSubmit(null)" [formGroup]="messageFormGroup">
-        <div ibmRow>
-          <div class="column-align" ibmCol columnNumbers="10">
-            <ibm-toggle
-              offText="Bot"
-              onText="Bot"
-              (click)="onChatToggle(chatService.chatWithBot)"
-              [(checked)]="chatService.chatWithBot">
-            </ibm-toggle>
-          </div>
-          <div ibmCol>
-            <ibm-label (keyup.enter)="onSubmit($event)">
-              <input aria-label="textarea" class="chat-box" formControlName="message" ibmCol
-                     ibmTextArea
-                     placeholder="Messages"/>
-            </ibm-label>
-          </div>
-          <div class="column-align" ibmCol columnNumbers="9">
-            <button class="button" type="submit">
-              <ibm-icon-send-alt size="32"></ibm-icon-send-alt>
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+
 

@@ -1,14 +1,17 @@
 import {Component, OnInit} from '@angular/core';
-import {BaseChat} from "@IQuality/core/models/base-chat";
 import {ChatService} from "@IQuality/core/services/chat.service";
+import {ChatContext} from "@IQuality/core/models/chat-context";
+import {NotificationService} from "carbon-components-angular";
+import {Message} from "@IQuality/core/models/messages/message";
 
 @Component({
   selector: 'app-chat-list',
   templateUrl: './chat-list.component.html',
-  styleUrls: ['./chat-list.component.scss']
+  styleUrls: ['./chat-list.component.scss'],
+  providers: []
 })
 export class ChatListComponent implements OnInit {
-  chats: Array<BaseChat> = [];
+  chats: Array<ChatContext> = [];
   chatName: string;
 
   constructor(public chatService: ChatService) {
@@ -17,6 +20,7 @@ export class ChatListComponent implements OnInit {
   ngOnInit(): void {
     this.chatService.getChats().then((response) => {
       this.chats = response;
+
     }, err => console.log(err));
   }
 
@@ -27,4 +31,20 @@ export class ChatListComponent implements OnInit {
       });
     }
   }
+
+    getLastMessage(chat: ChatContext): any {
+      chat.messages.sort((a, b) => {
+        if(a > b){
+          return -1;
+        }
+        if(a < b){
+          return 1;
+        }
+        return 0;
+      });
+
+
+      return chat.messages[0];
+    }
+
 }

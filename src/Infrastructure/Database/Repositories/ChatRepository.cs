@@ -13,55 +13,52 @@ using Raven.Client.Documents.Session;
 namespace IQuality.Infrastructure.Database.Repositories
 {
     [Injectable(interfaceType: typeof(IChatRepository))]
-    public class ChatRepository : BaseRavenRepository<BaseChat>, IChatRepository
+    public class ChatRepository : BaseRavenRepository<ChatContext<BaseChat>, BaseChat>, IChatRepository
     {
         public ChatRepository(IAsyncDocumentSession session) : base(session)
         {
         }
 
-        public async Task<List<T>> GetChatsAsync<T>() where T : BaseChat
+        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync(int skip, int take)
         {
-            return await Session.Query<T>().ToListAsync();
+            return await ConvertAsync(await Session.Query<BaseChat>().Skip(skip).Take(take).ToListAsync());
         }
 
-        public async Task<T> GetChatAsync<T>(string roomId) where T : BaseChat
+        public async Task<PatientChat> GetPatientChatAsync(string chatId)
         {
-            return await Session.LoadAsync<T>(roomId);
-        }
-        
-        public async Task<List<T>> GetChatsAsync<T>(int skip, int take) where T : BaseChat
-        {
-            return await Session.Query<T>().Skip(skip).Take(take).ToListAsync();
+            return await Session.Query<PatientChat>().FirstOrDefaultAsync(x => x.Id == chatId);
         }
 
-        public override async Task SaveAsync(BaseChat entity)
+        public override async Task SaveAsync(ChatContext<BaseChat> entity)
         {
-            await Session.StoreAsync(entity);
+            await Session.StoreAsync(entity.Chat);
         }
 
-        public override void Delete(BaseChat entity)
+        public override void Delete(ChatContext<BaseChat> entity)
         {
-            throw new NotImplementedException();
+            Session.Delete(entity.Chat);
         }
 
-        protected override async Task<List<BaseChat>> ConvertAsync(List<BaseChat> storage)
+        protected override async Task<List<ChatContext<BaseChat>>> ConvertAsync(List<BaseChat> storage)
         {
-            List<BaseChat> baseChats = storage.ToList();
-            foreach (var chat in baseChats)
-                chat.Messages = await Queryable.Take(Session.Query<BaseMessage>().Where(x => x.ChatId == chat.Id), 20)
-                    .ToListAsync();
-
-            return baseChats.ToList();
+            List<ChatContext<BaseChat>> chatContexts = new List<ChatContext<BaseChat>>();
+            foreach (var chat in storage.ToList())
+            {
+                chatContexts.Add(new ChatContext<BaseChat>
+                {
+                    Chat =  chat,
+                    Messages =   await Queryable
+                        .Take(Session.Query<BaseMessage>().Where(x => x.ChatId == chat.Id).OrderByDescending(x => x.SendDate), 20)
+                        .ToListAsync()
+                });
+            }
+            
+            return chatContexts;
         }
 
         public async Task<List<BuddyChat>> GetBuddyChatsByUserId(string userId)
         {
             return await Session.Query<BuddyChat>().OfType<BuddyChat>().Where(x => x.ParticipatorIds.Contains(userId) || x.InitiatorId == userId).ToListAsync();
-        }
-
-        public async Task<PatientChat> GetPatientChatIncludeGoalsAsync(string roomId)
-        {
-            return await Session.Include<PatientChat>(x => x.GoalId).LoadAsync<PatientChat>(roomId);
         }
     }
 }

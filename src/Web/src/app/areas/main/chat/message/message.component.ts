@@ -1,8 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Message} from "@IQuality/core/models/message";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {Suggestion} from "@IQuality/core/models/suggestion";
 import {ChatService} from "@IQuality/core/services/chat.service";
+import {TextMessage} from "@IQuality/core/models/messages/text-message";
+import {Listable} from "@IQuality/core/models/listable";
 
 @Component({
   selector: 'app-message',
@@ -10,7 +11,7 @@ import {ChatService} from "@IQuality/core/services/chat.service";
   styleUrls: ['./message.component.scss']
 })
 export class MessageComponent implements OnInit {
-  @Input("message") message: Message;
+  @Input("message") message: TextMessage;
   public suggestions = Array<Suggestion>();
   public options: Array<string>;
 
@@ -22,6 +23,10 @@ export class MessageComponent implements OnInit {
   }
 
   public onSuggestionClicked(suggestion : Suggestion) {
-      this.chatService.sendMessage(suggestion.explanation);
+      this.chatService.sendMessage(suggestion.value);
+  }
+
+  onClickDelete(message: TextMessage, data: Listable) {
+    this.chatService.deleteGoal(message, data);
   }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using IQuality.Models.Goals;
 
 namespace IQuality.Models.Chat
 {
@@ -8,12 +6,8 @@ namespace IQuality.Models.Chat
     {
         public PatientChat()
         {
-            GoalId = new List<string>();
+            Intent = new IntentData();
         }
-        
-        public List<string> GoalId { get; set; }
-        public string IntentName { get; set; }
-        public DateTime IntentStartDate { get; set; }
-        public string IntentType { get; set; }
+        public IntentData Intent { get; set; }
     }
 }

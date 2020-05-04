@@ -4,5 +4,7 @@
     {
         public const string Goal = "Goal";
         public const string Action = "Action";
+        public const string Cancel = "Cancel";
+        public const string Fallback = "Fallback";
     }
 }

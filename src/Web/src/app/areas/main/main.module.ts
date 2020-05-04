@@ -7,7 +7,7 @@ import {
   ButtonModule,
   GridModule,
   InputModule,
-  ListModule,
+  ListModule, NotificationModule, NotificationService,
   StructuredListModule,
   TableModule, TagModule,
   TilesModule, ToggleModule,
@@ -17,30 +17,44 @@ import {MessageComponent} from './chat/message/message.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {InviteComponent} from "@IQuality/areas/main/invite/invite.component";
 import {ChatListComponent} from './chat/chatlist/chat-list.component';
-import {AddModule, CloseModule, ColumnModule, DotMarkModule, SendAltModule} from "@carbon/icons-angular";
+import {
+  AddModule,
+  CloseModule,
+  ColumnModule, DeleteModule,
+  DotMarkModule,
+  SendAltModule,
+  TrashCanModule
+} from "@carbon/icons-angular";
+import {DoctorComponent} from "@IQuality/areas/main/doctor/doctor.component";
+import { ChatInstanceComponent } from './chat/chat-instance/chat-instance.component';
 
 @NgModule({
-  declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatListComponent],
-    imports: [
-        CommonModule,
-        MainRoutingModule,
-        TableModule,
-        GridModule,
-        InputModule,
-        ButtonModule,
-        ReactiveFormsModule,
-        TilesModule,
-        ListModule,
-        StructuredListModule,
-        AddModule,
-        FormsModule,
-        SendAltModule,
-        CloseModule,
-        ColumnModule,
-        TagModule,
-        ToggleModule,
-        DotMarkModule,
-    ]
+  declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatListComponent, DoctorComponent, ChatInstanceComponent],
+  imports: [
+    CommonModule,
+    MainRoutingModule,
+    TableModule,
+    GridModule,
+    InputModule,
+    ButtonModule,
+    ReactiveFormsModule,
+    TilesModule,
+    ListModule,
+    StructuredListModule,
+    AddModule,
+    FormsModule,
+    SendAltModule,
+    CloseModule,
+    ColumnModule,
+    TagModule,
+    ToggleModule,
+    DotMarkModule,
+    TrashCanModule,
+    DeleteModule,
+    NotificationModule,
+
+  ],
+  providers: []
 })
 export class MainModule {
 }

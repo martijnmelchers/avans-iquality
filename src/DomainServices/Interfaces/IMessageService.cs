@@ -11,5 +11,6 @@ namespace IQuality.DomainServices.Interfaces
         Task<TextMessage> GetMessage(string id, string messageId);
 
         Task<bool> RemoveMessage(string groupName, string messageId);
+        Task<BotMessage> CreateBotMessage(BotMessage message, string chatId);
     }
 }

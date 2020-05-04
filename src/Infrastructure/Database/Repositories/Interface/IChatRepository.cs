@@ -4,12 +4,10 @@ using IQuality.Models.Chat;
 
 namespace IQuality.Infrastructure.Database.Repositories.Interface
 {
-    public interface IChatRepository : IBaseRavenRepository<BaseChat>
+    public interface IChatRepository : IBaseRavenRepository<ChatContext<BaseChat>, BaseChat>
     {
-        Task<List<T>> GetChatsAsync<T>() where T : BaseChat;
-        Task<T> GetChatAsync<T>(string roomId) where T : BaseChat;
-        Task<List<T>> GetChatsAsync<T>(int skip, int take) where T : BaseChat;
+        Task<List<ChatContext<BaseChat>>> GetChatsAsync(int skip, int take);
         Task<List<BuddyChat>> GetBuddyChatsByUserId(string userId);
-        Task<PatientChat> GetPatientChatIncludeGoalsAsync(string roomId);
+        Task<PatientChat> GetPatientChatAsync(string chatId);
     }
 }

@@ -59,7 +59,7 @@ namespace IQuality.Api.Hubs
 
             await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has left he group {groupName}");
         }
-
+        
         public async Task NewMessage(string chatId, string message)
         {
             string senderId = GetSenderId();

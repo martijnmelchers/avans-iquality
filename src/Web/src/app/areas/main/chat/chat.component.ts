@@ -3,38 +3,23 @@ import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ChatService} from "@IQuality/core/services/chat.service";
 import { ApiService } from '@IQuality/core/services/api.service';
 import { Reminder } from '@IQuality/core/models/reminder';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent {
-  public messageFormGroup: FormGroup;
-  public messageControl: FormControl;
-  @ViewChild('chatScroll') private chatScrollContainer: ElementRef;
+export class ChatComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, public chatService: ChatService,
-              private apiService: ApiService) {
-
-    this.messageControl = new FormControl();
-    this.messageFormGroup = this.formBuilder.group({
-      message: this.messageControl,
-    });
-
+  constructor(private formBuilder: FormBuilder, public chatService: ChatService, private route: ActivatedRoute, private apiService: ApiService) {
     this.chatService.onChatSelected.push(() => this.onChatSelected());
   }
 
-  onSubmit(e): void {
-    const message = this.messageFormGroup.getRawValue().message;
-    if (!message || message === "") return;
-
-    this.chatService.sendMessage(message);
-
-    this.messageControl.setValue("");
-    if (e) {
-      e.preventDefault();
-    }
+  ngOnInit(){
+    this.route.params.subscribe((params) => {
+      let chatName = params.chatName;
+    });
   }
 
   private onChatSelected() {
