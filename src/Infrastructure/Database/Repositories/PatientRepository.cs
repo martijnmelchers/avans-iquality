@@ -16,11 +16,6 @@ namespace IQuality.Infrastructure.Database.Repositories
             
         }
 
-        public async override Task SaveAsync(Patient entity)
-        {
-            await Session.StoreAsync(entity);
-        }
-
         public override void Delete(Patient entity)
         {
             Session.Delete(entity);

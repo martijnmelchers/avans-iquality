@@ -26,7 +26,7 @@ export class ChatService {
 
   //Messages zijn voor alles om te laten zien
   public messages: Array<Message> = [];
-  public messageSubject: EventEmitter<void> = new EventEmitter<void>(null);
+  public messageSubject: EventEmitter<void> = new EventEmitter<void>(false);
   //Database messages zijn de messages die opgeslagen zijn in de database
 
   public onChatSelected: Array<() => void> = [];
@@ -139,7 +139,7 @@ export class ChatService {
     });
   }
 
-  public GetChatObservable(): Observable<any>{
+  public getChatObservable(): Observable<any>{
     return new Observable<any>((observer) => {
       this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
         const chat = this._chats.find((chat) => chat.chat.id === chatId);

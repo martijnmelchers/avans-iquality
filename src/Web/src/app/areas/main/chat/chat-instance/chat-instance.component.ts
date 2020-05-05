@@ -48,8 +48,7 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
   async onSubmit(e): Promise<void> {
     const message = this.messageFormGroup.getRawValue().message;
     if (!message || message === "") return;
-    await this.chatService.sendMessage(message)
-
+    await this.chatService.sendMessage(message);
 
     this.messageControl.setValue("");
     if (e) {

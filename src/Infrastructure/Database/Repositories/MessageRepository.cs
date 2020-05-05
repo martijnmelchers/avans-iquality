@@ -18,12 +18,6 @@ namespace IQuality.Infrastructure.Database.Repositories
         {
         }
 
-        public override async Task SaveAsync(BaseMessage entity)
-        {
-            await Session.StoreAsync(entity);
-            await Session.SaveChangesAsync();
-        }
-
         public override void Delete(BaseMessage entity)
         {
             throw new NotImplementedException();

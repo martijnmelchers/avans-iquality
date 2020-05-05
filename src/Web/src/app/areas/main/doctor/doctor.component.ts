@@ -13,7 +13,7 @@ export class DoctorComponent implements OnInit {
   constructor(private _notificationService: NotificationService, private _chatService: ChatService) { }
 
   ngOnInit(): void {
-    this._chatService.GetChatObservable().subscribe((message) => {
+    this._chatService.getChatObservable().subscribe((message) => {
       console.log(message);
       this._notificationService.showToast({
         type: "info",
