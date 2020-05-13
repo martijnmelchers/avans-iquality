@@ -27,9 +27,10 @@ import {
 } from "@carbon/icons-angular";
 import {DoctorComponent} from "@IQuality/areas/main/doctor/doctor.component";
 import { ChatInstanceComponent } from './chat/chat-instance/chat-instance.component';
+import { TipsComponent } from './doctor/tips/tips.component';
 
 @NgModule({
-  declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatListComponent, DoctorComponent, ChatInstanceComponent],
+  declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatListComponent, DoctorComponent, ChatInstanceComponent, TipsComponent],
   imports: [
     CommonModule,
     MainRoutingModule,
