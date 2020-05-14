@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using IQuality.Infrastructure.Database.Repositories.Interface;
+using IQuality.Models;
 using IQuality.Models.Actions;
-using IQuality.Models.Goals;
 using IQuality.Models.Helpers;
 using IQuality.Models.Interfaces;
+using Action = IQuality.Models.Actions.Action;
 
 namespace IQuality.DomainServices.Services
 {
@@ -12,6 +14,7 @@ namespace IQuality.DomainServices.Services
     public class ActionService : IActionService
     {
         private readonly IActionRepository _actionRepository;
+        private bool _notificationTimerSet = false;
 
         public ActionService(IActionRepository actionRepository)
         {
@@ -44,6 +47,18 @@ namespace IQuality.DomainServices.Services
         {
             throw new System.NotImplementedException();
         }
-        
+
+        public async Task<Action> SetActionReminderSettingsAsync(Interval interval, string actionId)
+        {
+            if (!_notificationTimerSet)
+            {
+                new TaskScheduler(_actionRepository);
+                _notificationTimerSet = true;
+            }
+
+            var result = await _actionRepository.SetActionReminderSettingsAsync(interval, actionId);
+
+            return result;
+        }
     }
 }

@@ -138,6 +138,8 @@ namespace IQuality.Api
                         }
                     };
                 });
+
+
             //
             //     services.AddAuthentication(options =>
             //     {
@@ -190,6 +192,7 @@ namespace IQuality.Api
                 endpoints.MapHub<ChatHub>("/hub");
             });
         }
+
     }
 
     public class IncludeNonPublicMembersContractResolver : DefaultContractResolver
