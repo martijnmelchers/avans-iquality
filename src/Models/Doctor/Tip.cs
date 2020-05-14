@@ -1,3 +1,4 @@
+using IQuality.Models.Actions;
 using IQuality.Models.Chat.Messages;
 using IQuality.Models.Interfaces;
 using System;
@@ -9,7 +10,7 @@ namespace IQuality.Models.Doctor
     public class Tip : IAggregateRoot
     {
         public string Id { get; set; }
-        public string ActionId { get; set; }
+        public ActionTypes ActionType { get; set; }
         public string UserId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
