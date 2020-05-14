@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models.Authentication;
 using IQuality.Models.Helpers;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 
 namespace IQuality.Infrastructure.Database.Repositories
@@ -24,6 +25,11 @@ namespace IQuality.Infrastructure.Database.Repositories
         protected override Task<List<Patient>> ConvertAsync(List<Patient> storage)
         {
             return Task.FromResult(storage.ToList());
+        }
+
+        public async Task<List<Patient>> GetAllPatientsOfDoctorAsync(string doctorId)
+        {
+            return await Session.Query<Patient>().OfType<Patient>().Where(x => x.DoctorId == doctorId).ToListAsync();
         }
     }
 }

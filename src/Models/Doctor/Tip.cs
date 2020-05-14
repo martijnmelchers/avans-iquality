@@ -14,11 +14,11 @@ namespace IQuality.Models.Doctor
         public string UserId { get; set; }
         
         [Required(ErrorMessage = "Please enter a name.")]  
-        [StringLength(50)]
+        [StringLength(20)]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Please enter a description.")]
-        [StringLength(500)]
+        [StringLength(50)]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Please pass on an actionType.")]
