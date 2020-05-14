@@ -27,26 +27,9 @@ namespace IQuality.Infrastructure.Database.Repositories
             return Task.FromResult(storage.ToList());
         }
 
-        public async Task<List<PatientApplicationUser>> GetAllPatientsOfDoctorAsync(string doctorId)
+        public async Task<List<Patient>> GetAllPatientsOfDoctorAsync(string doctorId)
         {
-            var patientList = await Session.Query<Patient>().OfType<Patient>().Where(x => x.DoctorId == doctorId).ToListAsync();
-
-            var patientApplicationUserList = new List<PatientApplicationUser>();
-
-            foreach (Patient patient in patientList)
-            {
-                var applicationUser = await Session.LoadAsync<ApplicationUser>(patient.ApplicationUserId);
-
-                var patientApplicationUser = new PatientApplicationUser();
-
-                patientApplicationUser.Id = patient.Id;
-                patientApplicationUser.ApplicationUser = applicationUser;
-                patientApplicationUser.DoctorId = patient.DoctorId;
-
-                patientApplicationUserList.Add(patientApplicationUser);
-            }
-
-            return patientApplicationUserList;
+            return await Session.Query<Patient>().OfType<Patient>().Where(x => x.DoctorId == doctorId).ToListAsync();
         }
     }
 }

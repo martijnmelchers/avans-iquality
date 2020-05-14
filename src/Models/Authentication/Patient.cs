@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using IQuality.Models.Authentication.Settings;
 using IQuality.Models.Interfaces;
 using IQuality.Models.Measurements;
@@ -11,6 +11,7 @@ namespace IQuality.Models.Authentication
         public string ApplicationUserId { get; set; }
         public string DoctorId { get; set; }
         public PatientSettings Settings { get; set; }
+        public List<string> TipIds { get; set; }
 
         // Contains the measurements
         public List<Measurement> Weight { get; set; }

@@ -6,6 +6,6 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
 {
     public interface IPatientRepository : IBaseRavenRepository<Patient>
     {
-        Task<List<PatientApplicationUser>> GetAllPatientsOfDoctorAsync(string doctorId);
+        Task<List<Patient>> GetAllPatientsOfDoctorAsync(string doctorId);
     }
 }
