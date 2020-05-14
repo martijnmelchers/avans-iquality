@@ -10,7 +10,7 @@ namespace IQuality.Models.Doctor
     public class Tip : IAggregateRoot
     {
         public string Id { get; set; }
-        public ActionTypes ActionType { get; set; }
+        public string ActionType { get; set; }
         public string UserId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
