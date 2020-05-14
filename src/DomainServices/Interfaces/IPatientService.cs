@@ -8,6 +8,6 @@ namespace IQuality.DomainServices.Interfaces
 {
     public interface IPatientService
     {
-        Task<List<Patient>> GetAllPatientsOfDoctorAsync(string doctorId);
+        Task<List<PatientApplicationUser>> GetAllPatientsOfDoctorAsync(string doctorId);
     }
 }
