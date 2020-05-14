@@ -29,8 +29,7 @@ export class AddTipComponent implements OnInit {
       Validators.minLength(5),
       Validators.maxLength(50)
     ]),
-    selectedAction: new FormControl(''),
-    selectedUsers: new FormControl('')
+    selectedAction: new FormControl('')
   });
 
   async ngOnInit(): Promise<any> {
@@ -38,11 +37,8 @@ export class AddTipComponent implements OnInit {
       this.actionTypes = resp;
     });
 
-    await this._api.get<any>('/patient/getallpatientsofdoctor').then(resp => {
-      this.users = resp;
-    });
 
-    console.log(this.users);
+
   }
 
   async onSubmit() {
@@ -55,8 +51,8 @@ export class AddTipComponent implements OnInit {
     data.ActionType = this.tipForm.value.selectedAction;
 
     console.log(this.tipForm.value);
-    // await this._api.post<Tip>('/doctor/createtip',data);
-    // this._route.navigateByUrl('/doctor/tips');
+    await this._api.post<Tip>('/doctor/createtip',data);
+    this._route.navigateByUrl('/doctor/tips');
 
   }
 
