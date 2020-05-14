@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApiService } from '@IQuality/core/services/api.service';
 import { Tip } from '@IQuality/core/models/tip';
 import { Router } from '@angular/router';
@@ -12,26 +12,34 @@ import { Router } from '@angular/router';
 export class AddTipComponent implements OnInit {
 
   actionTypes = [];
-  constructor(private _api: ApiService, private _route: Router) { 
+  constructor(private _api: ApiService, private _route: Router) {
 
   }
-  
+
 
   tipForm = new FormGroup({
-    name: new FormControl(''),
-    description: new FormControl(''),
-    selectedAction: new FormControl(''),
+    name: new FormControl('', [
+      Validators.required,
+      Validators.minLength(5),
+      Validators.maxLength(20)
+    ]),
+    description: new FormControl('', [
+      Validators.required,
+      Validators.minLength(5),
+      Validators.maxLength(50)
+    ]),
+    selectedAction: new FormControl('')
   });
 
   async ngOnInit(): Promise<any> {
-    await this._api.get<any>('/action/getactiontypes').then(resp =>{
+    await this._api.get<any>('/action/getactiontypes').then(resp => {
       this.actionTypes = resp;
     });
 
   }
 
   async onSubmit() {
-    if(this.tipForm.value.selectedAction == ''){
+    if (this.tipForm.value.selectedAction == '') {
       this.tipForm.value.selectedAction = 'General';
     }
     let data = new Tip();
