@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class AddTipComponent implements OnInit {
 
-  actionTypes = ['General','Weight','BloodPressure','Cholesterol']
+  actionTypes = [];
   constructor(private _api: ApiService, private _route: Router) { 
 
   }
@@ -23,15 +23,17 @@ export class AddTipComponent implements OnInit {
     selectedAction: new FormControl(''),
   });
 
-  ngOnInit(): void {
-    
+  async ngOnInit(): Promise<any> {
+    await this._api.get<any>('/action/getactiontypes').then(resp =>{
+      this.actionTypes = resp;
+    });
+
   }
 
   async onSubmit() {
     if(this.tipForm.value.selectedAction == ''){
       this.tipForm.value.selectedAction = 'General';
     }
-    console.warn(this.tipForm.value);
     let data = new Tip();
     data.Name = this.tipForm.value.name;
     data.Description = this.tipForm.value.description;
