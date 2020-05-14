@@ -29,7 +29,11 @@ namespace IQuality.Api.Controllers
         [HttpPost, Route("createtip"), Authorize(Roles = Roles.Doctor)]
         public async Task<IActionResult> CreateTip([FromBody] Tip tip)
         {
-            return Ok(await _tipService.CreateTipAsync(tip, HttpContext.User.GetUserId()));
+            if (ModelState.IsValid)
+                return Ok(await _tipService.CreateTipAsync(tip, HttpContext.User.GetUserId())); else
+            {
+                return ValidationProblem();
+            }
         }
 
         [HttpPut, Route("{id}"), Authorize(Roles = Roles.Doctor)]
