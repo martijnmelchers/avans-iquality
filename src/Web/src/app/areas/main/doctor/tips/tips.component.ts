@@ -28,7 +28,6 @@ export class TipsComponent implements OnInit {
     await this._api.get<Array<Tip>>('/doctor/gettips').then(resp => {
       this.tips = resp;
     });
-    console.log(this.tips);
   }
 
   private loadScreen() {
