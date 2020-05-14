@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class AddTipComponent implements OnInit {
 
   actionTypes = [];
+  users = [];
   constructor(private _api: ApiService, private _route: Router) {
 
   }
@@ -37,6 +38,11 @@ export class AddTipComponent implements OnInit {
       this.actionTypes = resp;
     });
 
+    await this._api.get<any>('/patient/getallpatientsofdoctor').then(resp => {
+      this.users = resp;
+    });
+
+    console.log(this.users);
   }
 
   async onSubmit() {

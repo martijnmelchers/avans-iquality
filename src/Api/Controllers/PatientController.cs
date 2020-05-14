@@ -25,7 +25,7 @@ namespace IQuality.Api.Controllers
         }
 
         [HttpGet, Route("getallpatientsofdoctor"), Authorize(Roles = Roles.Doctor)]
-        public async Task<IActionResult> GetActionTypes()
+        public async Task<IActionResult> GetAllPatients()
         {
             return Ok(await _patientService.GetAllPatientsOfDoctorAsync(HttpContext.User.GetUserId()));
         }
