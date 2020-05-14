@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TableHeaderItem, TableModel, TableItem } from 'carbon-components-angular';
 import { Router } from '@angular/router';
+import { ApiService } from '@IQuality/core/services/api.service';
+import { Tip } from '@IQuality/core/models/tip';
 
 
 
@@ -14,26 +16,23 @@ export class TipsComponent implements OnInit {
 
   public skeletonStateTable: boolean = true;
   public model: TableModel = new TableModel();
-  private  dataset = [
-    { name: "Vermijd snoep", type: "Bloodsugar" },
-    { name: "Vermijd drank", type: "Cholesterol" },
-    { name: "Wissel van positie", type: "General" },
-    { name: "Drink water", type: "General" },
-    { name: "Ga naar buiten", type: "Weight" },
-    { name: "Slaap op tijd", type: "Blood Pressure" },
-    { name: "Val af", type: "Weight" }
-  ];
+  private tips = [];
+ 
 
  
 
-  constructor(private route: Router) { }
+  constructor(private _api: ApiService ,private _route: Router) { }
 
-  ngOnInit(): void {
+  public async ngOnInit(): Promise<any> {
     this.loadScreen();
+    await this._api.get<Array<Tip>>('/doctor/gettips').then(resp => {
+      this.tips = resp;
+    });
+    console.log(this.tips);
   }
 
   private loadScreen() {
-    this.model.data = this.dataset.map(datapoint => [new TableItem({}), new TableItem({})]);
+    this.model.data = this.tips.map(datapoint => [new TableItem({}), new TableItem({})]);
 
     this.model.header = [new TableHeaderItem({ data: "" }), new TableHeaderItem({ data: "" })];
 
@@ -44,17 +43,17 @@ export class TipsComponent implements OnInit {
     setTimeout(() => {
       this.model.header = [new TableHeaderItem({ data: "Tip naam" }), new TableHeaderItem({ data: "Beschrijving" }), new TableHeaderItem({ data: "Actie Type" })];
 
-      this.model.data = this.dataset.map(datapoint =>
+      this.model.data = this.tips.map(datapoint =>
         [
           new TableItem({ data: datapoint.name }),
-          new TableItem({ data: "Lorem ipsum"}),
-          new TableItem({ data: datapoint.type})
+          new TableItem({ data: datapoint.description}),
+          new TableItem({ data: datapoint.actionType})
         ]
       );
-    }, 4000);
+    }, 2000);
   }
 
   navigateToAdd(){
-    this.route.navigateByUrl('/doctor/tips/add');
+    this._route.navigateByUrl('/doctor/tips/add');
   }
 }

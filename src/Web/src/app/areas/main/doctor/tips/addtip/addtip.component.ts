@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ApiService } from '@IQuality/core/services/api.service';
+import { Tip } from '@IQuality/core/models/tip';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-addtip',
@@ -9,21 +11,37 @@ import { ApiService } from '@IQuality/core/services/api.service';
 })
 export class AddTipComponent implements OnInit {
 
-  actionTypes = ['General','Weight','Blood Pressure','Cholesterol']
-  constructor(private api: ApiService) { }
+  actionTypes = [];
+  constructor(private _api: ApiService, private _route: Router) { 
 
-  profileForm = new FormGroup({
+  }
+  
+
+  tipForm = new FormGroup({
     name: new FormControl(''),
     description: new FormControl(''),
     selectedAction: new FormControl(''),
   });
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<any> {
+    await this._api.get<any>('/action/getactiontypes').then(resp =>{
+      this.actionTypes = resp;
+    });
+
   }
 
-  onSubmit() {
-    // TODO: Use EventEmitter with form value
-    console.warn(this.profileForm.value);
+  async onSubmit() {
+    if(this.tipForm.value.selectedAction == ''){
+      this.tipForm.value.selectedAction = 'General';
+    }
+    let data = new Tip();
+    data.Name = this.tipForm.value.name;
+    data.Description = this.tipForm.value.description;
+    data.ActionType = this.tipForm.value.selectedAction;
+
+    await this._api.post<Tip>('/doctor/createtip',data);
+    this._route.navigateByUrl('/doctor/tips');
+
   }
 
 }
