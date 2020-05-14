@@ -28,9 +28,10 @@ import {
 import {DoctorComponent} from "@IQuality/areas/main/doctor/doctor.component";
 import { ChatInstanceComponent } from './chat/chat-instance/chat-instance.component';
 import { TipsComponent } from './doctor/tips/tips.component';
+import { AddTipComponent } from './doctor/tips/addtip/addtip.component';
 
 @NgModule({
-  declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatListComponent, DoctorComponent, ChatInstanceComponent, TipsComponent],
+  declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatListComponent, DoctorComponent, ChatInstanceComponent, TipsComponent, AddTipComponent],
   imports: [
     CommonModule,
     MainRoutingModule,

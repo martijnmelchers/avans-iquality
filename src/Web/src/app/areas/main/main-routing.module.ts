@@ -6,6 +6,7 @@ import {InviteComponent} from "@IQuality/areas/main/invite/invite.component";
 import {DoctorComponent} from '@IQuality/areas/main/doctor/doctor.component';
 import {ChatInstanceComponent} from "@IQuality/areas/main/chat/chat-instance/chat-instance.component";
 import { TipsComponent } from './doctor/tips/tips.component';
+import { AddTipComponent } from './doctor/tips/addtip/addtip.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,9 @@ const routes: Routes = [
   {
     path: 'doctor/tips',
     component: TipsComponent
+  },{
+    path: 'doctor/tips/add',
+    component: AddTipComponent
   }
 ];
 

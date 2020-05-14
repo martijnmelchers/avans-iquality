@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TableHeaderItem, TableModel, TableItem } from 'carbon-components-angular';
+import { Router } from '@angular/router';
+
+
+
 
 @Component({
   selector: 'app-tips',
@@ -20,7 +24,9 @@ export class TipsComponent implements OnInit {
     { name: "Val af", type: "Weight" }
   ];
 
-  constructor() { }
+ 
+
+  constructor(private route: Router) { }
 
   ngOnInit(): void {
     this.loadScreen();
@@ -46,5 +52,9 @@ export class TipsComponent implements OnInit {
         ]
       );
     }, 4000);
+  }
+
+  navigateToAdd(){
+    this.route.navigateByUrl('/doctor/tips/add');
   }
 }
