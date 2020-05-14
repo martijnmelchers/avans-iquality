@@ -11,10 +11,12 @@ import { JwtHttpInterceptor } from "@IQuality/core/interceptor/jwt-http-intercep
 import { TableModule } from "carbon-components-angular";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {FadeModule} from "@carbon/icons-angular";
+import { DiagramAComponent } from './main/chat/chat-diagram/diagram-a/diagram-a.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DiagramAComponent
   ],
   imports: [
     BrowserModule,
