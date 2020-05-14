@@ -47,7 +47,7 @@ export class TipsComponent implements OnInit {
         [
           new TableItem({ data: datapoint.name }),
           new TableItem({ data: datapoint.description}),
-          new TableItem({ data: datapoint.type})
+          new TableItem({ data: datapoint.actionType})
         ]
       );
     }, 2000);

@@ -12,7 +12,9 @@ import { Router } from '@angular/router';
 export class AddTipComponent implements OnInit {
 
   actionTypes = ['General','Weight','BloodPressure','Cholesterol']
-  constructor(private _api: ApiService, private _route: Router) { }
+  constructor(private _api: ApiService, private _route: Router) { 
+
+  }
   
 
   tipForm = new FormGroup({
@@ -22,15 +24,18 @@ export class AddTipComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    
   }
 
   async onSubmit() {
-     
+    if(this.tipForm.value.selectedAction == ''){
+      this.tipForm.value.selectedAction = 'General';
+    }
     console.warn(this.tipForm.value);
     let data = new Tip();
     data.Name = this.tipForm.value.name;
     data.Description = this.tipForm.value.description;
-    data.ActionType = this.tipForm.value.actionType;
+    data.ActionType = this.tipForm.value.selectedAction;
 
     await this._api.post<Tip>('/doctor/createtip',data);
     this._route.navigateByUrl('/doctor/tips');
