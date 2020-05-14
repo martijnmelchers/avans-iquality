@@ -5,8 +5,10 @@
     <div class="form-group">
       <label>
         Tip naam:
-        <input type="text" name="name" id="name" class="form-control" formControlName="name">
       </label>
+    </div>
+    <div class="form-group">
+      <input type="text" name="name" id="name" class="form-control" formControlName="name">
     </div>
     <div *ngIf="tipForm.get('name').invalid && (tipForm.get('name').dirty || tipForm.get('name').touched)"
       class="alert alert-danger">
@@ -24,10 +26,14 @@
     <div class="form-group">
       <label>
         Tip beschrijving:
-        <input type="text" size="35" class="form-control" formControlName="description">
+        
       </label>
     </div>
-    <div *ngIf="tipForm.get('description').invalid && (tipForm.get('description').dirty || tipForm.get('description').touched)"
+    <div class="form-group">
+      <input type="text" size="35" class="form-control" formControlName="description">
+    </div>
+    <div
+      *ngIf="tipForm.get('description').invalid && (tipForm.get('description').dirty || tipForm.get('description').touched)"
       class="alert alert-danger">
       <div *ngIf="tipForm.get('description').errors.required">
         Description is required.
@@ -40,11 +46,27 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="sel1">Actie Type:</label>
+      <label for="actionType">Actie Type:</label>
+    </div>
+    <div class="form-group">
       <select formControlName="selectedAction" class="form-control">
         <option *ngFor="let actionType of actionTypes">{{actionType}}</option>
       </select>
     </div>
+
+    <div class="form-group">
+      <label for="selectedUsers">Selecteer patiënten:</label>
+    </div>
+    <div class="form-group">
+      <select multiple formControlName="selectedUsers" class="form-control" id="exampleFormControlSelect2">
+        <option>Patient 1</option>
+        <option>Patient 2</option>
+        <option>Patient 3</option>
+        <option>Patient 4</option>
+        <option>Patient 5</option>
+      </select>
+    </div>
+
     <div class="form-group">
       <button type="submit" class="btn btn-success" [disabled]="!tipForm.valid">Tip aanmaken</button>
     </div>
