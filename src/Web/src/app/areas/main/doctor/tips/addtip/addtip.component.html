@@ -1,0 +1,29 @@
+<div ibmGrid>
+
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+  
+    <div class="form-group">
+    <label>
+      Tip naam:
+      <input type="text" class="form-control" formControlName="name">
+    </label>
+    </div>
+  
+    <div class="form-group">
+    <label>
+      Tip beschrijving:
+      <input type="text" class="form-control" formControlName="description">
+    </label>
+    </div>
+    <div class="form-group">
+      <label for="sel1">Actie Type:</label>
+      <select formControlName="selectedAction" class="form-control">
+      <option *ngFor="let actionType of actionTypes">{{actionType}}</option>
+    </select>
+  </div>
+    <div class="form-group">
+    <button type="submit" class="btn btn-success" [disabled]="!profileForm.valid">Tip aanmaken</button>
+    </div>
+  </form>
+
+  </div>
