@@ -11,7 +11,7 @@ namespace IQuality.Models.Doctor
     public class Tip : IAggregateRoot
     {
         public string Id { get; set; }
-        public string UserId { get; set; }
+        public string DoctorId { get; set; }
         
         [Required(ErrorMessage = "Please enter a name.")]  
         [StringLength(20)]

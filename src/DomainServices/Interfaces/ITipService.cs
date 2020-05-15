@@ -8,7 +8,7 @@ namespace IQuality.DomainServices.Interfaces
 {
     public interface ITipService
     {
-        Task<List<Tip>> GetTipsOfDoctorAsync(string userId);
+        Task<List<Tip>> GetTipsOfDoctorAsync(string doctorId);
         Task<Tip> CreateTipAsync(Tip tip, string userId);
         Task<Tip> EditTipAsync(string id, Tip tip);
         Task<Tip> DeleteTipAsync(string tipId);

@@ -23,7 +23,7 @@ namespace IQuality.DomainServices.Services
 
         public async Task<Tip> CreateTipAsync(Tip tip, string userId)
         {
-            tip.UserId = userId;
+            tip.DoctorId = userId;
 
             return await _tipRepository.CreateTipAsync(tip);
         }
@@ -40,9 +40,9 @@ namespace IQuality.DomainServices.Services
             return await _tipRepository.DeleteTipAsync(tipId);
         }
 
-        public Task<List<Tip>> GetTipsOfDoctorAsync(string userId)
+        public Task<List<Tip>> GetTipsOfDoctorAsync(string doctorId)
         {
-            return _tipRepository.GetTipsOfDoctorAsync(userId);
+            return _tipRepository.GetTipsOfDoctorAsync(doctorId);
         }
     }
 }

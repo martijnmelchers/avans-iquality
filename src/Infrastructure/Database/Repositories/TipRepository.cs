@@ -44,9 +44,9 @@ namespace IQuality.Infrastructure.Database.Repositories
             return tip;
         }
 
-        public async Task<List<Tip>> GetTipsOfDoctorAsync(string userId)
+        public async Task<List<Tip>> GetTipsOfDoctorAsync(string doctorId)
         {
-            return await Session.Query<Tip>().OfType<Tip>().Where(x => x.UserId == userId).ToListAsync();
+            return await Session.Query<Tip>().OfType<Tip>().Where(x => x.DoctorId == doctorId).ToListAsync();
         }
 
         protected override Task<List<Tip>> ConvertAsync(List<Tip> storage)

@@ -8,7 +8,7 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
 {
     public interface ITipRepository : IBaseRavenRepository<Tip>
     {
-        Task<List<Tip>> GetTipsOfDoctorAsync(string userId);
+        Task<List<Tip>> GetTipsOfDoctorAsync(string doctorId);
         Task<Tip> CreateTipAsync(Tip tip);
         Task<Tip> EditTipAsync(Tip edittedTip);
         Task<Tip> DeleteTipAsync(string tipId);

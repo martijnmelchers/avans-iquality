@@ -19,7 +19,7 @@ namespace IQuality.DomainServices.Services
             _patientRepository = patientRepository;
         }
 
-        public async Task<List<PatientApplicationUser>> GetAllPatientsOfDoctorAsync(string doctorId)
+        public async Task<List<Patient>> GetAllPatientsOfDoctorAsync(string doctorId)
         {
             return await _patientRepository.GetAllPatientsOfDoctorAsync(doctorId);
         }
