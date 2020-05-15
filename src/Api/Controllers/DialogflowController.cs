@@ -47,7 +47,7 @@ namespace IQuality.Api.Controllers
         [HttpPost, Route("patient"), Authorize]
         public async Task<IActionResult> Set([FromBody] TextMessage textMessage)
         {
-            return Ok(await _dialogflowService.ProcessClientRequest(textMessage.Content, textMessage.ChatId));
+            return Ok(await _dialogflowService.ProcessClientRequest(textMessage.Content, textMessage.ChatId, HttpContext.User.GetUserId() ));
         }
 
         [HttpDelete, Route("goal/{goalId}"), Authorize]

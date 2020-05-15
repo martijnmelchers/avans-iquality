@@ -9,6 +9,6 @@ namespace IQuality.Infrastructure.Dialogflow.Interfaces
 {
     public interface IPatientDataIntentHandler : IIntentHandler
     {
-        Task SaveWeight(string weight, PatientChat chat);
+        Task SaveData(string weight, PatientChat chat, string patientId, string dataType);
     }
 }

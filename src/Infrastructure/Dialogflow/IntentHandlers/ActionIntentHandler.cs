@@ -11,7 +11,7 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
     [Injectable]
     public class ActionIntentHandler : IActionIntentHandler
     {
-        public Task<BotMessage> HandleClientIntent(PatientChat chat, string userText, QueryResult queryResult)
+        public Task<BotMessage> HandleClientIntent(PatientChat chat, string userText, QueryResult queryResult, string patientId)
         {
             throw new System.NotImplementedException();
         }

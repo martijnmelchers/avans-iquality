@@ -47,7 +47,7 @@ namespace IQuality.DomainServices.Services
                 "dialogflow.config.json");
         }
 
-        public async Task<BotMessage> ProcessClientRequest(string text, string chatId)
+        public async Task<BotMessage> ProcessClientRequest(string text, string chatId, string patientId)
         {
             var chatContext = await _chatRepository.GetPatientChatAsync(chatId);
             var result = await _responseBuilderService.BuildTextResponse(text, IntentNames.Default);
@@ -65,9 +65,9 @@ namespace IQuality.DomainServices.Services
 
             var message = chatContext.IntentType switch
             {
-                IntentTypes.Goal => await _goalIntentHandler.HandleClientIntent(chatContext, text, result),
-                IntentTypes.Action => await _actionIntentHandler.HandleClientIntent(chatContext, text, result),
-                IntentTypes.PatientData => await _patientDataIntentHandler.HandleClientIntent(chatContext, text, result),
+                IntentTypes.Goal => await _goalIntentHandler.HandleClientIntent(chatContext, text, result, patientId),
+                IntentTypes.Action => await _actionIntentHandler.HandleClientIntent(chatContext, text, result, patientId),
+                IntentTypes.PatientData => await _patientDataIntentHandler.HandleClientIntent(chatContext, text, result, patientId),
                 IntentTypes.Cancel => SendDefaultResponse(chatContext, result),
                 IntentTypes.Fallback => SendDefaultResponse(chatContext, result),
                 _ => throw new UnknownIntentException()

@@ -30,7 +30,7 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
             throw new NotImplementedException();
         }
 
-        public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userText, QueryResult queryResult)
+        public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userText, QueryResult queryResult, string patientId)
         {
             var response = new BotMessage();
 
