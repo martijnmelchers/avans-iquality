@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '@IQuality/core/services/api.service';
 import { Tip } from '@IQuality/core/models/tip';
 
@@ -11,8 +11,12 @@ import { Tip } from '@IQuality/core/models/tip';
 })
 export class ManageComponent implements OnInit {
 
-  private tip = {};
-  constructor(private _route: ActivatedRoute, private _api: ApiService) { }
+  public tip;
+
+  constructor(private _route: ActivatedRoute, private _navRoute: Router, private _api: ApiService) {
+
+
+  }
 
   tipForm = new FormGroup({
     name: new FormControl('', [
@@ -24,18 +28,39 @@ export class ManageComponent implements OnInit {
       Validators.required,
       Validators.minLength(5),
       Validators.maxLength(50)
-    ]),
-    selectedAction: new FormControl('')
+    ])
   });
 
+
   async ngOnInit(): Promise<any> {
-    await this._api.get<Tip>('/doctor/gettip').then(resp => {
+    let id = this._route.snapshot.paramMap.get('id');
+
+    await this._api.get<any>(`/doctor/gettipbyid/${id}`).then(resp => {
       this.tip = resp;
+      this.tipForm.patchValue({
+        name: this.tip.name,
+        description: this.tip.description
+      })
     });
+    console.log(this.tip);
+
+
+
   }
 
-  async onSubmit(){
+  async onSubmit() {    
+    let id = this._route.snapshot.paramMap.get('id');
+    await this._api.put(`/doctor/edit/${id}`,this.tip);
+    this._navRoute.navigateByUrl('/doctor/tips');
+  }
 
+  async deleteTip(){
+    if(confirm("Are you sure to delete this tip")) {
+
+    let id = this._route.snapshot.paramMap.get('id');
+    await this._api.delete(`/doctor/delete/${id}`);
+    this._navRoute.navigateByUrl('/doctor/tips');
+    }
   }
 
 }

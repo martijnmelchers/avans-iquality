@@ -37,7 +37,7 @@ const routes: Routes = [
     path: 'doctor/tips/add',
     component: AddTipComponent
   },{
-    path: 'doctor/tips/manage:id',
+    path: 'doctor/tips/manage/:id',
     component: ManageComponent
   }
 ];
