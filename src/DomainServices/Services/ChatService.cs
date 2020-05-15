@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories.Interface;
+using IQuality.Models.Authentication;
 using IQuality.Models.Chat;
 using IQuality.Models.Helpers;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace IQuality.DomainServices.Services
@@ -14,10 +16,12 @@ namespace IQuality.DomainServices.Services
     public class ChatService : IChatService
     {
         private readonly IChatRepository _chatRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ChatService(IChatRepository chatRepository)
+        public ChatService(IChatRepository chatRepository, UserManager<ApplicationUser> userManager)
         {
             _chatRepository = chatRepository;
+            _userManager = userManager;
         }
 
         public async Task<ChatContext<BaseChat>> GetChatAsync(string id)
@@ -73,6 +77,23 @@ namespace IQuality.DomainServices.Services
         public async void DeleteChatAsync(string id)
         {
             _chatRepository.Delete(await _chatRepository.GetByIdAsync(id));
+        }
+
+        public async Task<string> GetContactName(string userId, BaseChat chat)
+        {
+            if (chat.ParticipatorIds == null || chat.ParticipatorIds.Count == 0)
+            {
+                throw new Exception("Chat does not have any participators");
+            }
+            
+            if (userId == chat.InitiatorId)
+            {
+                // Get patient
+                return _userManager.FindByIdAsync(chat.ParticipatorIds[0]).Result.UserName;
+            }
+            
+            // Get Doctor
+            return _userManager.FindByIdAsync(chat.InitiatorId).Result.UserName;
         }
     }
 }

@@ -9,13 +9,38 @@
         (valueChange)="searchValueChange($event)"
         (clear)="searchClear()">
       </ibm-search>
+
+      <!-- TODO: Make a component for the list  -->
       <ibm-structured-list [border]="true"
                            [condensed]="false"
-                           [nowrap]="false">
+                           [nowrap]="false" *ngIf="filteredPatientChats.length !== 0">
         <ibm-list-header>
-          <ibm-list-column>Gesprekken</ibm-list-column>
+          <ibm-list-column>Chat</ibm-list-column>
+          <ibm-list-column>Contact</ibm-list-column>
         </ibm-list-header>
-        <ibm-list-row *ngFor="let item of chats" [routerLink]="['/chat/', item.chat.id]">
+        <ibm-list-row *ngFor="let item of filteredPatientChats" [routerLink]="['/chat/', item.chat.id]">
+          <ibm-list-column style="line-height: 0.8rem">
+            <div style="font-size: larger">
+              {{item.chat.name}}
+            </div> <br>
+            <div *ngIf="this.getLastMessage(item)">
+              {{this.getLastMessage(item).content}}
+            </div>
+          </ibm-list-column>
+          <ibm-list-column>
+            {{item.contactName}}
+          </ibm-list-column>
+        </ibm-list-row>
+      </ibm-structured-list>
+
+      <!-- TODO: Make a component for the list  -->
+      <ibm-structured-list [border]="true"
+                           [condensed]="false"
+                           [nowrap]="false" *ngIf="filteredBuddyChats.length !== 0">
+        <ibm-list-header>
+          <ibm-list-column>Buddy Chat</ibm-list-column>
+        </ibm-list-header>
+        <ibm-list-row *ngFor="let item of filteredBuddyChats" [routerLink]="['/chat/', item.chat.id]">
           <ibm-list-column style="line-height: 0.8rem">
             <div style="font-size: larger">
               {{item.chat.name}}

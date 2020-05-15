@@ -7,4 +7,7 @@ export class BaseChat {
 
   initiatorId: string;
   messages: Array<Message>;
+
+  // Need this to know if the chat is of buddychat :)
+  ay: string;
 }
