@@ -5,7 +5,7 @@
         {{message.content}}
       </div>
   </span>
-
+  <ibm-line-chart [data]="data" [options]="options"></ibm-line-chart>
   <div ibmGrid *ngIf="message.listData.length > 0">
     <div ibmRow *ngFor="let data of message.listData" class="row-list">
       <div (click)="onClickSayText(data)" style="cursor: pointer" ibmCol>
@@ -23,5 +23,5 @@
           </ibm-tag>
         </ul>
     </span>
+
 </div>
-<ibm-line-chart [data]="data" [options]="options" ></ibm-line-chart>
