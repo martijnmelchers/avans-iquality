@@ -1,13 +1,21 @@
 <div ibmGrid>
   <div ibmRow [gutter]="false">
     <div ibmCol>
+      <ibm-search
+        theme="dark"
+        placeholder="Search"
+        autocomplete="off"
+        size="sm"
+        (valueChange)="searchValueChange($event)"
+        (clear)="searchClear()">
+      </ibm-search>
       <ibm-structured-list [border]="true"
                            [condensed]="false"
                            [nowrap]="false">
         <ibm-list-header>
           <ibm-list-column>Gesprekken</ibm-list-column>
         </ibm-list-header>
-        <ibm-list-row *ngFor="let item of chats" [routerLink]="['/chat/', item.chat.id]">
+        <ibm-list-row *ngFor="let item of filteredChats" [routerLink]="['/chat/', item.chat.id]">
           <ibm-list-column>
             {{item.chat.name}}
           </ibm-list-column>

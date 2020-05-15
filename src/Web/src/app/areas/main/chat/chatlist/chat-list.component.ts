@@ -12,7 +12,12 @@ import {Message} from "@IQuality/core/models/messages/message";
 })
 export class ChatListComponent implements OnInit {
   chats: Array<ChatContext> = [];
-  chatName: string;
+
+
+  filteredChats: Array<ChatContext> = [];
+
+  searchChatName: string;
+  createChatName: string;
 
   constructor(public chatService: ChatService) {
   }
@@ -20,13 +25,13 @@ export class ChatListComponent implements OnInit {
   ngOnInit(): void {
     this.chatService.getChats().then((response) => {
       this.chats = response;
-
+      this.filteredChats = this.chats;
     }, err => console.log(err));
   }
 
   onBuddyChatCreate(isBuddyChat: boolean) {
-    if (this.chatName) {
-      this.chatService.createBuddychat(this.chatName, isBuddyChat).then((response) => {
+    if (this.createChatName) {
+      this.chatService.createBuddychat(this.createChatName, isBuddyChat).then((response) => {
         this.chats.push(response);
       });
     }
@@ -47,4 +52,14 @@ export class ChatListComponent implements OnInit {
       return chat.messages[0];
     }
 
+  searchValueChange($event: string) {
+    this.searchChatName = $event;
+    this.filteredChats = this.chats.filter(i => {
+      return i.chat.name.indexOf(this.searchChatName) >= 0;
+    });
+  }
+
+  searchClear() {
+    this.searchChatName = '';
+  }
 }

@@ -4,13 +4,13 @@ import {CommonModule} from '@angular/common';
 import {MainRoutingModule} from './main-routing.module';
 import {HomeComponent} from './home/home.component';
 import {
-  ButtonModule,
-  GridModule,
-  InputModule,
-  ListModule, NotificationModule, NotificationService,
-  StructuredListModule,
-  TableModule, TagModule,
-  TilesModule, ToggleModule,
+    ButtonModule,
+    GridModule,
+    InputModule,
+    ListModule, NotificationModule, NotificationService, SearchModule,
+    StructuredListModule,
+    TableModule, TagModule,
+    TilesModule, ToggleModule,
 } from 'carbon-components-angular';
 import {ChatComponent} from './chat/chat.component';
 import {MessageComponent} from './chat/message/message.component';
@@ -56,6 +56,7 @@ import { BotMessageComponent } from './chat/message/bot-message/bot-message.comp
         DeleteModule,
         NotificationModule,
         ChartsModule,
+        SearchModule,
 
     ],
   providers: []
