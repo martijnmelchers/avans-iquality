@@ -1,5 +1,6 @@
 using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories.Interface;
+using IQuality.Models.Authentication;
 using IQuality.Models.Doctor;
 using IQuality.Models.Helpers;
 using System;
@@ -14,18 +15,49 @@ namespace IQuality.DomainServices.Services
     {
         private readonly ITipRepository _tipRepository;
         private readonly IActionRepository _actionRepository;
+        private readonly IPatientRepository _patientRepository;
+        private readonly IGoalRepository _goalRepository;
 
-        public TipService(ITipRepository tipRepository, IActionRepository actionRepository)
+        public TipService(ITipRepository tipRepository, IActionRepository actionRepository, IPatientRepository patientRepository, IGoalRepository goalRepository)
         {
             _tipRepository = tipRepository;
             _actionRepository = actionRepository;
+            _patientRepository = patientRepository;
+            _goalRepository = goalRepository;
         }
 
-        public async Task<Tip> CreateTipAsync(Tip tip, string userId)
+        public async Task<Tip> CreateTipAsync(Tip tip, string doctorId)
         {
-            tip.DoctorId = userId;
+            tip.DoctorId = doctorId;
 
-            return await _tipRepository.CreateTipAsync(tip);
+            var createdTip = await _tipRepository.CreateTipAsync(tip);
+            
+            // addTipsToPatients
+            //await AddTipsToPatients(createdTip.Id, createdTip.ActionType, doctorId);
+
+            return createdTip;
+        }
+
+        public async Task<string> AddTipsToPatients(string tipId, string tipActionType, string doctorId)
+        {
+            //var patients = await _patientRepository.GetAllPatientsOfDoctorAsync(doctorId);
+
+            //foreach (Patient patient in patients)
+            //{
+            //    var patientGoalIdsList = await _goalRepository.GetGoalIdsOfPatient(patient.Id);
+
+            //    var patientActionTypesList = await _actionRepository.GetActionTypesOfGoalIds(patientGoalIdsList);
+
+            //    foreach (string actionType in patientActionTypesList)
+            //    {
+            //        if (tipActionType == actionType && !patient.TipIds.Contains(tipId))
+            //        {
+            //            await _patientRepository.AddTipIdToPatient(tipId);
+            //        }
+            //    }
+            //}
+
+            return doctorId;
         }
 
         public async Task<Tip> EditTipAsync(string id, Tip tip)
@@ -43,6 +75,11 @@ namespace IQuality.DomainServices.Services
         public Task<List<Tip>> GetTipsOfDoctorAsync(string doctorId)
         {
             return _tipRepository.GetTipsOfDoctorAsync(doctorId);
+        }
+
+        public async Task<Tip> GetTipByIdAsync(string id)
+        {
+            return await _tipRepository.GetTipByIdAsync(id);
         }
     }
 }

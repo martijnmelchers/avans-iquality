@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,6 +31,11 @@ namespace IQuality.Infrastructure.Database.Repositories
         public async Task<List<Patient>> GetAllPatientsOfDoctorAsync(string doctorId)
         {
             return await Session.Query<Patient>().OfType<Patient>().Where(x => x.DoctorId == doctorId).ToListAsync();
+        }
+
+        public Task<List<string>> AddTipIdToPatient(string tipId, string patientId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

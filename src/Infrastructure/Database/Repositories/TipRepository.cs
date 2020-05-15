@@ -53,5 +53,10 @@ namespace IQuality.Infrastructure.Database.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public async Task<Tip> GetTipByIdAsync(string tipId)
+        {
+            return await Session.LoadAsync<Tip>(tipId);
+        }
     }
 }

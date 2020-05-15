@@ -65,5 +65,27 @@ namespace IQuality.Infrastructure.Database.Repositories
 
             return action;
         }
+
+        public async Task<List<string>> GetActionTypesOfGoalIds(List<string> goalIds)
+        {
+            List<Action> actionsOfGoal = new List<Action>();
+
+            foreach (string goalId in goalIds)
+            {
+                actionsOfGoal.AddRange(await Session.Query<Action>().OfType<Action>().Where(a => a.GoalId == goalId).ToListAsync());
+            }
+
+            List<string> usedActionTypes = new List<string>();
+
+            foreach (Action action in actionsOfGoal)
+            {
+                if (!usedActionTypes.Contains(action.Type.ToString()))
+                {
+                    usedActionTypes.Add(action.Type.ToString());
+                }
+            }
+
+            return usedActionTypes;
+        }
     }
 }
