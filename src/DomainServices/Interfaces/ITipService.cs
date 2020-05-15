@@ -12,5 +12,7 @@ namespace IQuality.DomainServices.Interfaces
         Task<Tip> CreateTipAsync(Tip tip, string userId);
         Task<Tip> EditTipAsync(string id, Tip tip);
         Task<Tip> DeleteTipAsync(string tipId);
+        Task<string> AddTipsToPatients(string tipId, string tipActionType, string doctorId);
+        Task<Tip> GetTipByIdAsync(string id);
     }
 }

@@ -12,5 +12,6 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
         Task<Tip> CreateTipAsync(Tip tip);
         Task<Tip> EditTipAsync(Tip edittedTip);
         Task<Tip> DeleteTipAsync(string tipId);
+        Task<Tip> GetTipByIdAsync(string tipId);
     }
 }
