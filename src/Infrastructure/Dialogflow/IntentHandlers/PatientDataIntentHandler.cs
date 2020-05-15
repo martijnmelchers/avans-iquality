@@ -68,10 +68,10 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
 
         public async Task SaveData(string data, PatientChat chat, string patientId, string dataType)
         {
-            int dataValue;
+            float dataValue;
             try
             {
-                dataValue = Int32.Parse(data);
+                dataValue = float.Parse(data);
             } 
             catch(FormatException e)
             {
@@ -98,7 +98,7 @@ namespace IQuality.Infrastructure.Dialogflow.IntentHandlers
         public const string RegisterWeight = "register_weight";
         public const string SaveWeight = "save_weight";
         
-        public const string RegisterBloodPressure = "register_bloodPressure";
+        public const string RegisterBloodPressure = "register_bloodpressure";
         public const string SaveBloodPressure = "save_bloodpressure";
         
         public const string RegisterCholesterol = "register_cholesterol";
