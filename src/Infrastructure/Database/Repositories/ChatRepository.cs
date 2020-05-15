@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -59,6 +59,13 @@ namespace IQuality.Infrastructure.Database.Repositories
         public async Task<List<BuddyChat>> GetBuddyChatsByUserId(string userId)
         {
             return await Session.Query<BuddyChat>().OfType<BuddyChat>().Where(x => x.ParticipatorIds.Contains(userId) || x.InitiatorId == userId).ToListAsync();
+        }
+
+        public async Task<string> GetPatientChatByPatientId(string patientId)
+        {
+            var patientChat = await Session.Query<PatientChat>().OfType<PatientChat>().Where(x => x.ParticipatorIds.Contains(patientId) || x.InitiatorId == patientId).FirstAsync();
+
+            return patientChat.Id;
         }
     }
 }

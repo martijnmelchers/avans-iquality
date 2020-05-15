@@ -26,10 +26,10 @@ namespace IQuality.Api.Controllers
             return Ok(await _tipService.GetTipsOfDoctorAsync(HttpContext.User.GetUserId()));
         }
 
-        [HttpGet, Route("gettipbyid/{id}"), Authorize(Roles = Roles.Doctor)]
-        public async Task<IActionResult> GetTipById(string id)
+        [HttpGet, Route("gettipbyid/{tipId}"), Authorize(Roles = Roles.Doctor)]
+        public async Task<IActionResult> GetTipById(string tipId)
         {
-            return Ok(await _tipService.GetTipByIdAsync(id));
+            return Ok(await _tipService.GetTipByIdAsync(tipId));
         }
 
         [HttpPost, Route("createtip"), Authorize(Roles = Roles.Doctor)]
@@ -42,13 +42,13 @@ namespace IQuality.Api.Controllers
             }
         }
 
-        [HttpPut, Route("{id}"), Authorize(Roles = Roles.Doctor)]
-        public async Task<IActionResult> EditTip([FromRoute] string id, [FromBody] Tip tip)
+        [HttpPut, Route("/edit/{tipId}"), Authorize(Roles = Roles.Doctor)]
+        public async Task<IActionResult> EditTip([FromRoute] string tipId, [FromBody] Tip tip)
         {
-            return Ok(await _tipService.EditTipAsync(id, tip));
+            return Ok(await _tipService.EditTipAsync(tipId, tip, HttpContext.User.GetUserId()));
         }
 
-        [HttpPost("{tipId}"), Authorize(Roles = Roles.Doctor)]
+        [HttpDelete, Route("/delete/{tipId}"), Authorize(Roles = Roles.Doctor)]
         public async Task<IActionResult> DeleteTip(string tipId)
         {
             return Ok(await _tipService.DeleteTipAsync(tipId));

@@ -17,13 +17,15 @@ namespace IQuality.DomainServices.Services
         private readonly IActionRepository _actionRepository;
         private readonly IPatientRepository _patientRepository;
         private readonly IGoalRepository _goalRepository;
+        private readonly IChatRepository _chatRepository;
 
-        public TipService(ITipRepository tipRepository, IActionRepository actionRepository, IPatientRepository patientRepository, IGoalRepository goalRepository)
+        public TipService(ITipRepository tipRepository, IActionRepository actionRepository, IPatientRepository patientRepository, IGoalRepository goalRepository, IChatRepository chatRepository)
         {
             _tipRepository = tipRepository;
             _actionRepository = actionRepository;
             _patientRepository = patientRepository;
             _goalRepository = goalRepository;
+            _chatRepository = chatRepository;
         }
 
         public async Task<Tip> CreateTipAsync(Tip tip, string doctorId)
@@ -32,39 +34,44 @@ namespace IQuality.DomainServices.Services
 
             var createdTip = await _tipRepository.CreateTipAsync(tip);
             
-            // addTipsToPatients
-            //await AddTipsToPatients(createdTip.Id, createdTip.ActionType, doctorId);
+            await ConnectTipsToPatients(createdTip.Id, createdTip.ActionType, doctorId);
 
             return createdTip;
         }
 
-        public async Task<string> AddTipsToPatients(string tipId, string tipActionType, string doctorId)
+        public async Task<string> ConnectTipsToPatients(string tipId, string tipActionType, string doctorId)
         {
-            //var patients = await _patientRepository.GetAllPatientsOfDoctorAsync(doctorId);
+            var patients = await _patientRepository.GetAllPatientsOfDoctorAsync(doctorId);
 
-            //foreach (Patient patient in patients)
-            //{
-            //    var patientGoalIdsList = await _goalRepository.GetGoalIdsOfPatient(patient.Id);
+            foreach (Patient patient in patients)
+            {
+                var patientChatId = await _chatRepository.GetPatientChatByPatientId(patient.Id);
 
-            //    var patientActionTypesList = await _actionRepository.GetActionTypesOfGoalIds(patientGoalIdsList);
+                var patientGoalIdsList = await _goalRepository.GetGoalIdsOfPatientByChatId(patientChatId);
 
-            //    foreach (string actionType in patientActionTypesList)
-            //    {
-            //        if (tipActionType == actionType && !patient.TipIds.Contains(tipId))
-            //        {
-            //            await _patientRepository.AddTipIdToPatient(tipId);
-            //        }
-            //    }
-            //}
+                var patientActionTypesList = await _actionRepository.GetActionTypesOfGoalIds(patientGoalIdsList);
+
+                foreach (string actionType in patientActionTypesList)
+                {
+                    if (tipActionType == actionType && !patient.TipIds.Contains(tipId))
+                    {
+                        await _patientRepository.AddTipIdToPatient(tipId, patient.Id);
+                    }
+                }
+            }
 
             return doctorId;
         }
 
-        public async Task<Tip> EditTipAsync(string id, Tip tip)
+        public async Task<Tip> EditTipAsync(string id, Tip tip, string doctorId)
         {
             tip.Id = id;
 
-            return await _tipRepository.EditTipAsync(tip);
+            var edittedTip = await _tipRepository.EditTipAsync(tip);
+
+            await ConnectTipsToPatients(id, tip.ActionType, doctorId);
+
+            return edittedTip;
         }
 
         public async Task<Tip> DeleteTipAsync(string tipId)
