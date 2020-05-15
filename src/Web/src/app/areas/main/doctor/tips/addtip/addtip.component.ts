@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
 export class AddTipComponent implements OnInit {
 
   actionTypes = [];
-  users = [];
   constructor(private _api: ApiService, private _route: Router) {
 
   }
@@ -43,7 +42,7 @@ export class AddTipComponent implements OnInit {
 
   async onSubmit() {
     if (this.tipForm.value.selectedAction == '') {
-      this.tipForm.value.selectedAction = 'General';
+      this.tipForm.value.selectedAction = this.actionTypes[0];
     }
     let data = new Tip();
     data.Name = this.tipForm.value.name;

@@ -8,7 +8,8 @@
   </button>
 </div>
 
-<div>
-  <ibm-table class="data-table" [skeleton]="skeletonStateTable" [model]="model" size="lg" [showSelectionColumn]="false">
-  </ibm-table>
-</div>
+  <div>
+    <ibm-table class="data-table" (rowClick)="manageTip($event)" [skeleton]="skeletonStateTable" [model]="model" size="lg" [showSelectionColumn]="false">
+    </ibm-table>
+  </div>
+
