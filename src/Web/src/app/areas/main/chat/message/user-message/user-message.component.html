@@ -1,4 +1,4 @@
-<div class="message-box my-message-box">
+<div *ngIf="isCurrentUser" class="message-box my-message-box">
   <p class="my-p">{{message.senderName || message.senderId}}</p>
   <span class="text my-text">
       {{message.content}}
@@ -8,7 +8,7 @@
     </span>
 </div>
 
-<div class="message-box other-message-box">
+<div *ngIf="!isCurrentUser" class="message-box other-message-box">
   <p class="other-p">{{message.senderName || message.senderId}}</p>
   <span class="text other-text">
         {{message.content}}

@@ -1,5 +1,5 @@
 <div *ngIf="message.senderId === auth.getNameIdentifier">
-  <app-user-message [isCurrentUser]="true"></app-user-message>
+  <app-user-message [message]="message" [isCurrentUser]="true"></app-user-message>
 </div>
 
 <div *ngIf="!message.senderId" >
@@ -7,5 +7,5 @@
 </div>
 
 <div *ngIf="message.senderId && message.senderId !== auth.getNameIdentifier">
-  <app-user-message [isCurrentUser]="false"></app-user-message>
+  <app-user-message [message]="message" [isCurrentUser]="false"></app-user-message>
 </div>
