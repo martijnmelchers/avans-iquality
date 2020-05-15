@@ -4,7 +4,8 @@
       <div class="bot-border">
         {{message.content}}
       </div>
-    </span>
+  </span>
+
   <div ibmGrid *ngIf="message.listData.length > 0">
     <div ibmRow *ngFor="let data of message.listData" class="row-list">
       <div (click)="onClickSayText(data)" style="cursor: pointer" ibmCol>
@@ -23,3 +24,4 @@
         </ul>
     </span>
 </div>
+<ibm-line-chart [data]="data" [options]="options" ></ibm-line-chart>
