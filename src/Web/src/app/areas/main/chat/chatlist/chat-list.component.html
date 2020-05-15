@@ -15,15 +15,15 @@
         <ibm-list-header>
           <ibm-list-column>Gesprekken</ibm-list-column>
         </ibm-list-header>
-        <ibm-list-row *ngFor="let item of filteredChats" [routerLink]="['/chat/', item.chat.id]">
-          <ibm-list-column>
-            {{item.chat.name}}
-          </ibm-list-column>
-          <ibm-list-row *ngIf="this.getLastMessage(item)">
-            <ibm-list-column>
+        <ibm-list-row *ngFor="let item of chats" [routerLink]="['/chat/', item.chat.id]">
+          <ibm-list-column style="line-height: 0.8rem">
+            <div style="font-size: larger">
+              {{item.chat.name}}
+            </div> <br>
+            <div *ngIf="this.getLastMessage(item)">
               {{this.getLastMessage(item).content}}
-            </ibm-list-column>
-          </ibm-list-row>
+            </div>
+          </ibm-list-column>
         </ibm-list-row>
       </ibm-structured-list>
     </div>
