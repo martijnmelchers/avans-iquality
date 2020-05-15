@@ -9,7 +9,6 @@ using IQuality.Models.Chat;
 using IQuality.Models.Helpers;
 using Microsoft.AspNetCore.Identity;
 
-
 namespace IQuality.DomainServices.Services
 {
     [Injectable(interfaceType: typeof(IChatService))]
@@ -38,10 +37,10 @@ namespace IQuality.DomainServices.Services
         {
             return await _chatRepository.GetChatsAsync(skip, take);
         }
-        
+
         public async Task<ChatContext<BaseChat>> CreateChatAsync(BaseChat baseChat)
         {
-            var context = new ChatContext<BaseChat>()
+            ChatContext<BaseChat> context = new ChatContext<BaseChat>
             {
                 Chat = baseChat
             };
@@ -54,22 +53,17 @@ namespace IQuality.DomainServices.Services
             BaseChat baseChat;
             try
             {
-                 baseChat = (await GetChatAsync(chatId)).Chat;
+                baseChat = (await GetChatAsync(chatId)).Chat;
             }
             catch (Exception e)
             {
                 return false;
             }
-            
-            if (baseChat.InitiatorId == userId)
-            {
-                return true;
-            }
+
+            if (baseChat.InitiatorId == userId) return true;
 
             if (baseChat.ParticipatorIds != null && baseChat.ParticipatorIds.Count != 0)
-            {
                 return baseChat.ParticipatorIds.Any(participator => participator == userId);
-            }
 
             return false;
         }
@@ -82,18 +76,12 @@ namespace IQuality.DomainServices.Services
         public async Task<string> GetContactName(string userId, BaseChat chat)
         {
             if (chat.ParticipatorIds == null || chat.ParticipatorIds.Count == 0)
-            {
                 throw new Exception("Chat does not have any participators");
-            }
+
+            string contactId = userId == chat.InitiatorId ? chat.ParticipatorIds[0] : chat.InitiatorId;
+            ApplicationUser applicationUser = await _userManager.FindByIdAsync(contactId);
             
-            if (userId == chat.InitiatorId)
-            {
-                // Get patient
-                return _userManager.FindByIdAsync(chat.ParticipatorIds[0]).Result.UserName;
-            }
-            
-            // Get Doctor
-            return _userManager.FindByIdAsync(chat.InitiatorId).Result.UserName;
+            return applicationUser.Name.ToString();
         }
     }
 }
