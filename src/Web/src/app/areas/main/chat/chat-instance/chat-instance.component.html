@@ -1,7 +1,7 @@
 <div *ngIf="chatService.selected" ibmGrid style="overflow: hidden;">
   <div ibmRow>
     <div ibmCol>
-      <ibm-icon-close size="32" [routerLink]="['/chat']"></ibm-icon-close>
+      <ibm-icon-close size="32" (click)="this.back()"></ibm-icon-close>
     </div>
   </div>
 

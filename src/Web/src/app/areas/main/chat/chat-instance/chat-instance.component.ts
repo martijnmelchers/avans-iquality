@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { ChatService } from "@IQuality/core/services/chat.service";
 import { ActivatedRoute } from "@angular/router";
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-chat-instance',
@@ -16,11 +17,7 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
 
   @ViewChild('chatScroll') public chatScrollContainer: ElementRef;
 
-
-
-
-  constructor(private formBuilder: FormBuilder, public chatService: ChatService, private route: ActivatedRoute) {
-  }
+  constructor(private formBuilder: FormBuilder, public chatService: ChatService, private route: ActivatedRoute, private _location: Location) { }
 
   async ngOnInit() {
 
@@ -39,6 +36,7 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
 
   async initializeChat(chatId: string) {
     await this.chatService.selectChatWithId(chatId);
+
     this.chatService.messageSubject.subscribe(() => {
       setTimeout(() => this.scrollToBottom(), 100);
     });
@@ -57,6 +55,10 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
     if (e) {
       e.preventDefault();
     }
+  }
+
+  back(): void{
+    this._location.back();
   }
 
   ngAfterViewInit(): void {
