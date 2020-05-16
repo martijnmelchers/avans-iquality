@@ -13,6 +13,7 @@ export class BotMessageComponent implements OnInit {
 
   @Input("message") message: TextMessage
   public suggestions = Array<Suggestion>();
+
   data = [
     {
       "group": "Dataset 1",
@@ -151,7 +152,6 @@ export class BotMessageComponent implements OnInit {
       }
     },
     "curve": "curveMonotoneX",
-    "height": "400px"
   };
 
   constructor(public chatService : ChatService) { }

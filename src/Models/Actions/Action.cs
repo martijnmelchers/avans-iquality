@@ -1,6 +1,7 @@
-﻿using IQuality.Models.Chat.Messages;
-using IQuality.Models.Goals;
+﻿using System.Collections.Generic;
+using IQuality.Models.Chat.Messages;
 using IQuality.Models.Interfaces;
+using IQuality.Models.Measurements;
 
 namespace IQuality.Models.Actions
 {

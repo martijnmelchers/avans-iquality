@@ -26,6 +26,7 @@ export class ChatService {
 
   //Messages zijn voor alles om te laten zien
   public messages: Array<Message> = [];
+
   public messageSubject: EventEmitter<void> = new EventEmitter<void>(false);
   //Database messages zijn de messages die opgeslagen zijn in de database
 

@@ -53,4 +53,16 @@
       </ibm-structured-list>
     </div>
   </div>
+  <div ibmRow>
+    <button ibmCol ibmButton (click)="onBuddyChatCreate(true)">
+      Create Buddychat
+    </button>
+    <button ibmCol ibmButton (click)="onBuddyChatCreate(false)">
+      Create Patientchat
+    </button>
+    <label>
+      Name
+      <input ibmText [(ngModel)]="chatName">
+    </label>
+  </div>
 </div>

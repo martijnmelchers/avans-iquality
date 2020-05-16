@@ -1,11 +1,11 @@
-<div *ngIf="message.senderId === auth.getNameIdentifier">
-  <app-user-message [message]="message" [isCurrentUser]="true"></app-user-message>
-</div>
+<app-user-message *ngIf="message.senderId === auth.getNameIdentifier"
+                    [message]="message"
+                    [isCurrentUser]="true"></app-user-message>
 
-<div *ngIf="!message.senderId" >
-  <app-bot-message [message]="message"></app-bot-message>
-</div>
+<app-bot-message *ngIf="!message.senderId"
+                 [message]="message"></app-bot-message>
 
-<div *ngIf="message.senderId && message.senderId !== auth.getNameIdentifier">
-  <app-user-message [message]="message" [isCurrentUser]="false"></app-user-message>
-</div>
+<app-user-message *ngIf="message.senderId && message.senderId !== auth.getNameIdentifier"
+                  [message]="message"
+                  [isCurrentUser]="false"></app-user-message>
+

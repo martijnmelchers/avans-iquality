@@ -1,11 +1,23 @@
 ﻿using System;
+using IQuality.Models.Interfaces;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace IQuality.Models.Measurements
 {
-    public class Measurement
+    public class Measurement : IAggregateRoot
     {
-        public MeasurementType Type { get; set; }
-        public DateTime Date { get; set; }
-        public double Value { get; set; }
+        public string Id { get; }
+        public string PatientId { get;  }
+        public MeasurementType DataType { get; }
+        public double Value { get; }
+        public DateTime Date { get; }
+
+        public Measurement(string patientId, double value, MeasurementType type)
+        {
+            PatientId = patientId;
+            Value = value;
+            DataType = type;
+            Date = DateTime.Now;
+        }
     }
 }

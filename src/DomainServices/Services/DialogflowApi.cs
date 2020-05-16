@@ -7,14 +7,14 @@ using Microsoft.Extensions.Configuration;
 namespace IQuality.DomainServices.Services
 {
     [Injectable]
-    public class ResponseBuilderService : IResponseBuilderService
+    public class DialogflowApi : IDialogflowApi
     {
         private readonly IConfiguration _configuration;
-        public ResponseBuilderService(IConfiguration configuration)
+        public DialogflowApi(IConfiguration configuration)
         {
             _configuration = configuration;
         }
-        public async Task<QueryResult> BuildTextResponse(string text, string context)
+        public async Task<QueryResult> DetectClientIntent(string text, string context)
         {
             var sessionsClient = await SessionsClient.CreateAsync();
             var request = new DetectIntentRequest
