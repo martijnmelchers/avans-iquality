@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import {BrowserModule, HammerModule} from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 
@@ -19,9 +19,10 @@ import { TableModule } from "carbon-components-angular";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {FadeModule} from "@carbon/icons-angular";
 
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,

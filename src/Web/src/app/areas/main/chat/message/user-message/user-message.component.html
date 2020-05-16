@@ -1,7 +1,7 @@
 <div *ngIf="isCurrentUser" class="message-box my-message-box">
-  <p class="my-p">{{message.senderName || message.senderId}}</p>
+  <p class="my-p">{{textMessage.senderName || message.senderId}}</p>
   <span class="text my-text">
-      {{message.content}}
+      {{textMessage.content}}
     <div class="message-time my-time">
         <p>{{ message.sendDate | date:"HH:mm"}}</p>
       </div>
@@ -9,9 +9,9 @@
 </div>
 
 <div *ngIf="!isCurrentUser" class="message-box other-message-box">
-  <p class="other-p">{{message.senderName || message.senderId}}</p>
+  <p class="other-p">{{textMessage.senderName || message.senderId}}</p>
   <span class="text other-text">
-        {{message.content}}
+        {{textMessage.content}}
     <div class="message-time other-time">
         <p>15:39</p>
       </div>

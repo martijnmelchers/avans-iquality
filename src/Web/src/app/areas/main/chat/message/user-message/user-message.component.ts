@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TextMessage} from "@IQuality/core/models/messages/text-message";
+import {Message} from "@IQuality/core/models/messages/message";
 
 @Component({
   selector: 'app-user-message',
@@ -7,12 +8,15 @@ import {TextMessage} from "@IQuality/core/models/messages/text-message";
   styleUrls: ['./user-message.component.scss']
 })
 export class UserMessageComponent implements OnInit {
-  @Input("message") message: TextMessage;
+  @Input("message") message: Message;
   @Input("isCurrentUser") isCurrentUser: boolean;
+
+  public textMessage: TextMessage
 
   constructor() { }
 
   ngOnInit(): void {
+    this.textMessage = this.message as TextMessage
   }
 
 }
