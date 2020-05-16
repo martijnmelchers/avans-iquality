@@ -71,7 +71,7 @@ namespace IQuality.DomainServices.Services
 
             foreach (Patient patient in patients)
             {
-                var patientChatId = await _chatRepository.GetPatientChatByPatientId(patient.Id);
+                var patientChatId = await _chatRepository.GetPatientChatByPatientId(patient.ApplicationUserId);
 
                 var patientGoalIdsList = await _goalRepository.GetGoalIdsOfPatientByChatId(patientChatId);
 
