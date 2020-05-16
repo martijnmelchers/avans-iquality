@@ -12,6 +12,8 @@ import { Tip } from '@IQuality/core/models/tip';
 export class ManageComponent implements OnInit {
 
   public tip;
+  
+  actionTypes = [];
 
   constructor(private _route: ActivatedRoute, private _navRoute: Router, private _api: ApiService) {
 
@@ -28,6 +30,11 @@ export class ManageComponent implements OnInit {
       Validators.required,
       Validators.minLength(5),
       Validators.maxLength(50)
+    ]), 
+    selectedAction: new FormControl('', [
+      Validators.required,
+      Validators.minLength(5),
+      Validators.maxLength(50)
     ])
   });
 
@@ -39,10 +46,16 @@ export class ManageComponent implements OnInit {
       this.tip = resp;
       this.tipForm.patchValue({
         name: this.tip.name,
-        description: this.tip.description
-      })
+        description: this.tip.description,
+        selectedAction: this.tip.actionType
+      });
+
+      console.log(this.tip.actionType);
     });
-    console.log(this.tip);
+    
+    await this._api.get<any>('/action/getactiontypes').then(resp => {
+      this.actionTypes = resp;
+    });
 
 
 

@@ -42,7 +42,7 @@ namespace IQuality.Api.Controllers
             }
         }
 
-        [HttpPut, Route("/edit/{tipId}"), Authorize(Roles = Roles.Doctor)]
+        [HttpPut, Route("edit/{tipId}"), Authorize(Roles = Roles.Doctor)]
         public async Task<IActionResult> EditTip([FromRoute] string tipId, [FromBody] Tip tip)
         {
             return Ok(await _tipService.EditTipAsync(tipId, tip, HttpContext.User.GetUserId()));
