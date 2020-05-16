@@ -26,10 +26,10 @@ import {
   TrashCanModule
 } from "@carbon/icons-angular";
 import {DoctorComponent} from "@IQuality/areas/main/doctor/doctor.component";
-import {ChatInstanceComponent} from './chat/chat-instance/chat-instance.component';
+import { ChatInstanceComponent } from './chat/chat-instance/chat-instance.component';
 import {BotMessageComponent} from "@IQuality/areas/main/chat/message/bot-message/bot-message.component";
-import {UserMessageComponent} from "@IQuality/areas/main/chat/message/user-message/user-message.component";
 import {ChartsModule} from "@carbon/charts-angular";
+import {UserMessageComponent} from "@IQuality/areas/main/chat/message/user-message/user-message.component";
 
 @NgModule({
   declarations: [
@@ -40,8 +40,8 @@ import {ChartsModule} from "@carbon/charts-angular";
     ChatListComponent,
     DoctorComponent,
     ChatInstanceComponent,
-    UserMessageComponent,
-    BotMessageComponent
+    BotMessageComponent,
+    UserMessageComponent
   ],
   imports: [
     CommonModule,
@@ -65,8 +65,8 @@ import {ChartsModule} from "@carbon/charts-angular";
     TrashCanModule,
     DeleteModule,
     NotificationModule,
+    ModalModule,
     ChartsModule,
-    SearchModule,
   ],
   providers: []
 })

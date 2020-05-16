@@ -1,9 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
-import {Suggestion} from "@IQuality/core/models/suggestion";
-import {ChatService} from "@IQuality/core/services/chat.service";
-import {TextMessage} from "@IQuality/core/models/messages/text-message";
-import {Listable} from "@IQuality/core/models/listable";
+import {Message} from "@IQuality/core/models/messages/message";
 
 @Component({
   selector: 'app-message',
@@ -12,11 +9,11 @@ import {Listable} from "@IQuality/core/models/listable";
 })
 export class MessageComponent implements OnInit {
 
-  @Input("message") message: TextMessage;
+  @Input("message") message: Message;
   constructor(public auth: AuthenticationService) { }
 
   ngOnInit(): void {
-
+    console.log(this.message);
   }
 
 }

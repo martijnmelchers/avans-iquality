@@ -53,6 +53,7 @@ export class ChatService {
       this.messages.push(response);
       this.messageSubject.next()
     }
+
   }
 
   public async createBuddychat(name: string, isBuddyChat: boolean): Promise<ChatContext> {
@@ -156,7 +157,7 @@ export class ChatService {
     })
   }
 
-  deleteGoal(message: TextMessage, data: Listable) {
+  deleteGoal(message: BotMessage, data: Listable) {
     this._api.delete(`/dialogflow/goal/${data.id}`).then(() => {
       const index = message.listData.indexOf(data, 0);
       if (index > -1) {

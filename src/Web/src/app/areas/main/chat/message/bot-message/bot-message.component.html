@@ -2,19 +2,19 @@
   <p class="other-p">BuddyBot</p>
   <span class="text bot-text">
       <div class="bot-border">
-        {{message.content}}
+        {{botMessage.content}}
       </div>
   </span>
-  <div *ngIf="data.length > 0" style="height: 250px; width: 100%">
-    <ibm-line-chart [data]="data" [options]="options"></ibm-line-chart>
+  <div *ngIf="botMessage.graphData && botMessage.graphData.entries.length > 0" style="height: 250px; width: 100%">
+    <ibm-line-chart [data]="botMessage.graphData.entries" [options]="options"></ibm-line-chart>
   </div>
-  <div ibmGrid *ngIf="message.listData.length > 0">
-    <div ibmRow *ngFor="let data of message.listData" class="row-list">
+  <div ibmGrid *ngIf="botMessage.listData.length > 0">
+    <div ibmRow *ngFor="let data of botMessage.listData" class="row-list">
       <div (click)="onClickSayText(data)" style="cursor: pointer" ibmCol>
         {{data.text}}
       </div>
       <div ibmCol [columnNumbers]="{'sm': 1}" style="text-align: center; cursor: pointer">
-        <ibm-icon-trash-can *ngIf="data.isRemovable" size="20" (click)="onClickDelete(message, data)"></ibm-icon-trash-can>
+        <ibm-icon-trash-can *ngIf="data.isRemovable" size="20" (click)="onClickDelete(botMessage, data)"></ibm-icon-trash-can>
       </div>
     </div>
   </div>
