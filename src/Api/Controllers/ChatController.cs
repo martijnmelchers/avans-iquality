@@ -35,7 +35,7 @@ namespace IQuality.Api.Controllers
             return Ok(await _chatService.GetChatsAsync());
         }
 
-        [HttpPost]
+        [HttpPost, Route("createpatientchat")]
         public async Task<IActionResult> CreateChat([FromBody] PatientChat chat)
         {
             string id = HttpContext.User.GetUserId();
