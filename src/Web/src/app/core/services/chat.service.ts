@@ -104,6 +104,7 @@ export class ChatService {
     message.senderId = this.auth.getNameIdentifier;
     message.senderName = this.auth.getName;
     message.content = content;
+    message.type = "TextMessage";
     message.sendDate = new Date(Date.now());
 
     return message

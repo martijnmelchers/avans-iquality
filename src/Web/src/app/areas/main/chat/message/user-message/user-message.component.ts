@@ -13,7 +13,7 @@ export class UserMessageComponent implements OnInit {
 
   public textMessage: TextMessage
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.textMessage = this.message as TextMessage

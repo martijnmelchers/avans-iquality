@@ -46,7 +46,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                     break;
                 case PatientDataIntentNames.SaveWeight:
                     await SaveData(userText, chat, patientId, MeasurementType.Weight);
-                    response.RespondText("Weight is duly noted!");
+                    response.RespondText("Your weight is duly noted!");
                     chat.Intent.Clear();
                     break;
 
@@ -56,7 +56,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                     break;
                 case PatientDataIntentNames.SaveBloodPressure:
                     await SaveData(userText, chat, patientId, MeasurementType.BloodPressure);
-                    response.RespondText("Bloodpressure is duly noted!");
+                    response.RespondText("Your blood pressure is duly noted!");
                     chat.Intent.Clear();
                     break;
 
@@ -66,13 +66,13 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                     break;
                 case PatientDataIntentNames.SaveCholesterol:
                     await SaveData(userText, chat, patientId, MeasurementType.Cholesterol);
-                    response.RespondText("Cholesterol is duly noted!");
+                    response.RespondText("Your cholesterol is duly noted!");
                     chat.Intent.Clear();
                     break;
                 case PatientDataIntentNames.GetWeightGraph:
                     var data = await GetData(patientId, MeasurementType.Weight);
 
-                    response.RespondGraph("Sure, heres your progress", new GraphData
+                    response.RespondGraph("Sure, here is your progress", new GraphData
                     {
                         Title = "Weight over time",
                         Options = new GraphOptions
@@ -92,7 +92,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                         },
                         Entries = data.Select(x => new GraphEntry
                         {
-                            Date = x.Date.ToString(CultureInfo.InvariantCulture),
+                            Date = x.Date.ToString("yyyy-MM-ddTHH:mm:ssZ"),
                             Group = MeasurementType.Weight.ToString(),
                             Value = x.Value
                         }).ToList()
