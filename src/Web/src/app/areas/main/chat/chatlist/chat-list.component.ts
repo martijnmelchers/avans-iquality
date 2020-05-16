@@ -30,7 +30,7 @@ export class ChatListComponent implements OnInit {
       if(response != null)
       {
         response.forEach(e => {
-          if(e.chat.ay !== undefined)
+          if(e.chat.type === "BuddyChat")
           {
             this.buddyChats.push(e);
           }
@@ -80,11 +80,11 @@ export class ChatListComponent implements OnInit {
   searchValueChange($event: string) {
     this.searchChatName = $event;
     this.filteredPatientChats = this.patientChats.filter(i => {
-      return i.chat.name.indexOf(this.searchChatName) >= 0;
+      return i.chat.name.toLowerCase().indexOf(this.searchChatName.toLowerCase()) >= 0;
     });
 
     this.filteredBuddyChats = this.buddyChats.filter(i => {
-      return i.chat.name.indexOf(this.searchChatName) >= 0;
+      return i.chat.name.toLowerCase().indexOf(this.searchChatName.toLowerCase()) >= 0;
     });
   }
 
