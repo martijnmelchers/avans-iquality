@@ -46,5 +46,19 @@ namespace IQuality.Infrastructure.Database.Repositories
 
             return patient.TipIds;
         }
+
+        public async Task<List<string>> DeleteTipIdFromPatient(string tipId, string patientId)
+        {
+            var patient = await Session.Query<Patient>().OfType<Patient>().Where(p => p.Id == patientId).FirstAsync();
+
+            if (patient.TipIds.Contains(tipId))
+            {
+                patient.TipIds.Remove(tipId);
+            }
+
+            await Session.StoreAsync(patient);
+
+            return patient.TipIds;
+        }
     }
 }

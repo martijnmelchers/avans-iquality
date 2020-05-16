@@ -8,5 +8,6 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
     {
         Task<List<Patient>> GetAllPatientsOfDoctorAsync(string doctorId);
         Task<List<string>> AddTipIdToPatient(string tipId, string patientId);
+        Task<List<string>> DeleteTipIdFromPatient(string tipId, string patientId);
     }
 }

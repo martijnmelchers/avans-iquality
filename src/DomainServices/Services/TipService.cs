@@ -39,30 +39,6 @@ namespace IQuality.DomainServices.Services
             return createdTip;
         }
 
-        public async Task<string> ConnectTipsToPatients(string tipId, string tipActionType, string doctorId)
-        {
-            var patients = await _patientRepository.GetAllPatientsOfDoctorAsync(doctorId);
-
-            foreach (Patient patient in patients)
-            {
-                var patientChatId = await _chatRepository.GetPatientChatByPatientId(patient.Id);
-
-                var patientGoalIdsList = await _goalRepository.GetGoalIdsOfPatientByChatId(patientChatId);
-
-                var patientActionTypesList = await _actionRepository.GetActionTypesOfGoalIds(patientGoalIdsList);
-
-                foreach (string actionType in patientActionTypesList)
-                {
-                    if (tipActionType == actionType && !patient.TipIds.Contains(tipId))
-                    {
-                        await _patientRepository.AddTipIdToPatient(tipId, patient.Id);
-                    }
-                }
-            }
-
-            return doctorId;
-        }
-
         public async Task<Tip> EditTipAsync(string id, Tip tip, string doctorId)
         {
             tip.Id = id;
@@ -87,6 +63,45 @@ namespace IQuality.DomainServices.Services
         public async Task<Tip> GetTipByIdAsync(string id)
         {
             return await _tipRepository.GetTipByIdAsync(id);
+        }
+
+        public async Task<string> ConnectTipsToPatients(string tipId, string tipActionType, string doctorId)
+        {
+            var patients = await _patientRepository.GetAllPatientsOfDoctorAsync(doctorId);
+
+            foreach (Patient patient in patients)
+            {
+                var patientChatId = await _chatRepository.GetPatientChatByPatientId(patient.Id);
+
+                var patientGoalIdsList = await _goalRepository.GetGoalIdsOfPatientByChatId(patientChatId);
+
+                var patientActionTypesList = await _actionRepository.GetActionTypesOfGoalIds(patientGoalIdsList);
+
+                foreach (string actionType in patientActionTypesList)
+                {
+                    if (tipActionType == actionType && !patient.TipIds.Contains(tipId))
+                    {
+                        await _patientRepository.AddTipIdToPatient(tipId, patient.Id);
+                    }
+                }
+            }
+
+            return doctorId;
+        }
+
+        public async Task<string> DeleteTipFromPatients(string tipId, string doctorId)
+        {
+            var patients = await _patientRepository.GetAllPatientsOfDoctorAsync(doctorId);
+
+            foreach (Patient patient in patients)
+            {
+                if (patient.TipIds.Contains(tipId))
+                {
+                    await _patientRepository.DeleteTipIdFromPatient(tipId, patient.Id);
+                }
+            }
+
+            return doctorId;
         }
     }
 }
