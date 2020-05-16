@@ -27,34 +27,37 @@ import {
 } from "@carbon/icons-angular";
 import {DoctorComponent} from "@IQuality/areas/main/doctor/doctor.component";
 import { ChatInstanceComponent } from './chat/chat-instance/chat-instance.component';
-import { DiagramComponent } from './chat/chat-diagram/diagram/diagram.component';
+import {ChartsModule} from "@carbon/charts-angular";
+import { UserMessageComponent } from './chat/message/user-message/user-message.component';
+import { BotMessageComponent } from './chat/message/bot-message/bot-message.component';
 
 @NgModule({
-  declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatListComponent, DoctorComponent, ChatInstanceComponent, DiagramComponent],
-  imports: [
-    CommonModule,
-    MainRoutingModule,
-    TableModule,
-    GridModule,
-    InputModule,
-    ButtonModule,
-    ReactiveFormsModule,
-    TilesModule,
-    ListModule,
-    StructuredListModule,
-    AddModule,
-    FormsModule,
-    SendAltModule,
-    CloseModule,
-    ColumnModule,
-    TagModule,
-    ToggleModule,
-    DotMarkModule,
-    TrashCanModule,
-    DeleteModule,
-    NotificationModule,
+  declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatListComponent, DoctorComponent, ChatInstanceComponent, UserMessageComponent, BotMessageComponent],
+    imports: [
+        CommonModule,
+        MainRoutingModule,
+        TableModule,
+        GridModule,
+        InputModule,
+        ButtonModule,
+        ReactiveFormsModule,
+        TilesModule,
+        ListModule,
+        StructuredListModule,
+        AddModule,
+        FormsModule,
+        SendAltModule,
+        CloseModule,
+        ColumnModule,
+        TagModule,
+        ToggleModule,
+        DotMarkModule,
+        TrashCanModule,
+        DeleteModule,
+        NotificationModule,
+        ChartsModule,
 
-  ],
+    ],
   providers: []
 })
 export class MainModule {

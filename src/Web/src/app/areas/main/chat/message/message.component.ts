@@ -11,26 +11,12 @@ import {Listable} from "@IQuality/core/models/listable";
   styleUrls: ['./message.component.scss']
 })
 export class MessageComponent implements OnInit {
-  @Input("message") message: TextMessage;
-  public suggestions = Array<Suggestion>();
-  public options: Array<string>;
 
-  constructor(public auth: AuthenticationService, public chatService: ChatService) { }
+  @Input("message") message: TextMessage;
+  constructor(public auth: AuthenticationService) { }
 
   ngOnInit(): void {
-    this.suggestions.push(new Suggestion("Show active goals", "Get goals"));
-    this.suggestions.push(new Suggestion("Set goal", "Set goal"));
+
   }
 
-  public onSuggestionClicked(suggestion : Suggestion) {
-      this.chatService.sendMessage(suggestion.value);
-  }
-
-  onClickDelete(message: TextMessage, data: Listable) {
-    this.chatService.deleteGoal(message, data);
-  }
-
-  onClickSayText(data : Listable) {
-    if(data.isClickable) this.chatService.sendMessage(data.text);
-  }
 }

@@ -1,0 +1,130 @@
+$title-pad: 0.5rem;
+$my-color: #707070;
+$other-color: #AB0549;
+$text-padding: 0.8rem;
+
+
+.message-box {
+
+  margin: 0 0.7rem;
+
+  &.my-message-box{
+    text-align: right;
+  }
+
+  &.other-message-box{
+    text-align: left;
+  }
+}
+
+.message-box p {
+  font-size: 0.6rem;
+
+  &.my-p{
+    margin-left: 0.3rem;
+  }
+  &.other-p{
+    margin-right: 0.3rem;
+  }
+}
+
+.message-time{
+  vertical-align: center;
+  display: block;
+
+  font-size: 0.4rem;
+  color: white;
+
+  &.my-time{
+    text-align: left;
+  }
+
+  &.other-time {
+    text-align: right;
+  }
+
+  &.bot-time {
+    text-align: right;
+    color: #333333;
+  }
+}
+
+.text {
+  vertical-align: sub;
+  text-align: left;
+  display: inline-block;
+
+  line-height: $title-pad + 1rem;
+  padding: $title-pad;
+
+  white-space: normal;
+
+  border-radius: 0.6rem;
+  color: white;
+
+  word-wrap:break-word;
+
+  &.my-text {
+    max-width: 100%;
+    background: $my-color;
+    padding-right: $text-padding
+  }
+
+  &.other-text {
+    max-width: 80%;
+    padding-left: $text-padding;
+    background: $other-color;
+
+  }
+
+  &.bot-text {
+    padding-left: 0;
+    max-width: 80%;
+    color: #333333;
+  }
+}
+
+
+.bot-border{
+  border-radius: 0;
+  border: solid transparent;
+  border-left-color: #AB0549;
+  padding-left: $title-pad;
+}
+
+.options-border{
+  padding-bottom: 0.5rem;
+
+  margin-bottom: 0.3rem;
+  margin-left: 0.5rem;
+  margin-right: $text-padding;
+
+  width: 100%;
+
+  display: inline-block;
+
+  border-bottom: solid  rgba(232, 232, 232, .5);;
+  border-width: thin;
+
+  cursor: pointer;
+  color: black;
+}
+
+.suggestion-chips{
+  cursor: pointer;
+  display: inline-block;
+  border-radius: 2rem;
+  font-size: 0.8rem;
+  background-color: lightgray;
+  color: black;
+  opacity: 0.8;
+  padding: 0.8rem 0.5rem 0.8rem 0.5rem;
+  margin: 0.2rem 0.2rem;
+}
+
+.row-list {
+  height: 2.6em;
+  border-bottom: solid #3939396b;
+  border-width: 1px;
+  align-items: center;
+}
