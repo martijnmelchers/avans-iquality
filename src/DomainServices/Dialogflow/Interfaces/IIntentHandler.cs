@@ -7,6 +7,6 @@ namespace IQuality.DomainServices.Dialogflow.Interfaces
 {
     public interface IIntentHandler
     {
-        Task<BotMessage> HandleClientIntent(PatientChat chat, string userInput, QueryResult queryResult);
+        Task<BotMessage> HandleClientIntent(PatientChat chat, string userInput, QueryResult queryResult, string patientId);
     }
 }

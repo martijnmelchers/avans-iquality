@@ -26,6 +26,7 @@ export class ChatService {
 
   //Messages zijn voor alles om te laten zien
   public messages: Array<Message> = [];
+
   public messageSubject: EventEmitter<void> = new EventEmitter<void>(false);
   //Database messages zijn de messages die opgeslagen zijn in de database
 
@@ -52,6 +53,7 @@ export class ChatService {
       this.messages.push(response);
       this.messageSubject.next()
     }
+
   }
 
   public async createBuddychat(name: string, isBuddyChat: boolean): Promise<ChatContext> {
@@ -155,7 +157,7 @@ export class ChatService {
     })
   }
 
-  deleteGoal(message: TextMessage, data: Listable) {
+  deleteGoal(message: BotMessage, data: Listable) {
     this._api.delete(`/dialogflow/goal/${data.id}`).then(() => {
       const index = message.listData.indexOf(data, 0);
       if (index > -1) {

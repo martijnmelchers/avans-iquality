@@ -16,6 +16,7 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
   public scrollHeight: number;
 
   @ViewChild('chatScroll') public chatScrollContainer: ElementRef;
+
   constructor(private formBuilder: FormBuilder, public chatService: ChatService, private route: ActivatedRoute, private _location: Location) { }
 
   async ngOnInit() {
