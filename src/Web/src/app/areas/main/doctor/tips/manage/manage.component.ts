@@ -55,12 +55,11 @@ export class ManageComponent implements OnInit {
   }
 
   async deleteTip(){
-    if(confirm("Are you sure to delete this tip")) {
-
+    
     let id = this._route.snapshot.paramMap.get('id');
     await this._api.delete(`/doctor/delete/${id}`);
     this._navRoute.navigateByUrl('/doctor/tips');
-    }
+    
   }
 
 }
