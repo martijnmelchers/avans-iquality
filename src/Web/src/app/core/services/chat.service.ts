@@ -166,4 +166,8 @@ export class ChatService {
       }
     });
   }
+
+  getContactName(chatId: string) {
+    return this._api.get<string>(`/chats/${chatId}/contact`, null, {responseType: "text"});
+  }
 }

@@ -7,7 +7,7 @@ namespace IQuality.Models.Authentication
         public FullName Name { get; set; }
 
         public Address Address { get; set; }
-
+    
         // For the future :-)
         //public string ProfilePicturePath { get; set; }
     }

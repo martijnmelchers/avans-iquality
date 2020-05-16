@@ -7,4 +7,6 @@ export class BaseChat {
 
   initiatorId: string;
   messages: Array<Message>;
+
+  type: string;
 }
