@@ -61,7 +61,10 @@ export class ManageComponent implements OnInit {
 
   }
 
-  async onSubmit() {    
+  async onSubmit() { 
+    this.tip.name = this.tipForm.value.name;  
+    this.tip.description = this.tipForm.value.description;  
+    this.tip.actionType = this.tipForm.value.selectedAction;  
     let id = this._route.snapshot.paramMap.get('id');
     await this._api.put(`/doctor/edit/${id}`,this.tip);
     this._navRoute.navigateByUrl('/doctor/tips');

@@ -79,6 +79,10 @@ namespace IQuality.DomainServices.Services
 
                 foreach (string actionType in patientActionTypesList)
                 {
+                    if (patient.TipIds == null)
+                    {
+                        await _patientRepository.InitializeTipIdsList(patient.Id);
+                    }
                     if (tipActionType == actionType && !patient.TipIds.Contains(tipId))
                     {
                         await _patientRepository.AddTipIdToPatient(tipId, patient.Id);
