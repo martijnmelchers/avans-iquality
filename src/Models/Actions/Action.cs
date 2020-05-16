@@ -1,6 +1,7 @@
-﻿using IQuality.Models.Chat.Messages;
-using IQuality.Models.Goals;
+﻿using System.Collections.Generic;
+using IQuality.Models.Chat.Messages;
 using IQuality.Models.Interfaces;
+using IQuality.Models.Measurements;
 
 namespace IQuality.Models.Actions
 {
@@ -11,7 +12,13 @@ namespace IQuality.Models.Actions
         
         public string GoalId { get; set; }
         public ActionType Type { get; set; }
+        public List<Measurement> Measurements { get; set; }
         public string Description { get; set; }
         public Listable ToListable(bool clickable = false, bool removable = false)  => new Listable(Description, Id, clickable, removable);
+
+        public Action()
+        {
+            Measurements = new List<Measurement>();
+        }
     }
 }

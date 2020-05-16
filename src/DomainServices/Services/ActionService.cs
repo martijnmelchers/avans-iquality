@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models.Actions;
 using IQuality.Models.Goals;
 using IQuality.Models.Helpers;
 using IQuality.Models.Interfaces;
+using IQuality.Models.Measurements;
+using Action = IQuality.Models.Actions.Action;
 
 namespace IQuality.DomainServices.Services
 {
@@ -20,9 +23,8 @@ namespace IQuality.DomainServices.Services
         
         public async Task<Action> CreateAction(string chatId, string goalId, string description, string actionType)
         {
-            ActionType type;
-            ActionType.TryParse(actionType, out type);
-            var action = new Action
+            Enum.TryParse(actionType, out ActionType type);
+            var action = new Action()
             {
                 Type =  type,
                 Description = description,
@@ -33,6 +35,13 @@ namespace IQuality.DomainServices.Services
             await _actionRepository.SaveAsync(action);
             return action;
         }
+
+        public async Task AddMeasurement(string goalId, double value)
+        {
+            var action = await _actionRepository.GetByIdAsync(goalId);
+            
+            action.Measurements.Add(new Measurement(value));
+        } 
 
         public async Task<List<Action>> GetActions(string chatId)
         {
