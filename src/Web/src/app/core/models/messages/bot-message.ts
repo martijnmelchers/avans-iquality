@@ -9,7 +9,8 @@ export class BotMessage extends Message{
   chatId: string;
   sendDate: Date;
   content: string;
-  listData: Array<Listable>
+
+  listData?: Array<Listable>
 
   responseType: ResponseType;
 

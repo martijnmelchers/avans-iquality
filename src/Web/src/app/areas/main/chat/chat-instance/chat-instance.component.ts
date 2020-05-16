@@ -16,6 +16,9 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
 
   @ViewChild('chatScroll') public chatScrollContainer: ElementRef;
 
+
+
+
   constructor(private formBuilder: FormBuilder, public chatService: ChatService, private route: ActivatedRoute) {
   }
 
