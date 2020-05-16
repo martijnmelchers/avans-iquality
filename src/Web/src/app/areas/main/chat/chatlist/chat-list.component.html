@@ -54,15 +54,15 @@
     </div>
   </div>
   <div ibmRow>
-    <button ibmCol ibmButton (click)="onBuddyChatCreate(true)">
+    <button ibmCol ibmButton (click)="onChatCreate(true)">
       Create Buddychat
     </button>
-    <button ibmCol ibmButton (click)="onBuddyChatCreate(false)">
+    <button ibmCol ibmButton (click)="onChatCreate(false)">
       Create Patientchat
     </button>
     <label>
       Name
-      <input ibmText [(ngModel)]="chatName">
+      <input ibmText [(ngModel)]="createChatName">
     </label>
   </div>
 </div>
