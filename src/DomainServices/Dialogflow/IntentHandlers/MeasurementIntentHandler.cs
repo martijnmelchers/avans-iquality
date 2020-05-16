@@ -85,7 +85,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                             },
                             Left = new GraphAxis
                             {
-                                Title = "Weight",
+                                Title = "Weight(KG)",
                                 MapsTo = "value",
                                 ScaleType = "linear"
                             }
