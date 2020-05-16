@@ -24,7 +24,7 @@ namespace IQuality.DomainServices.Services
         public async Task<Action> CreateAction(string chatId, string goalId, string description, string actionType)
         {
             Enum.TryParse(actionType, out ActionType type);
-            var action = new Action()
+            var action = new Action
             {
                 Type =  type,
                 Description = description,
@@ -35,13 +35,6 @@ namespace IQuality.DomainServices.Services
             await _actionRepository.SaveAsync(action);
             return action;
         }
-
-        public async Task AddMeasurement(string goalId, double value)
-        {
-            var action = await _actionRepository.GetByIdAsync(goalId);
-            
-            action.Measurements.Add(new Measurement(value));
-        } 
 
         public async Task<List<Action>> GetActions(string chatId)
         {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using IQuality.Models.Chat.Messages.Graph;
 using IQuality.Models.Dialogflow;
 using IQuality.Models.Forms;
-using IQuality.Models.Interfaces;
 
 namespace IQuality.Models.Chat.Messages
 {
@@ -10,6 +10,7 @@ namespace IQuality.Models.Chat.Messages
         public string Content { get; set; }
         public List<Suggestion> Suggestions { get; set; }
         public List<Listable> ListData { get; set; }
+        public GraphData GraphData { get; set; }
         public ResponseType ResponseType { get; set; }
 
         public BotMessage()
@@ -31,6 +32,13 @@ namespace IQuality.Models.Chat.Messages
             Content = content;
             ListData = data;
             ResponseType = ResponseType.List;
+        }
+
+        public void RespondGraph(string content, GraphData graph)
+        {
+            Content = content;
+            GraphData = graph;
+            ResponseType = ResponseType.Graph;
         }
     }
 }
