@@ -6,5 +6,6 @@
         public const string Action = "Action";
         public const string Cancel = "Cancel";
         public const string Fallback = "Fallback";
+        public const string PatientData = "PatientData";
     }
 }

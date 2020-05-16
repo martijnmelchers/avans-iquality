@@ -24,7 +24,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
             _goalService = goalService;
         }
 
-        public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userInput, QueryResult queryResult)
+        public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userInput, QueryResult queryResult, string patientId)
         {
             var response = new BotMessage();
 

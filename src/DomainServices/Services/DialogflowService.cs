@@ -26,14 +26,16 @@ namespace IQuality.DomainServices.Services
 
         private readonly IGoalIntentHandler _goalIntentHandler;
         private readonly IActionIntentHandler _actionIntentHandler;
+        private readonly IPatientDataIntentHandler _patientDataIntentHandler;
 
         public DialogflowService(
             IResponseBuilderService responseBuilderService, IChatRepository chatRepository, 
-            IGoalIntentHandler goalIntentHandler, IActionIntentHandler actionIntentHandler,
+            IGoalIntentHandler goalIntentHandler, IActionIntentHandler actionIntentHandler, IPatientDataIntentHandler patientDataIntentHandler,
             IMessageService messageService)
         {
             _goalIntentHandler = goalIntentHandler;
             _actionIntentHandler = actionIntentHandler;
+            _patientDataIntentHandler = patientDataIntentHandler;
             _responseBuilderService = responseBuilderService;
 
             _chatRepository = chatRepository;
@@ -45,7 +47,7 @@ namespace IQuality.DomainServices.Services
                 "dialogflow.config.json");
         }
 
-        public async Task<BotMessage> ProcessClientRequest(string text, string chatId)
+        public async Task<BotMessage> ProcessClientRequest(string text, string chatId, string patientId)
         {
             var chatContext = await _chatRepository.GetPatientChatAsync(chatId);
             var result = await _responseBuilderService.BuildTextResponse(text, IntentNames.Default);
@@ -63,8 +65,9 @@ namespace IQuality.DomainServices.Services
 
             var message = chatContext.Intent.Type switch
             {
-                IntentTypes.Goal => await _goalIntentHandler.HandleClientIntent(chatContext, text, result),
-                IntentTypes.Action => await _actionIntentHandler.HandleClientIntent(chatContext, text, result),
+                IntentTypes.Goal => await _goalIntentHandler.HandleClientIntent(chatContext, text, result, patientId),
+                IntentTypes.Action => await _actionIntentHandler.HandleClientIntent(chatContext, text, result, patientId),
+                IntentTypes.PatientData => await _patientDataIntentHandler.HandleClientIntent(chatContext, text, result, patientId),
                 IntentTypes.Cancel => SendDefaultResponse(chatContext, result),
                 IntentTypes.Fallback => SendDefaultResponse(chatContext, result),
                 _ => throw new UnknownIntentException()
