@@ -98,6 +98,8 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                         }).ToList()
                     });
 
+                    chat.Intent.Clear();
+
 
                     break;
 
@@ -110,7 +112,8 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
             return response;
         }
 
-        private async Task<List<Measurement>> GetData(string patientId, MeasurementType type) => await _measurementRepository.GetAllWhereAsync(x => x.PatientId == patientId && x.DataType == type);
+        private async Task<List<Measurement>> GetData(string patientId, MeasurementType type) =>
+            await _measurementRepository.GetAllWhereAsync(x => x.PatientId == patientId && x.DataType == type);
     }
 
     public static class PatientDataIntentNames
