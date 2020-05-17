@@ -3,6 +3,13 @@
         <div ibmCol>
             <ibm-structured-list [border]="true" [condensed]="false" [nowrap]="false">
                 <ibm-list-header>
+                  <ibm-notification [notificationObj]="{
+                    type: 'info',
+                    title: notification?.name,
+                    message: notification?.description,
+                    showClose: false
+                  }">
+                      </ibm-notification>
                     <ibm-list-column>Gesprekken</ibm-list-column>
                 </ibm-list-header>
                 <ibm-list-row *ngFor="let item of chats" [routerLink]="['/chat/', item.chat.id]">
