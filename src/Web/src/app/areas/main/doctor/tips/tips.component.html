@@ -1,5 +1,14 @@
 <div ibmGrid>
   <h2>Tips beheren</h2>
+
+  <ibm-notification [notificationObj]="{
+    type: 'success',
+    title: 'Beweeg',
+    message: 'Wissel van positie',
+    showClose: showClose
+  }">
+			</ibm-notification>
+
   <button ibmButton (click)="navigateToAdd()" style="float: right; margin-bottom: 10px;background-color: green;">
     Add
     <svg class="bx--btn__icon" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">

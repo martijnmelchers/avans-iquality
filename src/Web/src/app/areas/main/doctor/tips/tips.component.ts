@@ -18,6 +18,8 @@ export class TipsComponent implements OnInit {
   public model: TableModel = new TableModel();
   private tips = [];
   customTableItemTemplate: TemplateRef<any>;
+  public showClose: boolean = true;
+
 
 
 
