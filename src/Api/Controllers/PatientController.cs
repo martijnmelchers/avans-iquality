@@ -12,7 +12,7 @@ using Raven.Client.Documents.Session;
 
 namespace IQuality.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("/patient")]
     public class PatientController : RavenApiController
     {
         private readonly IAsyncDocumentSession _session;
@@ -24,7 +24,7 @@ namespace IQuality.Api.Controllers
             _patientService = patientService;
         }
 
-        [HttpGet, Route("getallpatientsofdoctor"), Authorize(Roles = Roles.Doctor)]
+        [HttpGet, Authorize(Roles = Roles.Doctor)]
         public async Task<IActionResult> GetAllPatients()
         {
             return Ok(await _patientService.GetAllPatientsOfDoctorAsync(HttpContext.User.GetUserId()));

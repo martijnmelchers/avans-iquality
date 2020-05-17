@@ -11,6 +11,19 @@
       <input type="text" class="form-control" formControlName="name">
     </div>
 
+    <div *ngIf="tipForm.get('name').invalid && (tipForm.get('name').dirty || tipForm.get('name').touched)"
+    class="alert alert-danger">
+    <div *ngIf="tipForm.get('name').errors.required">
+      Name is required.
+    </div>
+    <div *ngIf="tipForm.get('name').errors.maxlength">
+      Name cannot be more than 20 characters long.
+    </div>
+    <div *ngIf="tipForm.get('name').errors.minlength">
+      Name must be at least 5 characters long.
+    </div>
+  </div>
+
     <div class="form-group">
       <label>
         Tip beschrijving:
@@ -19,6 +32,20 @@
     <div class="form-group">
       <input type="text" size="35" class="form-control" formControlName="description">
     </div>
+
+    <div
+    *ngIf="tipForm.get('description').invalid && (tipForm.get('description').dirty || tipForm.get('description').touched)"
+    class="alert alert-danger">
+    <div *ngIf="tipForm.get('description').errors.required">
+      Description is required.
+    </div>
+    <div *ngIf="tipForm.get('description').errors.maxlength">
+      Description cannot be more than 50 characters long.
+    </div>
+    <div *ngIf="tipForm.get('description').errors.minlength">
+      Description must be at least 5 characters long.
+    </div>
+  </div>
 
     <div class="form-group">
       <select formControlName="selectedAction" class="form-control">

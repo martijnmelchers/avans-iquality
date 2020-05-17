@@ -16,7 +16,7 @@ using Raven.Client.Documents.Session;
 namespace IQuality.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/buddy")]
     public class BuddyChatController : RavenApiController
     {
 
@@ -27,7 +27,7 @@ namespace IQuality.Api.Controllers
             _buddyGroupService = buddyGroupService;
         }
 
-        [HttpGet("getMyBuddyChats/{userId}"), Authorize(Roles = Roles.Patient)]
+        [HttpGet("{userId}"), Authorize(Roles = Roles.Patient)]
         public async Task<IActionResult> GetBuddyChatsByUserId(string userId)
         {
             var result = await _buddyGroupService.GetBuddyChatsByUserId(userId);
