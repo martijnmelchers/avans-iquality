@@ -32,6 +32,12 @@ namespace IQuality.Api.Controllers
             return Ok(await _tipService.GetTipByIdAsync(tipId));
         }
 
+        [HttpGet, Route("getrandomtip")]
+        public async Task<IActionResult> GetRandomTip()
+        {
+            return Ok(await _tipService.GetRandomTipOfPatient(HttpContext.User.GetUserId()));
+        }
+
         [HttpPost, Authorize(Roles = Roles.Doctor)]
         public async Task<IActionResult> CreateTip([FromBody] Tip tip)
         {

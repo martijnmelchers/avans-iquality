@@ -74,5 +74,21 @@ namespace IQuality.Infrastructure.Database.Repositories
 
             return patient.TipIds;
         }
+
+        public async Task<string> GetRandomTipIdFromPatient(string patientId)
+        {
+            var patient = await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == patientId).FirstAsync();
+
+            string returnTipId = "-1";
+
+            // if tipIds is initialized and tipIds has a tip
+            if (patient.TipIds != null && patient.TipIds.Count != 0)
+            {
+                Random rnd = new Random();
+                returnTipId = patient.TipIds[rnd.Next(patient.TipIds.Count)];
+            }
+
+            return returnTipId;
+        }
     }
 }

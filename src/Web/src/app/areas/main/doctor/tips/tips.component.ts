@@ -33,6 +33,10 @@ export class TipsComponent implements OnInit {
     });
 
     console.log(this.tips);
+
+    await this._api.get<Tip>('/tip/getrandomtip').then(resp => {
+      console.log('random tip: ', resp);
+    })
   }
 
   private loadScreen() {
