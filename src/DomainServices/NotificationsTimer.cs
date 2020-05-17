@@ -7,14 +7,15 @@ using System.Timers;
 namespace IQuality.DomainServices
 {
     [Injectable]
-    public class TaskScheduler : ITaskScheduler
+    public class NotificationsTimer : INotificationsTimer
     {
         private readonly IActionRepository _actionRepository;
         private Timer _timer = new Timer();
         private int counter = 0;
 
-        public TaskScheduler(IActionRepository actionRepository)
+        public NotificationsTimer(IActionRepository actionRepository)
         {
+            Console.WriteLine("Notificationstimer constructor called!!>>>>>>>>>>>>>>>>>>");
             _actionRepository = actionRepository;
 
             _timer.Interval = 15 * 1000;
@@ -31,12 +32,6 @@ namespace IQuality.DomainServices
             }
         }
 
-        private void Stop()
-        {
-            counter++;
-            _timer.Stop();
-        }
-
         // TODO: session disposed fixen
         private async void Start()
         {
@@ -49,8 +44,14 @@ namespace IQuality.DomainServices
                 // send notification
 
                 // get all actions
-                var result = await _actionRepository.GetAllToBeSentActionsAsync();
-                Console.WriteLine(result.Count);
+                try
+                {
+                    var result = await _actionRepository.GetAllToBeSentActionsAsync("actions-1-A");
+                    //Console.WriteLine(result.Count);
+                }catch(ObjectDisposedException e)
+                {
+                    //Console.WriteLine(e.Message);
+                }
             }
 
             _timer.Start();

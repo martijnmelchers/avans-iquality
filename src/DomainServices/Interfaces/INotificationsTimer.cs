@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace IQuality.DomainServices.Interfaces
 {
-    public interface ITaskScheduler
+    public interface INotificationsTimer
     {
     }
 }

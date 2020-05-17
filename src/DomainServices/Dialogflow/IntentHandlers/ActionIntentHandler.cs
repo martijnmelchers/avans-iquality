@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Google.Cloud.Dialogflow.V2;
 using IQuality.DomainServices.Dialogflow.Interfaces;

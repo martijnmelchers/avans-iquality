@@ -24,10 +24,30 @@ namespace IQuality.Infrastructure.Database.Repositories
             return Task.FromResult(storage);
         }
 
-        public async Task<List<Action>> GetAllToBeSentActionsAsync()
+        public async Task<List<Action>> GetAllToBeSentActionsAsync(string actionId)
         {
-            var result = await Session.Query<Action>().OfType<Action>().ToListAsync();
-            return result;
+            try
+            {
+                //int yesterdaysDayOfYear = DateTime.Now.DayOfYear - 1;
+                int yesterdaysDayOfYear = DateTime.Now.DayOfYear;
+                string yesterdaysDayOfYearString = yesterdaysDayOfYear.ToString();
+
+                int lastWeeksDayOfYear = DateTime.Now.DayOfYear - 7;
+                string lastWeeksDayOfYearString = yesterdaysDayOfYear.ToString();
+
+                int lastMonthsDayOfYear = DateTime.Now.DayOfYear - 31;
+                string lastMonthsDayOfYearString = yesterdaysDayOfYear.ToString();
+
+                var result = await Session.Query<Action>().OfType<Action>().ToListAsync();
+                //var result = await Session.LoadAsync<Action>(actionId);
+                //var result = await Session.Query<Action>().Where(a => a.LastReminded == yesterdaysDayOfYearString).ToListAsync();
+                return null;
+            }catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return null;
         }
 
         public async Task<Interval> GetActionReminderIntervalAsync(string actionId)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
 using IQuality.Models.Actions;
@@ -14,10 +15,11 @@ namespace IQuality.DomainServices.Services
     public class ActionService : IActionService
     {
         private readonly IActionRepository _actionRepository;
-        private bool _notificationTimerSet = false;
+        //private bool _notificationTimerSet = false;
 
-        public ActionService(IActionRepository actionRepository)
+        public ActionService(IActionRepository actionRepository, INotificationsTimer notificationsTimer)
         {
+            Console.WriteLine("ActionService constructor called!!<<<<<<<<<<<<<<");
             _actionRepository = actionRepository;
         }
         
@@ -50,12 +52,6 @@ namespace IQuality.DomainServices.Services
 
         public async Task<Action> SetActionReminderSettingsAsync(Interval interval, string actionId)
         {
-            if (!_notificationTimerSet)
-            {
-                new TaskScheduler(_actionRepository);
-                _notificationTimerSet = true;
-            }
-
             var result = await _actionRepository.SetActionReminderSettingsAsync(interval, actionId);
 
             return result;
