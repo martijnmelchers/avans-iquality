@@ -50,7 +50,7 @@ export class AddTipComponent implements OnInit {
     data.ActionType = this.tipForm.value.selectedAction;
 
     console.log(this.tipForm.value);
-    await this._api.post<Tip>('/doctor/createtip',data);
+    await this._api.post<Tip>('/tip',data);
     this._route.navigateByUrl('/doctor/tips');
 
   }

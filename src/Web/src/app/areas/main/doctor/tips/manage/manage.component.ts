@@ -42,7 +42,7 @@ export class ManageComponent implements OnInit {
   async ngOnInit(): Promise<any> {
     let id = this._route.snapshot.paramMap.get('id');
 
-    await this._api.get<any>(`/doctor/gettipbyid/${id}`).then(resp => {
+    await this._api.get<any>(`/tip/${id}`).then(resp => {
       this.tip = resp;
       this.tipForm.patchValue({
         name: this.tip.name,
@@ -66,14 +66,14 @@ export class ManageComponent implements OnInit {
     this.tip.description = this.tipForm.value.description;  
     this.tip.actionType = this.tipForm.value.selectedAction;  
     let id = this._route.snapshot.paramMap.get('id');
-    await this._api.put(`/doctor/edit/${id}`,this.tip);
+    await this._api.put(`/tip/${id}`,this.tip);
     this._navRoute.navigateByUrl('/doctor/tips');
   }
 
   async deleteTip(){
     
     let id = this._route.snapshot.paramMap.get('id');
-    await this._api.delete(`/doctor/delete/${id}`);
+    await this._api.delete(`/tip/${id}`);
     this._navRoute.navigateByUrl('/doctor/tips');
     
   }

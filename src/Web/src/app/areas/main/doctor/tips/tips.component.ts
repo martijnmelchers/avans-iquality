@@ -26,7 +26,7 @@ export class TipsComponent implements OnInit {
 
   public async ngOnInit(): Promise<any> {
     this.loadScreen();
-    await this._api.get<Array<Tip>>('/doctor/gettips').then(resp => {
+    await this._api.get<Array<Tip>>('/tip').then(resp => {
       this.tips = resp;
     });
 
