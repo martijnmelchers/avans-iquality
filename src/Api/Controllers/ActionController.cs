@@ -13,7 +13,7 @@ using Raven.Client.Documents.Session;
 
 namespace IQuality.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("/action")]
     public class ActionController : RavenApiController
     {
         private readonly IAsyncDocumentSession _session;
@@ -27,14 +27,14 @@ namespace IQuality.Api.Controllers
             _actionTypesService = actionTypesService;
         }
 
-        [HttpGet, Route("getactiontypes"), Authorize(Roles = "Patient, Doctor")]
+        [HttpGet, Authorize(Roles = "Patient, Doctor")]
         public IActionResult GetActionTypes()
         {
             return Ok(_actionTypesService.GetActionTypes());
         }
 
         // setactionreminder duratie actionid
-        [HttpPost("setactionremindersettings/{actionId}/{interval}"), Authorize(Roles = Roles.Patient)]
+        [HttpPost("{actionId}/{interval}"), Authorize(Roles = Roles.Patient)]
         public async Task<IActionResult> SetActionReminderSettings([FromRoute] Interval interval, [FromRoute] string actionId)
         {
             var result = await _actionService.SetActionReminderSettingsAsync(interval, actionId);
