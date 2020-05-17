@@ -107,5 +107,17 @@ namespace IQuality.DomainServices.Services
 
             return doctorId;
         }
+
+        public async Task<Tip> GetRandomTipOfPatient(string patientId)
+        {
+            var randomTipId = await _patientRepository.GetRandomTipIdFromPatient(patientId);
+
+            if (randomTipId != "-1")
+            {
+                return await _tipRepository.GetTipByIdAsync(randomTipId);
+            }
+
+            return new Tip();   // returns tip with Id = null, which can be checked for in the frontend.
+        }
     }
 }

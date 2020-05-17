@@ -10,5 +10,6 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
         Task<List<string>> AddTipIdToPatient(string tipId, string patientId);
         Task<List<string>> DeleteTipIdFromPatient(string tipId, string patientId);
         Task<List<string>> InitializeTipIdsList(string patientId);
+        Task<string> GetRandomTipIdFromPatient(string patientId);
     }
 }
