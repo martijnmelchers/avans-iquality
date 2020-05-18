@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {ChatService} from "@IQuality/core/services/chat.service";
-import {ChatContext} from "@IQuality/core/models/chat-context";
-import {NotificationService} from "carbon-components-angular";
-import {Message} from "@IQuality/core/models/messages/message";
+import { Component, OnInit } from '@angular/core';
+import { ChatService } from "@IQuality/core/services/chat.service";
+import { ChatContext } from "@IQuality/core/models/chat-context";
+import { NotificationService } from "carbon-components-angular";
+import { Message } from "@IQuality/core/models/messages/message";
 import { ApiService } from '@IQuality/core/services/api.service';
 import { Tip } from '@IQuality/core/models/tip';
 
@@ -27,10 +27,28 @@ export class ChatListComponent implements OnInit {
 
     }, err => console.log(err));
 
-    await this._api.get<any>('/tip/getrandomtip').then(resp =>{
-      this.notification = resp;
-      
+    // await this._api.get<any>('/tip/getrandomtip').then(resp => {
+    //   this.notification = resp;
+
+    // });
+    let thisComponent = this;
+    let OneSignal = window['OneSignal'] || [];
+    OneSignal.push( () => {
+      console.log('Register For Push');
+      OneSignal.push(["registerForPushNotifications"])
     });
+    OneSignal.push( () => {
+      console.log("firstt");
+      // Occurs when the user's subscription changes to a new value.
+      OneSignal.on('subscriptionChange',  (isSubscribed) => {
+        console.log("The user's subscription state is now:", isSubscribed);
+        OneSignal.getUserId().then(id => {
+          console.log('resp: ',id);
+          thisComponent._api.post<any>(`/patient/${id}/${isSubscribed}`,{});
+        });
+        });
+    });
+      
   }
 
   onBuddyChatCreate(isBuddyChat: boolean) {
@@ -41,19 +59,19 @@ export class ChatListComponent implements OnInit {
     }
   }
 
-    getLastMessage(chat: ChatContext): any {
-      chat.messages.sort((a, b) => {
-        if(a > b){
-          return -1;
-        }
-        if(a < b){
-          return 1;
-        }
-        return 0;
-      });
+  getLastMessage(chat: ChatContext): any {
+    chat.messages.sort((a, b) => {
+      if (a > b) {
+        return -1;
+      }
+      if (a < b) {
+        return 1;
+      }
+      return 0;
+    });
 
 
-      return chat.messages[0];
-    }
+    return chat.messages[0];
+  }
 
 }
