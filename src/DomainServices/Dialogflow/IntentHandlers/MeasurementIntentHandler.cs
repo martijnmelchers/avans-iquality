@@ -44,7 +44,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                 MatchedIntent = new MatchedIntent
                 {
                     Type = chat.Intent.Type,
-                    Name = chat.Intent.Name,
+                    Name = queryResult.Intent.Name,
                     Confidence = queryResult.IntentDetectionConfidence
                 }
             };
@@ -61,14 +61,14 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                     {
                         await SaveMeasurement(userText, chat, patientId, MeasurementType.Weight);
                         response.RespondText("Your weight is duly noted!");
+                        chat.Intent.Clear();
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         response.RespondText("I'm sorry but I can't figure out your weight, please try again. Try saying something like '80 pounds' or just '80'");
                         response.AddSuggestion("Cancel your action", "Cancel");
                     }
                     
-                    chat.Intent.Clear();
                     break;
 
                 case PatientDataIntentNames.RegisterBloodPressure:
