@@ -21,6 +21,9 @@ import {Listable} from "@IQuality/core/models/listable";
   providedIn: 'root'
 })
 export class ChatService {
+  private auth: AuthenticationService;
+  private connection: signalR.HubConnection;
+
   public chatWithBot: boolean;
   public selected: ChatContext;
 
@@ -28,22 +31,21 @@ export class ChatService {
   public messages: Array<Message> = [];
 
   public messageSubject: EventEmitter<void> = new EventEmitter<void>(false);
-  //Database messages zijn de messages die opgeslagen zijn in de database
 
   public onChatSelected: Array<() => void> = [];
 
-  private connection: signalR.HubConnection;
-
-
   private _chats: Array<ChatContext>;
-  constructor(private _api: ApiService, private auth: AuthenticationService, private _notificationService: NotificationService) {
-    this.setUpSocketConnection(auth)
+
+  constructor(private _api: ApiService, private _auth: AuthenticationService, private _notificationService: NotificationService) {
+    this._auth.SetChatService = this;
+  }
+
+  public connectWithChats() {
+    this.setUpSocketConnection(this._auth);
   }
 
   public async sendMessage(content: string) {
-
     await this.connection.send("newMessage", this.selected.chat.id, content);
-
     if (this.chatWithBot) {
 
       const patientMessage = new TextMessage();
@@ -54,7 +56,6 @@ export class ChatService {
       this.messages.push(response);
       this.messageSubject.next()
     }
-
   }
 
   public async createBuddychat(name: string, isBuddyChat: boolean): Promise<ChatContext> {
@@ -89,6 +90,9 @@ export class ChatService {
   }
 
   private hubJoinGroup(roomId: string) {
+    if(!this.connection)
+      return;
+
     this.connection.invoke("JoinGroup", roomId).catch(err => {
       console.log(err)
     });
@@ -106,7 +110,7 @@ export class ChatService {
       .withAutomaticReconnect()
       .withUrl(`${environment.endpoints.api}/hub`, {
         accessTokenFactory: () => auth.encodedToken
-      }).configureLogging(LogLevel.Warning).build();
+      }).build();
 
     this.connection.onreconnecting(() => console.log('Chat is reconnecting...'))
     this.connection.onreconnected(() => console.log('Chat is reconnected!'))
@@ -177,5 +181,17 @@ export class ChatService {
     message.sendDate = new Date(Date.now());
 
     return message
+  }
+
+  public disconnect() {
+    if(!this.connection)
+      return;
+
+    this.connection.stop();
+    this.connection = null;
+  }
+
+  public hasConnection(): boolean{
+    return this.connection != null;
   }
 }

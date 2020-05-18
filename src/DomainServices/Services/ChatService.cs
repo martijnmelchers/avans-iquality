@@ -28,14 +28,14 @@ namespace IQuality.DomainServices.Services
             return await _chatRepository.GetByIdAsync(id);
         }
 
-        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync()
+        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync(string userId)
         {
-            return await _chatRepository.GetChatsAsync(0, 100);
+            return await _chatRepository.GetChatsAsync(userId, 0, 1000);
         }
 
-        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync(int skip, int take)
+        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync(string userId, int skip, int take)
         {
-            return await _chatRepository.GetChatsAsync(skip, take);
+            return await _chatRepository.GetChatsAsync(userId, skip, take);
         }
 
         public async Task<ChatContext<BaseChat>> CreateChatAsync(BaseChat baseChat)

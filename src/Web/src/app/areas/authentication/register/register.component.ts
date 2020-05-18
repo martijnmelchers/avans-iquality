@@ -11,10 +11,9 @@ import {Invite} from "@IQuality/core/models/invite";
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-
   public form: FormGroup;
   public hasError: boolean = false;
-  private link: Invite;
+  link: Invite;
   private inviteTypes: Array<string> = ["buddy", "patient", "doctor", "admin"];
   private inviteToken: string;
   constructor(private _route: ActivatedRoute, private _fb: FormBuilder, private _api: ApiService, private _auth: AuthenticationService, private _router: Router) {

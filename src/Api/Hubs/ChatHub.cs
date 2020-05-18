@@ -64,8 +64,9 @@ namespace IQuality.Api.Hubs
         {
             string senderId = GetSenderId();
             string senderName = GetUserName();
+            
             await Clients.Group(chatId).SendAsync("messageReceived", senderId, senderName, chatId, message);
-
+            
             TextMessage textMessage = new TextMessage
             {
                 SenderId = senderId,
