@@ -14,7 +14,6 @@ export class DoctorComponent implements OnInit {
 
   ngOnInit(): void {
     this._chatService.getChatObservable().subscribe((message) => {
-      console.log(message);
       this._notificationService.showToast({
         type: "info",
         title: message.chatName,
