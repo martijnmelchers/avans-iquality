@@ -40,5 +40,15 @@ namespace IQuality.Models.Chat.Messages
             GraphData = graph;
             ResponseType = ResponseType.Graph;
         }
+
+        public void AddSuggestion(string text, string value)
+        {
+            Suggestions.Add(new Suggestion
+            {
+                Text = text,
+                Value = value,
+                Selected = false
+            });
+        }
     }
 }

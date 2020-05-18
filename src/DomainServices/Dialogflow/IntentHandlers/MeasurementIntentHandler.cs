@@ -72,6 +72,13 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                 case PatientDataIntentNames.GetWeightGraph:
                     List<Measurement> weightData = await GetData(patientId, MeasurementType.Weight);
 
+                    if (weightData.Count == 0)
+                    {
+                        response.RespondText("We don't have any recors of your weight, try adding one!");
+                        response.AddSuggestion("Setup reminders", "Setup remiders for weight tracking");
+                        response.AddSuggestion("Register current weight", "Register my current weight");
+                    }
+
                     response.RespondGraph("Sure, here is your progress", new GraphData
                     {
                         Title = "Weight over time",
@@ -85,7 +92,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                             },
                             Left = new GraphAxis
                             {
-                                Title = "Weight(KG)",
+                                Title = "Weight (Pound)",
                                 MapsTo = "value",
                                 ScaleType = "linear"
                             }
