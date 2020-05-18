@@ -109,7 +109,7 @@ namespace IQuality.Infrastructure.Database.Repositories
 
             if (isSubscribed)
                 patient.NotificationIds.Add(notificationId);
-            else
+            else if (patient.NotificationIds.Count != 0)
                 patient.NotificationIds.Remove(notificationId);
 
             await Session.StoreAsync(patient);

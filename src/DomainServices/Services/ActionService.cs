@@ -26,6 +26,7 @@ namespace IQuality.DomainServices.Services
         {
             ActionType type;
             ActionType.TryParse(actionType, out type);
+            Console.WriteLine(chatId, goalId, description, actionType);
             var action = new Action
             {
                 Type =  type,

@@ -1,9 +1,17 @@
 using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories;
+using Nancy.Json;
+using OneSignal.CSharp.SDK;
+using OneSignal.CSharp.SDK.Resources;
+using OneSignal.CSharp.SDK.Resources.Notifications;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Timers;
 using Action = IQuality.Models.Actions.Action;
 
@@ -80,7 +88,46 @@ namespace IQuality.DomainServices
                                 {
                                     foreach (string id in notificationIds)
                                     {
-                                        // send onesignal messages
+                                        var request = WebRequest.Create("https://onesignal.com/api/v1/notifications") as HttpWebRequest;
+                                        request.KeepAlive = true;
+                                        request.Method = "POST";
+                                        request.ContentType = "application/json; charset=utf-8";
+                                        var serializer = new JavaScriptSerializer();
+                                        var obj = new
+                                        {
+                                            app_id = "83238485-a09c-4593-ae5b-0281f6495b79",
+                                            contents = new { en = action.Description },
+                                            include_player_ids = new string[] { id }
+                                        };
+
+
+
+                                        var param = serializer.Serialize(obj);
+                                        byte[] byteArray = Encoding.UTF8.GetBytes(param);
+
+                                        string responseContent = null;
+                                        try
+                                        {
+                                            using (var writer = request.GetRequestStream())
+                                            {
+                                                writer.Write(byteArray, 0, byteArray.Length);
+                                            }
+
+                                            using (var response = request.GetResponse() as HttpWebResponse)
+                                            {
+                                                using (var reader = new StreamReader(response.GetResponseStream()))
+                                                {
+                                                    responseContent = reader.ReadToEnd();
+                                                }
+                                            }
+                                        }
+                                        catch (WebException ex)
+                                        {
+                                            Console.WriteLine(ex.Message);
+                                            Console.WriteLine(new StreamReader(ex.Response.GetResponseStream()).ReadToEnd());
+                                        }
+
+                                        Console.WriteLine(responseContent);
 
                                     }
                                 }
@@ -91,9 +138,6 @@ namespace IQuality.DomainServices
                         // check of de patient waar deze action van is een notificationId heeft
                         // zo ja, stuur een web push naar dat device
 
-                        // in de frontend:
-                        // vragen om notification permission            (check hoe je al die onesignal dingen met Angular kan doen)
-                        // als patient permission geeft, sla token in db op
 
                         await Session.SaveChangesAsync();
                     }

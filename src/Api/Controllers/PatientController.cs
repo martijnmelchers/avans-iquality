@@ -30,7 +30,7 @@ namespace IQuality.Api.Controllers
             return Ok(await _patientService.GetAllPatientsOfDoctorAsync(HttpContext.User.GetUserId()));
         }
 
-        [HttpPost, Route("subscribe/{notificationId}/{isSubscribed}"), Authorize(Roles = Roles.Patient)]
+        [HttpPost, Route("{notificationId}/{isSubscribed}")]
         public async Task<IActionResult> SetPatientNotificationId([FromRoute] string notificationId, [FromRoute] string isSubscribed)
         {
             return Ok(await _patientService.SetPatientNotificationIdAsync(notificationId, isSubscribed, HttpContext.User.GetUserId()));
