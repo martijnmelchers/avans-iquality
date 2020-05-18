@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Models;
+using IQuality.Models.Authentication;
 using IQuality.Models.Forms;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -40,21 +42,43 @@ namespace IQuality.Api.Controllers
         [HttpPost, Route("register/buddy/{inviteToken}"), AllowAnonymous]
         public async Task<IActionResult> RegisterAsBuddy(string inviteToken, [FromBody] UserRegister register)
         {
-           await _authorizationService.Register(inviteToken, register);
-
-            return Ok("User created :-)");
+            try
+            {
+                (string chatId, ApplicationUser user) userData = await _authorizationService.Register(inviteToken, register);
+                return Ok(userData);
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
         }
 
-        [HttpPost, Route("register/patient"), AllowAnonymous]
+        [HttpPost, Route("register/patient/{inviteToken}"), AllowAnonymous]
         public async Task<IActionResult> RegisterAsPatient(string inviteToken, [FromBody] PatientRegister register)
         {
-            return Ok();
+            try
+            {
+                (string chatId, ApplicationUser user) userData = await _authorizationService.Register(inviteToken, register);
+                return Ok(userData);
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
         }
 
-        [HttpPost, Route("register/doctor"), AllowAnonymous]
+        [HttpPost, Route("register/doctor/{inviteToken}"), AllowAnonymous]
         public async Task<IActionResult> RegisterAsDoctor(string inviteToken, [FromBody] DoctorRegister register)
         {
-            return Ok();
+            try
+            {
+                await _authorizationService.Register(inviteToken, register);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
         }
 
         [HttpGet, Route("verifyToken"), Authorize]

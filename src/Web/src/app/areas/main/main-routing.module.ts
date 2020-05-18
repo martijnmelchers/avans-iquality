@@ -28,6 +28,14 @@ const routes: Routes = [
     component: InviteComponent
   },
   {
+    path: 'create-invite',
+    component: InviteComponent
+  },
+  {
+    path: 'create-invite/:chatId',
+    component: InviteComponent
+  },
+  {
     path: 'doctor',
     component: DoctorComponent
   }

@@ -41,7 +41,7 @@ import {UserMessageComponent} from "@IQuality/areas/main/chat/message/user-messa
     DoctorComponent,
     ChatInstanceComponent,
     BotMessageComponent,
-    UserMessageComponent
+    UserMessageComponent,
   ],
   imports: [
     CommonModule,
@@ -67,6 +67,7 @@ import {UserMessageComponent} from "@IQuality/areas/main/chat/message/user-messa
     NotificationModule,
     ModalModule,
     ChartsModule,
+    PlaceholderModule,
 
 
   ],

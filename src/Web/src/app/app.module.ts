@@ -1,7 +1,6 @@
 import {BrowserModule, HammerModule} from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgProgressModule } from "ngx-progressbar";
@@ -25,6 +24,7 @@ import {FadeModule} from "@carbon/icons-angular";
     AppComponent,
   ],
   imports: [
+    PlaceholderModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,

@@ -58,7 +58,7 @@ namespace IQuality.DomainServices.Services
             return (await _userManager.CheckPasswordAsync(applicationUser, password), applicationUser);
         }
 
-        public async Task<ApplicationUser> Register(string inviteToken, UserRegister register)
+        public async Task<(string chatId, ApplicationUser user)> Register(string inviteToken, UserRegister register) 
         {
             if (!await _inviteService.ValidateInvite(inviteToken))
                 throw new Exception("Invalid invite provided!");
@@ -69,7 +69,8 @@ namespace IQuality.DomainServices.Services
                 UserName = register.Email,
                 Email = register.Email,
                 Address = register.Address,
-                Name = register.Name
+                Name = register.Name,
+                EmailConfirmed = true
             }, register.Password);
 
             var invite = await _inviteService.GetInvite(inviteToken);
@@ -84,10 +85,10 @@ namespace IQuality.DomainServices.Services
             };
 
             await _userManager.AddToRoleAsync(applicationUser, role);
-            await _inviteService.ConsumeInvite(inviteToken);
+            string chatId = await _inviteService.ConsumeInvite(inviteToken,applicationUser.Id);
             await CreateAdditionalData(invite, applicationUser);
-
-            return applicationUser;
+            
+            return (chatId: chatId, user: applicationUser);
         }
 
         public string GenerateToken(ApplicationUser user)

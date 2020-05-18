@@ -18,11 +18,13 @@ namespace IQuality.DomainServices.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IInviteRepository _inviteRepository;
+        private readonly IChatService _chatService;
 
-        public InviteService(UserManager<ApplicationUser> userManager, IInviteRepository inviteRepository)
+        public InviteService(UserManager<ApplicationUser> userManager, IInviteRepository inviteRepository, IChatService chatService)
         {
             _userManager = userManager;
             _inviteRepository = inviteRepository;
+            _chatService = chatService;
         }
         
         public async Task<Invite> CreateInvite(string userId, string email, string chatId = "")
@@ -57,10 +59,18 @@ namespace IQuality.DomainServices.Services
         }
 
         // Uses the invite link.
-        public async Task ConsumeInvite(string inviteToken)
+        public async Task<string> ConsumeInvite(string inviteToken, string applicationUserId)
         {
             var invite = await _inviteRepository.GetByInviteToken(inviteToken);
             invite.Consume();
+            
+            if (invite.ChatId != null)
+            {
+                await _chatService.AddUserToChat(applicationUserId, invite.ChatId);
+                return invite.ChatId;
+            }
+            
+            return null;
         }
 
         public async Task<bool> ValidateInvite(string inviteToken)

@@ -74,5 +74,17 @@ namespace IQuality.DomainServices.Services
         {
             _chatRepository.Delete(await _chatRepository.GetByIdAsync(id));
         }
+        
+        public async Task AddUserToChat(string applicationUserId, string chatId)
+        {
+            ChatContext<BaseChat> chat = await _chatRepository.GetByIdAsync(chatId);
+            if (chat.Chat.ParticipatorIds == null)
+            {
+                chat.Chat.ParticipatorIds = new List<string>();
+            }
+            
+            chat.Chat.ParticipatorIds.Add(applicationUserId);
+            await _chatRepository.SaveAsync(chat);
+        }
     }
 }

@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Button} from "carbon-components-angular";
-import {ActivatedRoute, Params} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {Observable} from "rxjs";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {Invite} from "@IQuality/core/models/invite";
@@ -18,7 +18,8 @@ export class InviteComponent implements OnInit, OnDestroy {
   inviteToken: string;
   invite: Invite;
   inviteTypes: Array<string> = ["Buddy", "Patient", "Doctor", "Admin"];
-  constructor(private route: ActivatedRoute, private _authService: AuthenticationService ) { }
+  chatId: string;
+  constructor(private route: ActivatedRoute, private _authService: AuthenticationService, private router: Router ) { }
   ngOnInit(): void {
       this.sub = this.route.params.subscribe( params => {
         console.log(params);
@@ -29,6 +30,13 @@ export class InviteComponent implements OnInit, OnDestroy {
           this.getInvite()
         }
       });
+
+    this.route.params.subscribe((params) => {
+      if(params.chatId){
+        const chatId: string = params.chatId;
+        this.chatId = chatId;
+      }
+    });
 
     this.role = this._authService.getRole;
     console.log(this.role)
@@ -43,15 +51,15 @@ export class InviteComponent implements OnInit, OnDestroy {
   }
 
   async createInvite(){
-      const link = await this._authService.createInviteLink();
+      const link = await this._authService.createInviteLink(this.chatId);
       this.inviteToken = `http://localhost:4200/invite/${link.token}`;
   }
 
   acceptInvite(){
-
+    this.router.navigate(['/authenticate', 'register', this.id]);
   }
 
   declineInvite(){
-
+    this.router.navigate(['/']);
   }
 }

@@ -5,4 +5,5 @@ export class ApplicationUser {
     id: string;
     address: Address;
     name: FullName;
+    email: string;
 }
