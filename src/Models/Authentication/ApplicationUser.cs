@@ -12,6 +12,7 @@ namespace IQuality.Models.Authentication
 
         public bool Active { get; set; } = true;
 
+    
         // For the future :-)
         //public string ProfilePicturePath { get; set; }
     }

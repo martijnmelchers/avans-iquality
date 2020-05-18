@@ -25,21 +25,11 @@ export class BotMessageComponent implements OnInit {
   ngOnInit(): void {
     this.botMessage = this.message as BotMessage
 
+    console.log(this.botMessage);
     if(this.botMessage.responseType == ResponseType.Graph) {
       this.options = {
         "title": this.botMessage.graphData.title,
-        "axes": {
-        "bottom": {
-          "title": this.botMessage.graphData.options.bottom.title,
-            "mapsTo": this.botMessage.graphData.options.bottom.mapsTo,
-            "scaleType": this.botMessage.graphData.options.bottom.scaleType
-        },
-        "left": {
-          "title": this.botMessage.graphData.options.left.title,
-            "mapsTo": this.botMessage.graphData.options.left.mapsTo,
-            "scaleType": this.botMessage.graphData.options.left.scaleType
-        }
-      },
+        "axes": this.botMessage.graphData.options,
         "curve": "curveMonotoneX",
       };
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using IQuality.Models.Authentication;
 using IQuality.Models.Chat;
 
 namespace IQuality.DomainServices.Interfaces
@@ -14,5 +15,6 @@ namespace IQuality.DomainServices.Interfaces
         public Task<ChatContext<BaseChat>> CreateChatAsync(BaseChat chat);
         public Task<Boolean> UserCanJoinChat(string userId, string chatId);
         public void DeleteChatAsync(string id);
+        Task<string> GetContactName(string userId, BaseChat chat);
     }
 }
