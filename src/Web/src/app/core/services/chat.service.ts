@@ -43,6 +43,7 @@ export class ChatService {
   public async sendMessage(content: string) {
 
     await this.connection.send("newMessage", this.selected.chat.id, content);
+
     if (this.chatWithBot) {
 
       const patientMessage = new TextMessage();
@@ -104,6 +105,7 @@ export class ChatService {
     message.senderId = this.auth.getNameIdentifier;
     message.senderName = this.auth.getName;
     message.content = content;
+    message.type = "TextMessage";
     message.sendDate = new Date(Date.now());
 
     return message
@@ -164,5 +166,9 @@ export class ChatService {
         message.listData.splice(index, 1);
       }
     });
+  }
+
+  getContactName(chatId: string) {
+    return this._api.get<string>(`/chats/${chatId}/contact`, null, {responseType: "text"});
   }
 }
