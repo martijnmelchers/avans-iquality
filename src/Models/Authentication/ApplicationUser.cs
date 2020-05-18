@@ -8,9 +8,7 @@ namespace IQuality.Models.Authentication
         public FullName Name { get; set; }
 
         public Address Address { get; set; }
-
-
-        public bool Active { get; set; } = true;
+        
 
     
         // For the future :-)

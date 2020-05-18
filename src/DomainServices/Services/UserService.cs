@@ -41,7 +41,7 @@ namespace IQuality.DomainServices.Services
         public async Task DeactivateUser(string applicationUserId)
         {
             ApplicationUser user = await _userRepository.GetByIdAsync(applicationUserId);
-            user.Active = false;
+            user.LockoutEnabled = false;
             await _userRepository.SaveAsync(user);
         }
         

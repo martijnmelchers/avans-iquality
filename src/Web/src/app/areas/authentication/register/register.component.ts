@@ -88,7 +88,7 @@ export class RegisterComponent implements OnInit {
         }
       };
 
-      let userData: any = await this._api.post<any>(`/authorize/register/${registerType}/${this.inviteToken}`, postData, null, { disableAuthentication: true, responseType: 'text', headers: {} });
+      let userData: any = await this._api.post<any>(`/authorize/register/${this.inviteToken}`, postData, null, { disableAuthentication: true, responseType: 'text', headers: {} });
       userData = JSON.parse(userData);
       await this._router.navigate([`/authenticate`], {queryParams: {chat_id: userData.item1}});
     } catch(e) {
