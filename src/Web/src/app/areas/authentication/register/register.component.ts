@@ -25,13 +25,24 @@ export class RegisterComponent implements OnInit {
     this._route.params.subscribe(async (params) => {
       const inviteToken = params.inviteToken;
       this.link = await this._auth.getInviteLink(inviteToken);
+
+
+      console.log(this.link);
       this.inviteToken = inviteToken;
     });
 
     // Initialize the form
     this.form = this._fb.group({
-      email: ['', {
-        validators: [Validators.required, Validators.email],
+      first: ['', {
+        validators: [Validators.required, Validators.minLength(3)],
+        updateOn: 'blur'
+      }],
+      infix: ['', {
+        validators: [],
+        updateOn: 'blur'
+      }],
+      last: ['', {
+        validators: [Validators.required, Validators.minLength(3)],
         updateOn: 'blur'
       }],
       password: ['',  {
@@ -65,7 +76,20 @@ export class RegisterComponent implements OnInit {
   async submit() {
     const registerType = this.inviteTypes[this.link.inviteType];
     try {
-      let userData: any = await this._api.post<any>(`/authorize/register/${registerType}/${this.inviteToken}`, this.form.getRawValue(), null, { disableAuthentication: true, responseType: 'text', headers: {} });
+
+      let formData = this.form.getRawValue();
+
+      const postData = {
+        email: formData.email,
+        password: formData.password,
+        name: {
+          first: formData.first,
+          last: formData.last,
+          infix: formData.infix,
+        }
+      };
+
+      let userData: any = await this._api.post<any>(`/authorize/register/${registerType}/${this.inviteToken}`, postData, null, { disableAuthentication: true, responseType: 'text', headers: {} });
       userData = JSON.parse(userData);
       await this._router.navigate([`/authenticate`], {queryParams: {chat_id: userData.item1}});
     } catch(e) {

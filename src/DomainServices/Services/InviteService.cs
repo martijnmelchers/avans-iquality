@@ -34,7 +34,7 @@ namespace IQuality.DomainServices.Services
         
         public async Task<Invite> CreateInvite(string userId, string email, string chatId = "")
         {
-            var user = await _userManager.FindByIdAsync(userId);
+                var user = await _userManager.FindByIdAsync(userId);
             
             var inviteType = user.Roles.First() switch
             {

@@ -1,7 +1,7 @@
 <div ibmGrid>
   <div ibmRow>
     <div ibmCol [offsets]="{ lg: 4 }" [columnNumbers]="{ lg: 4 }">
-      <form [formGroup]="form" (ngSubmit)="submit()">
+      <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="link">
         <h1 class="mb-01">Register</h1>
 
         <p class="mb-07">
@@ -17,17 +17,45 @@
           lowContrast: true}">
           </ibm-notification>
         </div>
+        <fieldset class="mb-06">
+          <ibm-label>
+            Email
+            <input disabled ibmText value="{{link.email}}">
+          </ibm-label>
+        </fieldset>
 
 
         <fieldset class="mb-06">
           <ibm-label
-            helperText="The email you used during sign-up"
-            [invalid]="isInvalid('email')"
-            invalidText="Please enter a valid email">
-            Email
-            <input ibmText formControlName="email" name="email">
+            helperText="First name."
+            [invalid]="isInvalid('first')"
+            invalidText="Please enter a valid name ">
+            First name
+            <input ibmText type="first" formControlName="first" name="first">
           </ibm-label>
         </fieldset>
+
+
+        <fieldset class="mb-06">
+          <ibm-label
+            helperText="This is your real name."
+            [invalid]="isInvalid('infix')"
+            invalidText="Please enter a valid name ">
+            Infix
+            <input ibmText type="infix" formControlName="infix" name="infix">
+          </ibm-label>
+        </fieldset>
+
+        <fieldset class="mb-06">
+          <ibm-label
+            helperText="Last name."
+            [invalid]="isInvalid('last')"
+            invalidText="Please enter a valid name ">
+            Last name
+            <input ibmText type="last" formControlName="last" name="last">
+          </ibm-label>
+        </fieldset>
+
 
         <fieldset class="mb-06">
           <ibm-label

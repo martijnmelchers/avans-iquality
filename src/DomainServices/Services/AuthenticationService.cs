@@ -62,18 +62,18 @@ namespace IQuality.DomainServices.Services
         {
             if (!await _inviteService.ValidateInvite(inviteToken))
                 throw new Exception("Invalid invite provided!");
-
+            
+            var invite = await _inviteService.GetInvite(inviteToken);
+            
             // Create a new user first
             var applicationUser = await CreateApplicationUser(new ApplicationUser
             {
-                UserName = register.Email,
-                Email = register.Email,
+                UserName =  invite != null ? invite.Email : register.Email,
+                Email = invite != null ? invite.Email : register.Email,
                 Address = register.Address,
                 Name = register.Name,
                 EmailConfirmed = true
             }, register.Password);
-
-            var invite = await _inviteService.GetInvite(inviteToken);
             
             var role = invite.InviteType switch
             {
