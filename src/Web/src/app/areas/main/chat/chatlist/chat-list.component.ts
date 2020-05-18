@@ -29,6 +29,8 @@ export class ChatListComponent implements OnInit {
     this.chatService.getChats().then((response) => {
       if(response != null)
       {
+
+        console.log(response);
         response.forEach(e => {
           if(e.chat.type === "BuddyChat")
           {
