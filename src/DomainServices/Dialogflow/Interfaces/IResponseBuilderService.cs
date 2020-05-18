@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Google.Cloud.Dialogflow.V2;
 
-namespace IQuality.Infrastructure.Dialogflow.Interfaces
+namespace IQuality.DomainServices.Dialogflow.Interfaces
 {
     public interface IResponseBuilderService
     {

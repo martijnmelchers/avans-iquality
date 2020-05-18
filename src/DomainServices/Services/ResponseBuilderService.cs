@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Google.Cloud.Dialogflow.V2;
-using IQuality.Infrastructure.Dialogflow.Interfaces;
+using IQuality.DomainServices.Dialogflow.Interfaces;
 using IQuality.Models.Helpers;
 using Microsoft.Extensions.Configuration;
 

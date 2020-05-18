@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import {ApiService} from "@IQuality/core/services/api.service";
 import {BaseChat} from "@IQuality/core/models/base-chat";
 import * as signalR from "@microsoft/signalr";
@@ -11,6 +11,9 @@ import {AuthenticationService} from "@IQuality/core/services/authentication.serv
 import {environment} from "../../../environments/environment";
 import {BotMessage} from "@IQuality/core/models/messages/bot-message";
 import {ChatContext} from "@IQuality/core/models/chat-context";
+import {DEBUG} from "@angular/compiler-cli/ngcc/src/logging/console_logger";
+import {NotificationService} from "carbon-components-angular";
+import { BehaviorSubject, Observable } from "rxjs";
 import {Listable} from "@IQuality/core/models/listable";
 
 
@@ -19,18 +22,20 @@ import {Listable} from "@IQuality/core/models/listable";
 })
 export class ChatService {
   public chatWithBot: boolean;
-
   public selected: ChatContext;
 
   //Messages zijn voor alles om te laten zien
   public messages: Array<Message> = [];
+  public messageSubject: EventEmitter<void> = new EventEmitter<void>(false);
   //Database messages zijn de messages die opgeslagen zijn in de database
 
   public onChatSelected: Array<() => void> = [];
 
   private connection: signalR.HubConnection;
 
-  constructor(private _api: ApiService, private auth: AuthenticationService) {
+
+  private _chats: Array<ChatContext>;
+  constructor(private _api: ApiService, private auth: AuthenticationService, private _notificationService: NotificationService) {
     this.setUpSocketConnection(auth)
   }
 
@@ -45,6 +50,7 @@ export class ChatService {
 
       const response = await this._api.post<BotMessage>("/dialogflow/patient", patientMessage, null, {disableRequestLoader: true});
       this.messages.push(response);
+      this.messageSubject.next()
     }
   }
 
@@ -69,7 +75,9 @@ export class ChatService {
     this.chatWithBot = false;
     this.selected = await this._api.get<ChatContext>(`/chats/${id}`);
 
-    this.messages = this.selected.messages;
+    this.messages = this.selected.messages.reverse();
+    this.messageSubject.next();
+
     this.onChatSelected.forEach(value => {
       value();
     });
@@ -107,14 +115,21 @@ export class ChatService {
       }).configureLogging(LogLevel.Warning).build();
 
     this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
-      if (chatId === this.selected.chat.id) {
-        this.messages.push(this.createMessage(content));
+      if(this.selected){
+        if (chatId === this.selected.chat.id) {
+          const message = this.createMessage(content);
+
+          this.messages.push(message);
+          this.messageSubject.next();
+        }
       }
     });
 
     this.connection.start().then(() => {
       const response = this.getChats();
       response.then((chats) => {
+
+        this._chats = chats;
         for (const context of chats) {
           this.hubJoinGroup(context.chat.id);
         }
@@ -122,6 +137,22 @@ export class ChatService {
     }).catch(err => {
       console.log("Connection error", err);
     });
+  }
+
+  public getChatObservable(): Observable<any>{
+    return new Observable<any>((observer) => {
+      this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
+        const chat = this._chats.find((chat) => chat.chat.id === chatId);
+        const  message = {
+          senderId: userId,
+          userName: userName,
+          chatId: chatId,
+          content: content,
+          chatName: chat.chat.name
+        };
+        observer.next(message)
+      });
+    })
   }
 
   deleteGoal(message: TextMessage, data: Listable) {

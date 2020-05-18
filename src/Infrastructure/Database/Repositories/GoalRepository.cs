@@ -17,11 +17,6 @@ namespace IQuality.Infrastructure.Database.Repositories
         public GoalRepository(IAsyncDocumentSession session) : base(session)
         {
         }
-        
-        public override async Task SaveAsync(Goal entity)
-        {
-            await Session.StoreAsync(entity);
-        }
 
         public async Task<Goal> GetWhereDescription(string description)
         {

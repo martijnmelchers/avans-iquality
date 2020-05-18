@@ -1,9 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Google.Cloud.Dialogflow.V2;
 using IQuality.Models.Chat.Messages;
-using IQuality.Models.Forms;
 
-namespace IQuality.Infrastructure.Dialogflow.Interfaces
+namespace IQuality.DomainServices.Dialogflow.Interfaces
 {
     public interface IDialogflowService
     {

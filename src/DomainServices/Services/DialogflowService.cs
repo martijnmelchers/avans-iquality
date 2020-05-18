@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Google.Cloud.Dialogflow.V2;
 using Google.Protobuf.WellKnownTypes;
+using IQuality.DomainServices.Dialogflow.Interfaces;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories.Interface;
-using IQuality.Infrastructure.Dialogflow.Interfaces;
 using IQuality.Models.Chat;
 using IQuality.Models.Chat.Messages;
 using IQuality.Models.Dialogflow;
@@ -51,17 +51,17 @@ namespace IQuality.DomainServices.Services
             var result = await _responseBuilderService.BuildTextResponse(text, IntentNames.Default);
             
             if (
-                string.IsNullOrEmpty(chatContext.IntentName) ||
+                string.IsNullOrEmpty(chatContext.Intent.Name) ||
                 result.Intent.DisplayName == IntentNames.Cancel ||
-                result.Intent.DisplayName == IntentNames.Fallback && chatContext.IntentName == string.Empty)
+                result.Intent.DisplayName == IntentNames.Fallback && chatContext.Intent.Name == string.Empty)
             {
-                chatContext.IntentName = result.Intent.DisplayName;
+                chatContext.Intent.Name = result.Intent.DisplayName;
 
                 result.Parameters.Fields.TryGetValue("intentType", out Value intentType);
-                chatContext.IntentType = intentType?.StringValue ?? IntentTypes.Fallback;
+                chatContext.Intent.Type = intentType?.StringValue ?? IntentTypes.Fallback;
             }
 
-            var message = chatContext.IntentType switch
+            var message = chatContext.Intent.Type switch
             {
                 IntentTypes.Goal => await _goalIntentHandler.HandleClientIntent(chatContext, text, result),
                 IntentTypes.Action => await _actionIntentHandler.HandleClientIntent(chatContext, text, result),
@@ -75,7 +75,7 @@ namespace IQuality.DomainServices.Services
 
         private static BotMessage SendDefaultResponse(PatientChat chat, QueryResult result)
         {
-            chat.ClearIntent();
+            chat.Intent.Clear();
             
             return new BotMessage
             {

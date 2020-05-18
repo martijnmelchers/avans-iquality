@@ -21,12 +21,6 @@ export class ChatComponent implements OnInit {
     });
   }
 
-
-
   private onChatSelected() {
-
   }
-
-
-
 }

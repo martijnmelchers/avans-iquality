@@ -9,11 +9,9 @@ namespace IQuality.Models.Goals
     {
         public string Id { get; private set; }
         public string ChatId { get; set; }
-        public GoalType Type { get; set; }
         public string Description { get; set; }
         public Interval Reminders { get; set; }
         
-        public List<BaseAction> Actions { get; set; }
-        public Listable ToListable() => new Listable(Description, Id);
+        public Listable ToListable(bool clickable = false, bool removable = false) => new Listable(Description, Id, clickable, removable);
     }
 }

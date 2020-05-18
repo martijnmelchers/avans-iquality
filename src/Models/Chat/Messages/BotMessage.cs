@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using IQuality.Models.Dialogflow;
 using IQuality.Models.Forms;
+using IQuality.Models.Interfaces;
 
 namespace IQuality.Models.Chat.Messages
 {
@@ -17,6 +18,19 @@ namespace IQuality.Models.Chat.Messages
             ListData = new List<Listable>();
             Suggestions = new List<Suggestion>();
             Content = string.Empty;
+        }
+
+        public void RespondText(string content)
+        {
+            Content = content;
+            ResponseType = ResponseType.Text;
+        }
+
+        public void RespondList(string content, List<Listable> data)
+        {
+            Content = content;
+            ListData = data;
+            ResponseType = ResponseType.List;
         }
     }
 }

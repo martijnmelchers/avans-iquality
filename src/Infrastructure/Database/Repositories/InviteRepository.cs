@@ -19,12 +19,6 @@ namespace IQuality.Infrastructure.Database.Repositories
         public InviteRepository(IAsyncDocumentSession session) : base(session)
         {
         }
-
-        public override async Task SaveAsync(Invite entity)
-        {
-            await Session.StoreAsync(entity);
-        }
-
         public override void Delete(Invite entity)
         {
             Session.Delete(entity);
