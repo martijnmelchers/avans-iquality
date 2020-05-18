@@ -3,6 +3,8 @@ import { ApiService } from "@IQuality/core/services/api.service";
 import { CookieService } from "ngx-cookie-service";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import {Invite} from "@IQuality/core/models/invite";
+import {ChatService} from "@IQuality/core/services/chat.service";
+import {ChatContext} from "@IQuality/core/models/chat-context";
 
 @Injectable({
   providedIn: 'root'
@@ -61,12 +63,10 @@ export class AuthenticationService {
     return this._api.get<Invite>(`/invite/${inviteToken}`);
   }
 
-  async createInviteLink(chatId:string = null): Promise<Invite> {
-    let body: object = {};
-
-    if(chatId)
-      body = {ChatId: chatId};
+  async createInviteLink(chatId:string = null, email:string): Promise<Invite> {
+    let body: object = {ChatId: chatId, Email: email};
 
     return this._api.post<Invite>('/invite', body);
   }
+
 }

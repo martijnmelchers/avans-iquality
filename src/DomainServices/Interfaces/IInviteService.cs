@@ -10,5 +10,6 @@ namespace IQuality.DomainServices.Interfaces
         Task<string> ConsumeInvite(string inviteToken, string applicationUserId);
         public Task<Invite> GetInvite(string inviteToken);
         Task<bool> ValidateInvite(string inviteToken);
+        Task SendInviteEmail(Invite inv);
     }
 }

@@ -10,6 +10,7 @@
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.5.0" />
     <PackageReference Include="RavenDB.Client" Version="4.2.8" />
     <PackageReference Include="RavenDB.Identity" Version="7.0.1" />
+    <PackageReference Include="SendGrid" Version="9.15.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
   </ItemGroup>
 
