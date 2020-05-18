@@ -16,7 +16,6 @@ export class BotMessageComponent implements OnInit {
   @Input("message") message: Message
 
   public botMessage: BotMessage;
-  public suggestions = Array<Suggestion>();
   public options: any;
 
 
@@ -31,10 +30,6 @@ export class BotMessageComponent implements OnInit {
         "curve": "curveMonotoneX",
       };
     }
-
-
-    this.suggestions.push(new Suggestion("Show active goals", "Get goals"));
-    this.suggestions.push(new Suggestion("Set goal", "Set goal"));
   }
 
   public onSuggestionClicked(suggestion : Suggestion) {
