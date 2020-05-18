@@ -36,13 +36,22 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
         public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userText, QueryResult queryResult,
             string patientId)
         {
-            var response = new BotMessage();
+            var response = new BotMessage
+            {
+                MatchedIntent = new MatchedIntent
+                {
+                    Type = chat.Intent.Type,
+                    Name = chat.Intent.Name,
+                    Confidence = queryResult.IntentDetectionConfidence
+                }
+            };
+
 
             switch (chat.Intent.Name)
             {
                 case PatientDataIntentNames.RegisterWeight:
                     chat.Intent.Name = PatientDataIntentNames.SaveWeight;
-                    response.Content = queryResult.FulfillmentText;
+                    response.RespondText(queryResult.FulfillmentText);
                     break;
                 case PatientDataIntentNames.SaveWeight:
                     await SaveData(userText, chat, patientId, MeasurementType.Weight);
@@ -72,37 +81,44 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                 case PatientDataIntentNames.GetWeightGraph:
                     List<Measurement> weightData = await GetData(patientId, MeasurementType.Weight);
 
-                    response.RespondGraph("Sure, here is your progress", new GraphData
+                    if (weightData.Count == 0)
                     {
-                        Title = "Weight over time",
-                        Options = new GraphOptions
+                        response.RespondText("You haven't told me your weight yet, you can track it easily by saying 'Register my current weight'!");
+                        response.AddSuggestion("Setup reminders", "Setup remiders for weight tracking");
+                        response.AddSuggestion("Register current weight", "Register my current weight");
+                    }
+                    else
+                    {
+                        response.RespondGraph("Sure, here is your progress", new GraphData
                         {
-                            Bottom = new GraphAxis
+                            Title = "Weight over time",
+                            Options = new GraphOptions
                             {
-                                Title = "Date",
-                                MapsTo = "date",
-                                ScaleType = "time"
+                                Bottom = new GraphAxis
+                                {
+                                    Title = "Date",
+                                    MapsTo = "date",
+                                    ScaleType = "time"
+                                },
+                                Left = new GraphAxis
+                                {
+                                    Title = "Weight (Pound)",
+                                    MapsTo = "value",
+                                    ScaleType = "linear"
+                                }
                             },
-                            Left = new GraphAxis
+                            Entries = weightData.Select(x => new GraphEntry
                             {
-                                Title = "Weight(KG)",
-                                MapsTo = "value",
-                                ScaleType = "linear"
-                            }
-                        },
-                        Entries = weightData.Select(x => new GraphEntry
-                        {
-                            Date = x.Date.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                            Group = MeasurementType.Weight.ToString(),
-                            Value = x.Value
-                        }).ToList()
-                    });
+                                Date = x.Date.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                                Group = MeasurementType.Weight.ToString(),
+                                Value = x.Value
+                            }).ToList()
+                        });
+                    }
 
                     chat.Intent.Clear();
-
-
                     break;
-                
+
                 case PatientDataIntentNames.GetBloodPressureGraph:
                     List<Measurement> bloodPressureData = await GetData(patientId, MeasurementType.BloodPressure);
 
@@ -136,7 +152,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
 
 
                     break;
-                
+
                 case PatientDataIntentNames.GetCholesterolGraph:
                     List<Measurement> cholesterolData = await GetData(patientId, MeasurementType.Cholesterol);
 
@@ -194,7 +210,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
 
         public const string RegisterCholesterol = "register_cholesterol";
         public const string SaveCholesterol = "save_cholesterol";
-        
+
         public const string GetWeightGraph = "get_weight_graph";
         public const string GetBloodPressureGraph = "get_bloodpressure_graph";
         public const string GetCholesterolGraph = "get_cholesterol_graph";
