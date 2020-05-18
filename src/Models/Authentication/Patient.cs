@@ -12,6 +12,7 @@ namespace IQuality.Models.Authentication
         public string DoctorId { get; set; }
         public PatientSettings Settings { get; set; }
         public List<string> TipIds { get; set; }
+        public List<string> NotificationIds { get; set; }
 
         // Contains the measurements
         public List<Measurement> Weight { get; set; }

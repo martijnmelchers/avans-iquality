@@ -10,5 +10,6 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
         Task<Goal> GetWhereDescription(string description);
         Task<List<Goal>> GetGoalsOfChat(string chatId);
         Task<List<string>> GetGoalIdsOfPatientByChatId(string chatId);
+        Task<string> GetChatIdFromGoalId(string goalId);
     }
 }

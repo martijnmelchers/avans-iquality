@@ -90,5 +90,28 @@ namespace IQuality.Infrastructure.Database.Repositories
 
             return returnTipId;
         }
+
+        public async Task<List<string>> GetNotificationIdsOfPatient(string patientId)
+        {
+            var patient = await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == patientId).FirstAsync();
+
+            return patient.NotificationIds;
+        }
+
+        public async Task<List<string>> SetPatientNotificationIdAsync(string notificationId, string patientId)
+        {
+            var patient = await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == patientId).FirstAsync();
+
+            if (patient.NotificationIds == null)
+            {
+                patient.NotificationIds = new List<string>();
+            }
+
+            patient.NotificationIds.Add(notificationId);
+
+            await Session.StoreAsync(patient);
+
+            return patient.NotificationIds;
+        }
     }
 }

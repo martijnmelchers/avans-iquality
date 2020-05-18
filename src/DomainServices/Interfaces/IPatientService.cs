@@ -9,5 +9,6 @@ namespace IQuality.DomainServices.Interfaces
     public interface IPatientService
     {
         Task<List<Patient>> GetAllPatientsOfDoctorAsync(string doctorId);
+        Task<List<string>> SetPatientNotificationIdAsync(string notificationId, string patientId);
     }
 }

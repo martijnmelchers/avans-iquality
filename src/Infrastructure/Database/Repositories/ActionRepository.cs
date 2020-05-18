@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using IQuality.Infrastructure.Database.Repositories.Interface;
 using IQuality.Models;
 using IQuality.Models.Actions;
 using IQuality.Models.Helpers;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using Action = IQuality.Models.Actions.Action;
 
@@ -24,30 +24,9 @@ namespace IQuality.Infrastructure.Database.Repositories
             return Task.FromResult(storage);
         }
 
-        public async Task<List<Action>> GetAllToBeSentActionsAsync(string actionId)
+        public async Task<List<Action>> GetAllReminderActionsAsync()
         {
-            try
-            {
-                //int yesterdaysDayOfYear = DateTime.Now.DayOfYear - 1;
-                int yesterdaysDayOfYear = DateTime.Now.DayOfYear;
-                string yesterdaysDayOfYearString = yesterdaysDayOfYear.ToString();
-
-                int lastWeeksDayOfYear = DateTime.Now.DayOfYear - 7;
-                string lastWeeksDayOfYearString = yesterdaysDayOfYear.ToString();
-
-                int lastMonthsDayOfYear = DateTime.Now.DayOfYear - 31;
-                string lastMonthsDayOfYearString = yesterdaysDayOfYear.ToString();
-
-                var result = await Session.Query<Action>().OfType<Action>().ToListAsync();
-                //var result = await Session.LoadAsync<Action>(actionId);
-                //var result = await Session.Query<Action>().Where(a => a.LastReminded == yesterdaysDayOfYearString).ToListAsync();
-                return null;
-            }catch(Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
-            return null;
+            return await Session.Stream<Action>(Session.Query<Action>().Where(a => a.ReminderInterval != Interval.Never));
         }
 
         public async Task<Interval> GetActionReminderIntervalAsync(string actionId)
@@ -92,7 +71,7 @@ namespace IQuality.Infrastructure.Database.Repositories
 
             foreach (string goalId in goalIds)
             {
-                actionsOfGoal.AddRange(await Session.Query<Action>().OfType<Action>().Where(a => a.GoalId == goalId).ToListAsync());
+                actionsOfGoal.AddRange(await Session.Query<Action>().Where(a => a.GoalId == goalId).ToListAsync());
             }
 
             List<string> usedActionTypes = new List<string>();
