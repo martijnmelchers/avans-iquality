@@ -40,23 +40,33 @@ export class InviteComponent implements OnInit, OnDestroy {
       if(params.chatId){
         const chatId: string = params.chatId;
         this.chatId = chatId;
+
+
+        // Initialize the form
+        this.form = this._fb.group({
+          email: ['', {
+            validators: [Validators.required, Validators.email],
+            updateOn: 'blur'
+          }],
+        });
+      }
+      else{
+        // Initialize the form
+        this.form = this._fb.group({
+          email: ['', {
+            validators: [Validators.required, Validators.email],
+            updateOn: 'blur'
+          }],
+          chatName: ['',  {
+            validators: [Validators.required, Validators.minLength(6)],
+            updateOn: 'blur'
+          }],
+        });
       }
     });
 
     this.role = this._authService.getRole;
-
-
-    // Initialize the form
-    this.form = this._fb.group({
-      email: ['', {
-        validators: [Validators.required, Validators.email],
-        updateOn: 'blur'
-      }],
-      chatName: ['',  {
-        validators: [Validators.required, Validators.minLength(6)],
-        updateOn: 'blur'
-      }],
-    });
+    
     console.log(this.role)
   }
 
@@ -74,10 +84,16 @@ export class InviteComponent implements OnInit, OnDestroy {
     if(chat){
       console.log("Name exists");
     }
-
     else{
-      const chat: ChatContext = await this._chatService.createBuddychat(values.chatName, isBuddyChat);
-      let link = await this._authService.createInviteLink(chat.chat.id, values.email);
+      let chatId: string;
+      if(this.chatId){
+        chatId = this.chatId;
+      }
+      else{
+        chatId = (await this._chatService.createBuddychat(values.chatName, isBuddyChat)).chat.id;
+      }
+
+      let link = await this._authService.createInviteLink(chatId, values.email);
       this.inviteToken = `http://localhost:4200/invite/${link.token}`;
 
       this.success = true;

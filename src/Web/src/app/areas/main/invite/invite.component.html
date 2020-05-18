@@ -18,7 +18,7 @@
 
 
         <form action="" [formGroup]="form" (ngSubmit)="submit()">
-          <fieldset class="mb-06">
+          <fieldset class="mb-06" *ngIf="!chatId">
             <ibm-label
               helperText="How do you want to call the chat?"
               invalidText="Please enter a valid chat name" [invalid]="isInvalid('chatName')">
