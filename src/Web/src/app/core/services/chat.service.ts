@@ -108,6 +108,11 @@ export class ChatService {
         accessTokenFactory: () => auth.encodedToken
       }).configureLogging(LogLevel.Warning).build();
 
+    this.connection.onreconnecting(() => console.log('Chat is reconnecting...'))
+    this.connection.onreconnected(() => console.log('Chat is reconnected!'))
+    this.connection.onclose(() => console.log('Connection closed!'));
+
+
     this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
       if(this.selected){
         if (chatId === this.selected.chat.id) {

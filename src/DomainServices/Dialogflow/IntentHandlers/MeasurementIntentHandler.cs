@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection.Metadata;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Google.Cloud.Dialogflow.V2;
 using IQuality.DomainServices.Dialogflow.Interfaces;
@@ -27,9 +29,10 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
             _measurementRepository = measurementRepository;
         }
 
-        private async Task SaveData(string data, PatientChat chat, string patientId, MeasurementType type)
+        private async Task SaveMeasurement(string data, PatientChat chat, string patientId, MeasurementType type)
         {
-            await _measurementRepository.SaveAsync(new Measurement(patientId, double.Parse(data), type));
+            var value = double.Parse(Regex.Match(data, @"[\d,\.]+", RegexOptions.Multiline).Value);
+            await _measurementRepository.SaveAsync(new Measurement(patientId, value, type));
             chat.Intent.Clear();
         }
 
@@ -54,8 +57,17 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                     response.RespondText(queryResult.FulfillmentText);
                     break;
                 case PatientDataIntentNames.SaveWeight:
-                    await SaveData(userText, chat, patientId, MeasurementType.Weight);
-                    response.RespondText("Your weight is duly noted!");
+                    try
+                    {
+                        await SaveMeasurement(userText, chat, patientId, MeasurementType.Weight);
+                        response.RespondText("Your weight is duly noted!");
+                    }
+                    catch (Exception e)
+                    {
+                        response.RespondText("I'm sorry but I can't figure out your weight, please try again. Try saying something like '80 pounds' or just '80'");
+                        response.AddSuggestion("Cancel your action", "Cancel");
+                    }
+                    
                     chat.Intent.Clear();
                     break;
 
@@ -64,7 +76,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                     response.Content = queryResult.FulfillmentText;
                     break;
                 case PatientDataIntentNames.SaveBloodPressure:
-                    await SaveData(userText, chat, patientId, MeasurementType.BloodPressure);
+                    await SaveMeasurement(userText, chat, patientId, MeasurementType.BloodPressure);
                     response.RespondText("Your blood pressure is duly noted!");
                     chat.Intent.Clear();
                     break;
@@ -74,7 +86,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                     response.RespondText(queryResult.FulfillmentText);
                     break;
                 case PatientDataIntentNames.SaveCholesterol:
-                    await SaveData(userText, chat, patientId, MeasurementType.Cholesterol);
+                    await SaveMeasurement(userText, chat, patientId, MeasurementType.Cholesterol);
                     response.RespondText("Your cholesterol is duly noted!");
                     chat.Intent.Clear();
                     break;

@@ -16,17 +16,15 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
   public scrollHeight: number;
   public botIsTyping: boolean;
 
-  @ViewChild('chatScroll') public chatScrollContainer: ElementRef;
+  private chatId: string;
+
+  @ViewChild('chatScroll', { static: false }) public chatScrollContainer: ElementRef;
 
   constructor(private formBuilder: FormBuilder, public chatService: ChatService, private route: ActivatedRoute, private _location: Location) { }
 
   async ngOnInit() {
-
-    this.scrollHeight = 0;
-
     this.route.params.subscribe(async (params) => {
-      let chatId = params.chatId;
-      await this.initializeChat(chatId);
+      this.chatId = params.chatId;
     });
 
     this.messageControl = new FormControl();
@@ -67,7 +65,8 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
     this._location.back();
   }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit() {
+    await this.initializeChat(this.chatId);
     setTimeout(() => this.scrollToBottom(), 100);
   }
 }
