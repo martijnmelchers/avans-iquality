@@ -1,0 +1,30 @@
+<div ibmGrid>
+  <div ibmRow [gutter]="false">
+    <div ibmCol>
+      <ibm-structured-list [border]="true"
+                           [condensed]="false"
+                           [nowrap]="false">
+        <ibm-list-header>
+          <ibm-list-column>Users</ibm-list-column>
+        </ibm-list-header>
+        <ibm-list-row *ngFor="let item of users" >
+          <ibm-list-column [routerLink]="['/admin','users', item.id]">
+            {{item.email}}
+          </ibm-list-column>
+          <ibm-list-column>
+            {{item.roles[0] ? item.roles[0] : "No role found."}}
+          </ibm-list-column>
+
+          <ibm-list-column>
+            <a href="" [routerLink]="['/admin', 'users', item.id]">User options</a>
+          </ibm-list-column>
+        </ibm-list-row>
+      </ibm-structured-list>
+    </div>
+  </div>
+  <div ibmRow>
+    <button ibmCol ibmButton [routerLink]="['/create-invite']">
+      Invite Doctor
+    </button>
+  </div>
+</div>

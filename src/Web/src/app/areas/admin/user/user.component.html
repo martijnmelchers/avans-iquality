@@ -1,0 +1,63 @@
+<div ibmGrid>
+  <div ibmRow [gutter]="false">
+    <div ibmCol [offsets]="{ lg: 4 }" [columnNumbers]="{ lg: 4 }" *ngIf="user">
+      <h1>Viewing user: {{user.email}}</h1>
+      <hr>
+      <div ibmRow>
+        <div ibmCol>
+          <h3>Email:</h3>
+          <p>{{user.email}}</p>
+        </div>
+      </div>
+      <hr>
+      <div ibmRow>
+        <div ibmCol>
+          <h2>Name</h2>
+          <div *ngIf="user.name">
+            <h3>First Name:</h3>
+            <p>{{user.name.first}}</p>
+
+
+            <h3>Last Name:</h3>
+            <p>{{user.name.first}}</p>
+          </div>
+        </div>
+      </div>
+      <hr>
+
+      <div ibmRow>
+        <div ibmCol>
+          <h2>Address</h2>
+
+          <div *ngIf="user.address">
+          <h3>Zip code:</h3>
+          <p>{{user.address.zipCode}}</p>
+
+          <h3>Streetname:</h3>
+          <p>{{user.address.streetName}}</p>
+
+          <h3>Housenumber:</h3>
+          <p>{{user.address.houseNumber}}</p>
+
+          <h3>City:</h3>
+          <p>{{user.address.city}}</p>
+
+          <h3>Country:</h3>
+          <p>{{user.address.country}}</p>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div ibmRow>
+        <div ibmCol>
+          <button ibmButton="danger" (click)="removeUser()">Remove user</button>
+        </div>
+        <div ibmCol>
+          <button ibmButton (click)="deactivateUser()">Deactivate user</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

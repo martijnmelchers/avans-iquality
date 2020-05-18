@@ -2,9 +2,9 @@
 {
     public static class Roles
     {
-        public const string Patient = "Patient";
-        public const string Buddy = "Buddy";
-        public const string Doctor = "Doctor";
-        public const string Admin = "Admin";
+        public const string Patient = "patient";
+        public const string Buddy = "buddy";
+        public const string Doctor = "doctor";
+        public const string Admin = "admin";
     }
 }

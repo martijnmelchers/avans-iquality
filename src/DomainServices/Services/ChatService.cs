@@ -28,14 +28,14 @@ namespace IQuality.DomainServices.Services
             return await _chatRepository.GetByIdAsync(id);
         }
 
-        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync()
+        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync(string userId)
         {
-            return await _chatRepository.GetChatsAsync(0, 10);
+            return await _chatRepository.GetChatsAsync(userId, 0, 1000);
         }
 
-        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync(int skip, int take)
+        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync(string userId, int skip, int take)
         {
-            return await _chatRepository.GetChatsAsync(skip, take);
+            return await _chatRepository.GetChatsAsync(userId, skip, take);
         }
 
         public async Task<ChatContext<BaseChat>> CreateChatAsync(BaseChat baseChat)
@@ -71,6 +71,18 @@ namespace IQuality.DomainServices.Services
         public async void DeleteChatAsync(string id)
         {
             _chatRepository.Delete(await _chatRepository.GetByIdAsync(id));
+        }
+        
+        public async Task AddUserToChat(string applicationUserId, string chatId)
+        {
+            ChatContext<BaseChat> chat = await _chatRepository.GetByIdAsync(chatId);
+            if (chat.Chat.ParticipatorIds == null)
+            {
+                chat.Chat.ParticipatorIds = new List<string>();
+            }
+            
+            chat.Chat.ParticipatorIds.Add(applicationUserId);
+            await _chatRepository.SaveAsync(chat);
         }
 
         public async Task<string> GetContactName(string userId, BaseChat chat)

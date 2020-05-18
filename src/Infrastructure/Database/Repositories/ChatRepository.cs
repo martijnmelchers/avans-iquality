@@ -19,9 +19,9 @@ namespace IQuality.Infrastructure.Database.Repositories
         {
         }
 
-        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync(int skip, int take)
+        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync(string userId, int skip, int take)
         {
-            return await ConvertAsync(await Session.Query<BaseChat>().Skip(skip).Take(take).ToListAsync());
+            return await ConvertAsync(await Session.Query<BaseChat>().Where(c => c.InitiatorId == userId || c.ParticipatorIds.Contains(userId)).Skip(skip).Take(take).ToListAsync());
         }
 
         public async Task<PatientChat> GetPatientChatAsync(string chatId)

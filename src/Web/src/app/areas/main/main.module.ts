@@ -7,7 +7,7 @@ import {
   ButtonModule,
   GridModule,
   InputModule,
-  ListModule, ModalModule, NotificationModule, SearchModule,
+  ListModule, ModalModule, NotificationModule, PlaceholderModule, SearchModule,
   StructuredListModule,
   TableModule, TagModule,
   TilesModule, ToggleModule,
@@ -41,7 +41,7 @@ import {UserMessageComponent} from "@IQuality/areas/main/chat/message/user-messa
     DoctorComponent,
     ChatInstanceComponent,
     BotMessageComponent,
-    UserMessageComponent
+    UserMessageComponent,
   ],
   imports: [
     CommonModule,
@@ -67,6 +67,7 @@ import {UserMessageComponent} from "@IQuality/areas/main/chat/message/user-messa
     NotificationModule,
     ModalModule,
     ChartsModule,
+    PlaceholderModule,
     SearchModule,
   ],
   providers: []

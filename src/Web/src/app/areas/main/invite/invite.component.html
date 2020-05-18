@@ -1,14 +1,57 @@
 
 <div ibmGrid>
   <div ibmRow>
-    <div ibmCol>
+    <div ibmCol [offsets]="{ lg: 4 }" [columnNumbers]="{ lg: 4 }">
       <div class="send" *ngIf="isSend">
         <h1 *ngIf="this.role == 'Doctor'">Invite patient</h1>
         <h1 *ngIf="this.role == 'Patient'">Invite buddy</h1>
 
-        <p>Copy the invite link and send it to the patient. With this link they will be able to register.</p>
-        <input value="{{inviteToken}}" ibmText id="copyText">
-        <button ibmButton="primary" size="normal" (click)="createInvite()">Create invite</button>
+        <div [hidden]="!success">
+          <ibm-notification [notificationObj]="{
+				type: 'success',
+          title: 'Invite has been sent',
+          message: 'An invite has been sent to the specified email. It may be in the spambox.',
+          showClose: false,
+          lowContrast: true}">
+          </ibm-notification>
+        </div>
+
+
+        <form action="" [formGroup]="form" (ngSubmit)="submit()">
+          <fieldset class="mb-06">
+            <ibm-label
+              helperText="How do you want to call the chat?"
+              invalidText="Please enter a valid chat name" [invalid]="isInvalid('chatName')">
+              Chat name
+              <input ibmText formControlName="chatName" name="chatName">
+            </ibm-label>
+          </fieldset>
+
+
+          <fieldset class="mb-06">
+            <ibm-label
+              helperText="This is the email of the user you want to invite."
+              invalidText="Please enter a valid email " [invalid]="isInvalid('email')">
+              Email
+              <input ibmText formControlName="email" name="email">
+            </ibm-label>
+          </fieldset>
+
+
+          <fieldset class="mb-06">
+            <div ibmRow>
+              <div ibmCol>
+                <button ibmButton class="mb-04" [disabled]="!form.valid">Send invite</button>
+              </div>
+
+              <div ibmCol>
+                <button ibmButton class="mb-04" [routerLink]="['/chat']" [disabled]="!success">Go to chats</button>
+              </div>
+            </div>
+
+          </fieldset>
+        </form>
+
       </div>
 
       <div class="accept" *ngIf="this.invite">
@@ -16,8 +59,8 @@
         <h4>To become a: {{inviteTypes[invite.inviteType]}}</h4>
         <br>
         <p>After accepting this invite. You will be able to register an account</p>
-        <button ibmButton="primary" size="normal">Accept</button>
-        <button ibmButton="warning" size="normal">Decline</button>
+        <button ibmButton="primary" size="normal" (click)="acceptInvite()">Accept</button>
+        <button ibmButton="warning" size="normal" (click)="declineInvite()">Decline</button>
       </div>
     </div>
   </div>

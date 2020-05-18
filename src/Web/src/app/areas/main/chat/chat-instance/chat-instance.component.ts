@@ -31,6 +31,9 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
     this.messageFormGroup = this.formBuilder.group({
       message: this.messageControl,
     });
+
+    if(!this.chatService.hasConnection())
+      this.chatService.connectWithChats();
   }
 
   async initializeChat(chatId: string) {

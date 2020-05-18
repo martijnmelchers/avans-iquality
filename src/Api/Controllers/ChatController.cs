@@ -29,7 +29,7 @@ namespace IQuality.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetChats()
         {
-            return Ok(await _chatService.GetChatsAsync());
+            return Ok(await _chatService.GetChatsAsync(HttpContext.User.GetUserId()));
         }
 
         [HttpPost]
