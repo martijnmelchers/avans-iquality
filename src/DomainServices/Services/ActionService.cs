@@ -17,9 +17,8 @@ namespace IQuality.DomainServices.Services
         private readonly IActionRepository _actionRepository;
         //private bool _notificationTimerSet = false;
 
-        public ActionService(IActionRepository actionRepository, INotificationsTimer notificationsTimer)
+        public ActionService(IActionRepository actionRepository)
         {
-            Console.WriteLine("ActionService constructor called!!<<<<<<<<<<<<<<");
             _actionRepository = actionRepository;
         }
         

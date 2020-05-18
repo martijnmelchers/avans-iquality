@@ -67,5 +67,12 @@ namespace IQuality.Infrastructure.Database.Repositories
 
             return patientChat.Id;
         }
+
+        public async Task<string> GetPatientIdFromPatientChatId(string patientChatId)
+        {
+            var patientChat = await Session.Query<PatientChat>().OfType<PatientChat>().Where(x => x.Id == patientChatId).FirstAsync();
+
+            return patientChat.ParticipatorIds.First();
+        }
     }
 }

@@ -23,5 +23,10 @@ namespace IQuality.DomainServices.Services
         {
             return await _patientRepository.GetAllPatientsOfDoctorAsync(doctorId);
         }
+
+        public async Task<List<string>> RegisterPatientNotificationIdAsync(string notificationId, string patientId)
+        {
+            return await _patientRepository.SetPatientNotificationIdAsync(notificationId, patientId);
+        }
     }
 }

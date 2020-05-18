@@ -10,7 +10,7 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
         Task<Action> SetActionReminderSettingsAsync(Interval interval, string actionId);
         Task<Interval> GetActionReminderIntervalAsync(string actionId);
         Task<string> GetActionDescriptionAsync(string actionId);
-        Task<List<Action>> GetAllToBeSentActionsAsync(string actionId);
+        Task<List<Action>> GetAllReminderActionsAsync();
         Task<List<string>> GetActionTypesOfGoalIds(List<string> goalIds);
     }
 }

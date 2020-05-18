@@ -29,5 +29,11 @@ namespace IQuality.Api.Controllers
         {
             return Ok(await _patientService.GetAllPatientsOfDoctorAsync(HttpContext.User.GetUserId()));
         }
+
+        [HttpPost, Route("{notificationId}"), Authorize(Roles = Roles.Patient)]
+        public async Task<IActionResult> SetPatientNotificationId([FromRoute] string notificationId)
+        {
+            return Ok(await _patientService.SetPatientNotificationIdAsync(notificationId, HttpContext.User.GetUserId()));
+        }
     }
 }

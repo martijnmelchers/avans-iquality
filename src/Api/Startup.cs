@@ -26,28 +26,20 @@ using IQuality.Models.Chat.Messages;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using IdentityRole = Raven.Identity.IdentityRole;
+using IQuality.DomainServices;
 
 namespace IQuality.Api
 {
     public class Startup
     {
+        private readonly IDocumentStore DocumentStore;
+
         public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             Configuration = configuration;
             Environment = environment;
-        }
 
-        private IConfiguration Configuration { get; }
-        private IHostEnvironment Environment { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddCors();
-            services.AddControllers().AddNewtonsoftJson(o => { o.SerializerSettings.CheckAdditionalContent = true; });
-            services.AddSignalR();
-
-            var documentStore = new DocumentStore
+            DocumentStore = new DocumentStore
             {
                 Urls = new[]
                 {
@@ -75,12 +67,23 @@ namespace IQuality.Api
                     }
                 }
             }.Initialize();
+        }
+
+        private IConfiguration Configuration { get; }
+        private IHostEnvironment Environment { get; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddCors();
+            services.AddControllers().AddNewtonsoftJson(o => { o.SerializerSettings.CheckAdditionalContent = true; });
+            services.AddSignalR();
 
             services.AddDependencies(Environment);
 
             // Setup RavenDB session and authorization
             services
-                .AddSingleton(documentStore)
+                .AddSingleton(DocumentStore)
                 .AddSingleton(s => s.GetService<IDocumentStore>().Changes())
                 .AddRavenDbAsyncSession()
                 .AddIdentity<ApplicationUser, IdentityRole>()
@@ -140,6 +143,8 @@ namespace IQuality.Api
                 });
 
 
+
+
             //
             //     services.AddAuthentication(options =>
             //     {
@@ -173,6 +178,8 @@ namespace IQuality.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            var notificationsTimer = new NotificationsTimer(DocumentStore);
+            notificationsTimer.StartTimer(int.Parse(Configuration["Notification:Interval"]));
 
             app.UseRouting();
 
