@@ -16,7 +16,6 @@ export class BotMessageComponent implements OnInit {
   @Input("message") message: Message
 
   public botMessage: BotMessage;
-  public suggestions = Array<Suggestion>();
   public options: any;
 
 
@@ -31,22 +30,19 @@ export class BotMessageComponent implements OnInit {
         "curve": "curveMonotoneX",
       };
     }
-
-
-    this.suggestions.push(new Suggestion("Show active goals", "Get goals"));
-    this.suggestions.push(new Suggestion("Set goal", "Set goal"));
   }
 
-  public onSuggestionClicked(suggestion : Suggestion) {
-    this.chatService.sendMessage(suggestion.value);
+  public async onSuggestionClicked(suggestion : Suggestion) {
+    this.chatService.chatWithBot = true;
+    await this.chatService.sendMessage(suggestion.value);
   }
 
-  onClickDelete(message: BotMessage, data: Listable) {
+  public onClickDelete(message: BotMessage, data: Listable) {
     this.chatService.deleteGoal(message, data);
   }
 
-  onClickSayText(data : Listable) {
-    if(data.isClickable) this.chatService.sendMessage(data.text);
+  public async onClickSayText(data : Listable) {
+    if(data.isClickable) await this.chatService.sendMessage(data.text);
   }
 
 }
