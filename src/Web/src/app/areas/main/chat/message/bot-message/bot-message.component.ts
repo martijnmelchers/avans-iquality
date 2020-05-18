@@ -24,8 +24,6 @@ export class BotMessageComponent implements OnInit {
 
   ngOnInit(): void {
     this.botMessage = this.message as BotMessage
-
-    console.log(this.botMessage);
     if(this.botMessage.responseType == ResponseType.Graph) {
       this.options = {
         "title": this.botMessage.graphData.title,

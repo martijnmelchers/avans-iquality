@@ -99,17 +99,7 @@ export class ChatService {
     return `${time.getHours()}:${time.getMinutes()}`
   }
 
-  private createMessage(content: string) {
-    let message = new TextMessage();
-    message.chatId = this.selected.chat.id;
-    message.senderId = this.auth.getNameIdentifier;
-    message.senderName = this.auth.getName;
-    message.content = content;
-    message.type = "TextMessage";
-    message.sendDate = new Date(Date.now());
 
-    return message
-  }
 
   private setUpSocketConnection(auth: AuthenticationService) {
     this.connection = new signalR.HubConnectionBuilder()
@@ -121,7 +111,7 @@ export class ChatService {
     this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
       if(this.selected){
         if (chatId === this.selected.chat.id) {
-          const message = this.createMessage(content);
+          const message = ChatService.createMessage(userId, userName, chatId, content);
 
           this.messages.push(message);
           this.messageSubject.next();
@@ -170,5 +160,17 @@ export class ChatService {
 
   getContactName(chatId: string) {
     return this._api.get<string>(`/chats/${chatId}/contact`, null, {responseType: "text"});
+  }
+
+  private static createMessage(userId : string, userName: string, chatId: string, content: string) {
+    let message = new TextMessage();
+    message.chatId = chatId;
+    message.senderId = userId;
+    message.senderName = userName;
+    message.content = content;
+    message.type = "TextMessage";
+    message.sendDate = new Date(Date.now());
+
+    return message
   }
 }
