@@ -1,5 +1,10 @@
 
 export class Invite {
   id: string;
-  used: boolean;
+  invitedBy: string;
+  token: string;
+  email: string;
+  chatId: string;
+  inviteType: string;
+  consumed: boolean;
 }

@@ -5,6 +5,6 @@ namespace IQuality.DomainServices.Dialogflow.Interfaces
 {
     public interface IDialogflowService
     {
-        Task<BotMessage> ProcessClientRequest(string text, string chatId);
+        Task<BotMessage> ProcessClientRequest(string text, string chatId, string patientId);
     }
 }

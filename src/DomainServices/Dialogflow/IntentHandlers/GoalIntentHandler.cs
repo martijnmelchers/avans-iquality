@@ -16,17 +16,26 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
     public class GoalIntentHandler : IGoalIntentHandler
     {
         private readonly IGoalService _goalService;
-        private readonly IResponseBuilderService _responseBuilderService;
+        private readonly IDialogflowApi _dialogflowApi;
 
-        public GoalIntentHandler(IGoalService goalService, IResponseBuilderService responseBuilderService)
+        public GoalIntentHandler(IGoalService goalService, IDialogflowApi dialogflowApi)
         {
-            _responseBuilderService = responseBuilderService;
+            _dialogflowApi = dialogflowApi;
             _goalService = goalService;
         }
 
-        public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userInput, QueryResult queryResult)
+        public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userInput, QueryResult queryResult, string patientId)
         {
-            var response = new BotMessage();
+            var response = new BotMessage
+            {
+                MatchedIntent = new MatchedIntent
+                {
+                    Type = chat.Intent.Type,
+                    Name = queryResult.Intent.Name,
+                    Confidence = queryResult.IntentDetectionConfidence
+                }
+            };
+
 
             switch (chat.Intent.Name)
             {
@@ -39,7 +48,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                     if (!await _goalService.GoalExists(chat.Id, userInput))
                     {
                         await _goalService.CreateGoal(chat.Id, userInput);
-                        var dialogflowResponse = await _responseBuilderService.BuildTextResponse(userInput,
+                        var dialogflowResponse = await _dialogflowApi.DetectClientIntent(userInput,
                             GoalIntentNames.CreateGoalDescription);
 
 
@@ -91,7 +100,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                     chat.Intent.Clear();
                     break;
                 default:
-                    response.Content = (await _responseBuilderService.BuildTextResponse(userInput, "first_intent"))
+                    response.Content = (await _dialogflowApi.DetectClientIntent(userInput, "first_intent"))
                         .FulfillmentText;
                         
                     break;

@@ -19,7 +19,11 @@ export class ChatComponent implements OnInit {
     this.route.params.subscribe((params) => {
       let chatName = params.chatName;
     });
+
+    this.chatService.connectWithChats()
   }
+
+
 
   private onChatSelected() {
   }

@@ -23,7 +23,19 @@ const routes: Routes = [
     component: ChatInstanceComponent
   },
   {
-    path: 'invite',
+    path: 'invite/:id',
+    component: InviteComponent
+  },
+  {
+    path: 'create-invite',
+    component: InviteComponent
+  },
+  {
+    path: 'create-invite',
+    component: InviteComponent
+  },
+  {
+    path: 'create-invite/:chatId',
     component: InviteComponent
   },
   {

@@ -7,7 +7,7 @@ import {
   ButtonModule,
   GridModule,
   InputModule,
-  ListModule, NotificationModule, NotificationService,
+  ListModule, ModalModule, NotificationModule, PlaceholderModule, SearchModule,
   StructuredListModule,
   TableModule, TagModule,
   TilesModule, ToggleModule,
@@ -30,9 +30,25 @@ import { ChatInstanceComponent } from './chat/chat-instance/chat-instance.compon
 import { TipsComponent } from './doctor/tips/tips.component';
 import { AddTipComponent } from './doctor/tips/addtip/addtip.component';
 import { ManageComponent } from './doctor/tips/manage/manage.component';
+import {BotMessageComponent} from "@IQuality/areas/main/chat/message/bot-message/bot-message.component";
+import {ChartsModule} from "@carbon/charts-angular";
+import {UserMessageComponent} from "@IQuality/areas/main/chat/message/user-message/user-message.component";
 
 @NgModule({
-  declarations: [HomeComponent, ChatComponent, MessageComponent, InviteComponent, ChatListComponent, DoctorComponent, ChatInstanceComponent, TipsComponent, AddTipComponent, ManageComponent],
+  declarations: [
+    HomeComponent,
+    ChatComponent,
+    MessageComponent,
+    InviteComponent,
+    ChatListComponent,
+    DoctorComponent,
+    ChatInstanceComponent,
+    BotMessageComponent,
+    UserMessageComponent,
+	 TipsComponent, 
+	 AddTipComponent, 
+	 ManageComponent,
+  ],
   imports: [
     CommonModule,
     MainRoutingModule,
@@ -55,7 +71,10 @@ import { ManageComponent } from './doctor/tips/manage/manage.component';
     TrashCanModule,
     DeleteModule,
     NotificationModule,
-
+    ModalModule,
+    ChartsModule,
+    PlaceholderModule,
+    SearchModule,
   ],
   providers: []
 })

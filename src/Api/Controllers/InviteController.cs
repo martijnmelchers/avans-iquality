@@ -42,6 +42,10 @@ namespace IQuality.Api.Controllers
             {
                 var invite =
                     await _inviteService.CreateInvite(HttpContext.User.GetUserId(), data.Email, data.ChatId);
+                
+                
+                //TODO: Emailservice
+                await _inviteService.SendInviteEmail(invite);
                 return Ok(invite);
             }
             catch (Exception e)

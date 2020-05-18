@@ -4,13 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using IQuality.Api.Extensions;
 using IQuality.DomainServices.Interfaces;
-using IQuality.Models.Authentication;
 using IQuality.Models.Chat;
 using IQuality.Models.Chat.Messages;
-using IQuality.Models.Forms;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Raven.Client.Documents.Session;
 
 namespace IQuality.Api.Controllers
@@ -32,7 +29,7 @@ namespace IQuality.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetChats()
         {
-            return Ok(await _chatService.GetChatsAsync());
+            return Ok(await _chatService.GetChatsAsync(HttpContext.User.GetUserId()));
         }
 
         [HttpPost]
@@ -63,9 +60,11 @@ namespace IQuality.Api.Controllers
         }
 
         [Route("{chatId}/messages")]
-        public async Task<IActionResult> GetChatMessagesPagination(string chatId, [FromQuery] int pageOffset = 1, [FromQuery] int pageSize = 1)
+        public async Task<IActionResult> GetChatMessagesPagination(string chatId, [FromQuery] int pageOffset = 1,
+            [FromQuery] int pageSize = 1)
         {
-            List<TextMessage> messages = await _messageService.GetMessages(chatId, (pageOffset - 1) * pageSize, pageSize); 
+            List<TextMessage> messages =
+                await _messageService.GetMessages(chatId, (pageOffset - 1) * pageSize, pageSize);
 
             return Ok(messages);
         }
@@ -82,7 +81,7 @@ namespace IQuality.Api.Controllers
                 ChatId = chatId,
                 Content = content
             });
-            
+
             return Ok(messages);
         }
 
@@ -92,6 +91,17 @@ namespace IQuality.Api.Controllers
         {
             TextMessage messages = await _messageService.GetMessage(chatId, messageId);
             return Ok(messages);
+        }
+
+
+        [HttpGet("{chatId}/contact")]
+        public async Task<IActionResult> GetParticipant(string chatId)
+        {
+            ChatContext<BaseChat> chatContext = await _chatService.GetChatAsync(chatId);
+            string userId = HttpContext.User.GetUserId();
+
+            string contactName = await _chatService.GetContactName(userId, chatContext.Chat);
+            return Ok(contactName);
         }
     }
 }

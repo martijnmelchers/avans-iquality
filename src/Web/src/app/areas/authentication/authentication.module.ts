@@ -13,10 +13,11 @@ import {
   TilesModule
 } from "carbon-components-angular";
 import { ReactiveFormsModule } from "@angular/forms";
+import { RegisterComponent } from './register/register.component';
 
 
 @NgModule({
-  declarations: [LoginComponent],
+  declarations: [LoginComponent, RegisterComponent],
   imports: [
     CoreModule,
     CommonModule,

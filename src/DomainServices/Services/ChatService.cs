@@ -4,9 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories.Interface;
+using IQuality.Models.Authentication;
 using IQuality.Models.Chat;
 using IQuality.Models.Helpers;
-
+using Microsoft.AspNetCore.Identity;
 
 namespace IQuality.DomainServices.Services
 {
@@ -14,10 +15,12 @@ namespace IQuality.DomainServices.Services
     public class ChatService : IChatService
     {
         private readonly IChatRepository _chatRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ChatService(IChatRepository chatRepository)
+        public ChatService(IChatRepository chatRepository, UserManager<ApplicationUser> userManager)
         {
             _chatRepository = chatRepository;
+            _userManager = userManager;
         }
 
         public async Task<ChatContext<BaseChat>> GetChatAsync(string id)
@@ -25,19 +28,19 @@ namespace IQuality.DomainServices.Services
             return await _chatRepository.GetByIdAsync(id);
         }
 
-        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync()
+        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync(string userId)
         {
-            return await _chatRepository.GetChatsAsync(0, 10);
+            return await _chatRepository.GetChatsAsync(userId, 0, 1000);
         }
 
-        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync(int skip, int take)
+        public async Task<List<ChatContext<BaseChat>>> GetChatsAsync(string userId, int skip, int take)
         {
-            return await _chatRepository.GetChatsAsync(skip, take);
+            return await _chatRepository.GetChatsAsync(userId, skip, take);
         }
-        
+
         public async Task<ChatContext<BaseChat>> CreateChatAsync(BaseChat baseChat)
         {
-            var context = new ChatContext<BaseChat>()
+            ChatContext<BaseChat> context = new ChatContext<BaseChat>
             {
                 Chat = baseChat
             };
@@ -50,22 +53,17 @@ namespace IQuality.DomainServices.Services
             BaseChat baseChat;
             try
             {
-                 baseChat = (await GetChatAsync(chatId)).Chat;
+                baseChat = (await GetChatAsync(chatId)).Chat;
             }
             catch (Exception e)
             {
                 return false;
             }
-            
-            if (baseChat.InitiatorId == userId)
-            {
-                return true;
-            }
+
+            if (baseChat.InitiatorId == userId) return true;
 
             if (baseChat.ParticipatorIds != null && baseChat.ParticipatorIds.Count != 0)
-            {
                 return baseChat.ParticipatorIds.Any(participator => participator == userId);
-            }
 
             return false;
         }
@@ -73,6 +71,29 @@ namespace IQuality.DomainServices.Services
         public async void DeleteChatAsync(string id)
         {
             _chatRepository.Delete(await _chatRepository.GetByIdAsync(id));
+        }
+        
+        public async Task AddUserToChat(string applicationUserId, string chatId)
+        {
+            ChatContext<BaseChat> chat = await _chatRepository.GetByIdAsync(chatId);
+            if (chat.Chat.ParticipatorIds == null)
+            {
+                chat.Chat.ParticipatorIds = new List<string>();
+            }
+            
+            chat.Chat.ParticipatorIds.Add(applicationUserId);
+            await _chatRepository.SaveAsync(chat);
+        }
+
+        public async Task<string> GetContactName(string userId, BaseChat chat)
+        {
+            if (chat.ParticipatorIds == null || chat.ParticipatorIds.Count == 0)
+                throw new Exception("Chat does not have any participators");
+
+            string contactId = userId == chat.InitiatorId ? chat.ParticipatorIds[0] : chat.InitiatorId;
+            ApplicationUser applicationUser = await _userManager.FindByIdAsync(contactId);
+            
+            return applicationUser.Name.ToString();
         }
     }
 }

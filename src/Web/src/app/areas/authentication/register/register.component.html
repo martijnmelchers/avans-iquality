@@ -1,0 +1,86 @@
+<div ibmGrid>
+  <div ibmRow>
+    <div ibmCol [offsets]="{ lg: 4 }" [columnNumbers]="{ lg: 4 }">
+      <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="link">
+        <h1 class="mb-01">Register</h1>
+
+        <p class="mb-07">
+          You are creating an account, remember the account credentials.
+        </p>
+
+        <div [hidden]="!hasError">
+        <ibm-notification [notificationObj]="{
+				type: 'error',
+          title: 'Oops! Something went wrong...',
+          message: 'Invalid username/password, please check your credentials and try again...',
+          showClose: false,
+          lowContrast: true}">
+        </ibm-notification>
+      </div>
+
+        <fieldset class="mb-06">
+          <ibm-label>
+            Email
+            <input disabled ibmText value="{{link.email}}">
+          </ibm-label>
+        </fieldset>
+
+
+        <fieldset class="mb-06">
+          <ibm-label
+            helperText="First name."
+            [invalid]="isInvalid('first')"
+            invalidText="Please enter a valid name ">
+            First name
+            <input ibmText type="first" formControlName="first" name="first">
+          </ibm-label>
+        </fieldset>
+
+
+        <fieldset class="mb-06">
+          <ibm-label
+            helperText="This is your real name."
+            [invalid]="isInvalid('infix')"
+            invalidText="Please enter a valid name ">
+            Infix
+            <input ibmText type="infix" formControlName="infix" name="infix">
+          </ibm-label>
+        </fieldset>
+
+        <fieldset class="mb-06">
+          <ibm-label
+            helperText="Last name."
+            [invalid]="isInvalid('last')"
+            invalidText="Please enter a valid name ">
+            Last name
+            <input ibmText type="last" formControlName="last" name="last">
+          </ibm-label>
+        </fieldset>
+
+
+        <fieldset class="mb-06">
+          <ibm-label
+            helperText="This will be the password used for loging in, please remember well"
+            [invalid]="isInvalid('password')"
+            invalidText="Please enter a valid password">
+            Password
+            <input ibmText type="password" formControlName="password" name="password">
+          </ibm-label>
+        </fieldset>
+
+
+        <fieldset class="mb-06">
+          <ibm-label
+            helperText="Confirm your password"
+            [invalid]="isInvalid('password')"
+            invalidText="Please enter a valid password">
+            Confirm your Password
+            <input ibmText type="password" formControlName="confirmPassword" name="confirmPassword">
+          </ibm-label>
+        </fieldset>
+
+        <button ibmButton [disabled]="!form.valid" class="mb-04">Register</button>
+      </form>
+    </div>
+  </div>
+</div>

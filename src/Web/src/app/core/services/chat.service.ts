@@ -21,26 +21,30 @@ import {Listable} from "@IQuality/core/models/listable";
   providedIn: 'root'
 })
 export class ChatService {
+  private auth: AuthenticationService;
+  private connection: signalR.HubConnection;
+
   public chatWithBot: boolean;
   public selected: ChatContext;
 
   //Messages zijn voor alles om te laten zien
   public messages: Array<Message> = [];
+
   public messageSubject: EventEmitter<void> = new EventEmitter<void>(false);
-  //Database messages zijn de messages die opgeslagen zijn in de database
 
   public onChatSelected: Array<() => void> = [];
 
-  private connection: signalR.HubConnection;
-
-
   private _chats: Array<ChatContext>;
-  constructor(private _api: ApiService, private auth: AuthenticationService, private _notificationService: NotificationService) {
-    this.setUpSocketConnection(auth)
+
+  constructor(private _api: ApiService, private _auth: AuthenticationService, private _notificationService: NotificationService) {
+    this._auth.SetChatService = this;
+  }
+
+  public connectWithChats() {
+    this.setUpSocketConnection(this._auth);
   }
 
   public async sendMessage(content: string) {
-
     await this.connection.send("newMessage", this.selected.chat.id, content);
     if (this.chatWithBot) {
 
@@ -86,6 +90,9 @@ export class ChatService {
   }
 
   private hubJoinGroup(roomId: string) {
+    if(!this.connection)
+      return;
+
     this.connection.invoke("JoinGroup", roomId).catch(err => {
       console.log(err)
     });
@@ -96,28 +103,24 @@ export class ChatService {
     return `${time.getHours()}:${time.getMinutes()}`
   }
 
-  private createMessage(content: string) {
-    let message = new TextMessage();
-    message.chatId = this.selected.chat.id;
-    message.senderId = this.auth.getNameIdentifier;
-    message.senderName = this.auth.getName;
-    message.content = content;
-    message.sendDate = new Date(Date.now());
 
-    return message
-  }
 
   private setUpSocketConnection(auth: AuthenticationService) {
     this.connection = new signalR.HubConnectionBuilder()
       .withAutomaticReconnect()
       .withUrl(`${environment.endpoints.api}/hub`, {
         accessTokenFactory: () => auth.encodedToken
-      }).configureLogging(LogLevel.Warning).build();
+      }).build();
+
+    this.connection.onreconnecting(() => console.log('Chat is reconnecting...'))
+    this.connection.onreconnected(() => console.log('Chat is reconnected!'))
+    this.connection.onclose(() => console.log('Connection closed!'));
+
 
     this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
       if(this.selected){
         if (chatId === this.selected.chat.id) {
-          const message = this.createMessage(content);
+          const message = ChatService.createMessage(userId, userName, chatId, content);
 
           this.messages.push(message);
           this.messageSubject.next();
@@ -155,12 +158,40 @@ export class ChatService {
     })
   }
 
-  deleteGoal(message: TextMessage, data: Listable) {
+  deleteGoal(message: BotMessage, data: Listable) {
     this._api.delete(`/dialogflow/goal/${data.id}`).then(() => {
       const index = message.listData.indexOf(data, 0);
       if (index > -1) {
         message.listData.splice(index, 1);
       }
     });
+  }
+
+  getContactName(chatId: string) {
+    return this._api.get<string>(`/chats/${chatId}/contact`, null, {responseType: "text"});
+  }
+
+  private static createMessage(userId : string, userName: string, chatId: string, content: string) {
+    let message = new TextMessage();
+    message.chatId = chatId;
+    message.senderId = userId;
+    message.senderName = userName;
+    message.content = content;
+    message.type = "TextMessage";
+    message.sendDate = new Date(Date.now());
+
+    return message
+  }
+
+  public disconnect() {
+    if(!this.connection)
+      return;
+
+    this.connection.stop();
+    this.connection = null;
+  }
+
+  public hasConnection(): boolean{
+    return this.connection != null;
   }
 }
