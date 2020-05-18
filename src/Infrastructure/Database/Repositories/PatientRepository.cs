@@ -98,7 +98,7 @@ namespace IQuality.Infrastructure.Database.Repositories
             return patient.NotificationIds;
         }
 
-        public async Task<List<string>> SetPatientNotificationIdAsync(string notificationId, string patientId)
+        public async Task<List<string>> SetPatientNotificationIdAsync(string notificationId, bool isSubscribed, string patientId)
         {
             var patient = await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == patientId).FirstAsync();
 
@@ -107,7 +107,10 @@ namespace IQuality.Infrastructure.Database.Repositories
                 patient.NotificationIds = new List<string>();
             }
 
-            patient.NotificationIds.Add(notificationId);
+            if (isSubscribed)
+                patient.NotificationIds.Add(notificationId);
+            else
+                patient.NotificationIds.Remove(notificationId);
 
             await Session.StoreAsync(patient);
 
