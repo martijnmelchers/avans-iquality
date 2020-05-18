@@ -32,7 +32,7 @@ export class AddTipComponent implements OnInit {
   });
 
   async ngOnInit(): Promise<any> {
-    await this._api.get<any>('/action/getactiontypes').then(resp => {
+    await this._api.get<any>('/action').then(resp => {
       this.actionTypes = resp;
     });
 
