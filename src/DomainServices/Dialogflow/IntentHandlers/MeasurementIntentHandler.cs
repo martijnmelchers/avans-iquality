@@ -70,7 +70,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                     chat.Intent.Clear();
                     break;
                 case PatientDataIntentNames.GetWeightGraph:
-                    var data = await GetData(patientId, MeasurementType.Weight);
+                    List<Measurement> weightData = await GetData(patientId, MeasurementType.Weight);
 
                     response.RespondGraph("Sure, here is your progress", new GraphData
                     {
@@ -90,10 +90,78 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                                 ScaleType = "linear"
                             }
                         },
-                        Entries = data.Select(x => new GraphEntry
+                        Entries = weightData.Select(x => new GraphEntry
                         {
                             Date = x.Date.ToString("yyyy-MM-ddTHH:mm:ssZ"),
                             Group = MeasurementType.Weight.ToString(),
+                            Value = x.Value
+                        }).ToList()
+                    });
+
+                    chat.Intent.Clear();
+
+
+                    break;
+                
+                case PatientDataIntentNames.GetBloodPressureGraph:
+                    List<Measurement> bloodPressureData = await GetData(patientId, MeasurementType.BloodPressure);
+
+                    response.RespondGraph("Sure, here is your progress", new GraphData
+                    {
+                        Title = "Blood pressure over time",
+                        Options = new GraphOptions
+                        {
+                            Bottom = new GraphAxis
+                            {
+                                Title = "Date",
+                                MapsTo = "date",
+                                ScaleType = "time"
+                            },
+                            Left = new GraphAxis
+                            {
+                                Title = "Systolic",
+                                MapsTo = "value",
+                                ScaleType = "linear"
+                            }
+                        },
+                        Entries = bloodPressureData.Select(x => new GraphEntry
+                        {
+                            Date = x.Date.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                            Group = MeasurementType.BloodPressure.ToString(),
+                            Value = x.Value
+                        }).ToList()
+                    });
+
+                    chat.Intent.Clear();
+
+
+                    break;
+                
+                case PatientDataIntentNames.GetCholesterolGraph:
+                    List<Measurement> cholesterolData = await GetData(patientId, MeasurementType.Cholesterol);
+
+                    response.RespondGraph("Sure, here is your progress", new GraphData
+                    {
+                        Title = "Cholesterol over time",
+                        Options = new GraphOptions
+                        {
+                            Bottom = new GraphAxis
+                            {
+                                Title = "Date",
+                                MapsTo = "date",
+                                ScaleType = "time"
+                            },
+                            Left = new GraphAxis
+                            {
+                                Title = "Glu",
+                                MapsTo = "value",
+                                ScaleType = "linear"
+                            }
+                        },
+                        Entries = cholesterolData.Select(x => new GraphEntry
+                        {
+                            Date = x.Date.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                            Group = MeasurementType.Cholesterol.ToString(),
                             Value = x.Value
                         }).ToList()
                     });
@@ -126,6 +194,9 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
 
         public const string RegisterCholesterol = "register_cholesterol";
         public const string SaveCholesterol = "save_cholesterol";
+        
         public const string GetWeightGraph = "get_weight_graph";
+        public const string GetBloodPressureGraph = "get_bloodpressure_graph";
+        public const string GetCholesterolGraph = "get_cholesterol_graph";
     }
 }

@@ -19,6 +19,10 @@
     </div>
   </div>
 
+  <div *ngIf="botIsTyping">
+    Bot is typing...
+  </div>
+
   <form (ngSubmit)="onSubmit($event)" [formGroup]="messageFormGroup" class="type-bar">
     <div ibmRow gutter="true" condensed="true">
 

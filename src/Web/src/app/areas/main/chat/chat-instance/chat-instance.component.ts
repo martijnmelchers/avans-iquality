@@ -14,6 +14,7 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
   public messageControl: FormControl;
 
   public scrollHeight: number;
+  public botIsTyping: boolean;
 
   @ViewChild('chatScroll') public chatScrollContainer: ElementRef;
 
@@ -49,9 +50,14 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
   async onSubmit(e): Promise<void> {
     const message = this.messageFormGroup.getRawValue().message;
     if (!message || message === "") return;
-    await this.chatService.sendMessage(message);
+
+    this.botIsTyping = this.chatService.chatWithBot;
 
     this.messageControl.setValue("");
+    await this.chatService.sendMessage(message);
+
+    this.botIsTyping = false;
+
     if (e) {
       e.preventDefault();
     }

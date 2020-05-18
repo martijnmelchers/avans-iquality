@@ -43,6 +43,7 @@ export class ChatService {
   public async sendMessage(content: string) {
 
     await this.connection.send("newMessage", this.selected.chat.id, content);
+
     if (this.chatWithBot) {
 
       const patientMessage = new TextMessage();
