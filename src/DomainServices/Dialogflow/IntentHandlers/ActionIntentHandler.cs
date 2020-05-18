@@ -24,9 +24,18 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
             _goalService = goalService;
             _actionService = actionService;
         }
-        public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userInput, QueryResult queryResult)
+        public async Task<BotMessage> HandleClientIntent(PatientChat chat, string userInput, QueryResult queryResult, string patientId)
         {
-            var response = new BotMessage();
+            var response = new BotMessage
+            {
+                MatchedIntent = new MatchedIntent
+                {
+                    Type = chat.Intent.Type,
+                    Name = queryResult.Intent.Name,
+                    Confidence = queryResult.IntentDetectionConfidence
+                }
+            };
+
 
             switch (chat.Intent.Name)
             {
@@ -59,7 +68,7 @@ namespace IQuality.DomainServices.Dialogflow.IntentHandlers
                         response.RespondText("I'm sorry but I can't find that goal, check the spelling and try again.");
                         break;
                     }
-                    Goal goal = await _goalService.GetGoalByDescription(chat.Id, chat.Intent.SelectedItem);
+                    var goal = await _goalService.GetGoalByDescription(chat.Id, chat.Intent.SelectedItem);
                     await _actionService.CreateAction(chat.Id, goal.Id,userInput, chat.Intent.SelectedActionType);
                     
                     response.RespondText("I created a new action!");

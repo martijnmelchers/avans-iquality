@@ -4,4 +4,5 @@
 
   chatId: string;
   sendDate: Date;
+  type: string;
 }

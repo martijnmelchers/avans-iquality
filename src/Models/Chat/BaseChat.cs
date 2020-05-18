@@ -14,5 +14,6 @@ namespace IQuality.Models.Chat
         // Initiator started the chat with the participator
         public string InitiatorId { get; set; }
         public List<string> ParticipatorIds { get; set; }
+        public string Type => GetType().Name;
     }
 }

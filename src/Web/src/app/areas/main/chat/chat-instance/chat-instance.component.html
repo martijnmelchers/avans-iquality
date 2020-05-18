@@ -1,7 +1,7 @@
 <div *ngIf="chatService.selected" ibmGrid style="overflow: hidden;">
   <div ibmRow>
     <div ibmCol>
-      <ibm-icon-close size="32" [routerLink]="['/chat']"></ibm-icon-close>
+      <ibm-icon-close size="32" (click)="this.back()"></ibm-icon-close>
     </div>
   </div>
 
@@ -19,6 +19,10 @@
     </div>
   </div>
 
+  <div *ngIf="botIsTyping">
+    Bot is typing...
+  </div>
+
   <form (ngSubmit)="onSubmit($event)" [formGroup]="messageFormGroup" class="type-bar">
     <div ibmRow gutter="true" condensed="true">
 
@@ -29,20 +33,20 @@
           [(checked)]="chatService.chatWithBot">
         </ibm-toggle>
       </div>
-      <div ibmCol [columnNumbers]="{ 'lg': 5, 'md': 5, 'sm': 2}">
+      <div ibmCol [columnNumbers]="{ 'lg': 8, 'md': 5, 'sm': 2}">
         <ibm-label>
           <input aria-label="textarea" formControlName="message"
                  ibmTextArea
                  placeholder="Messages"/>
         </ibm-label>
       </div>
-      <div ibmCol [columnNumbers]="{ 'lg': 1, 'md': 1, 'sm': 1}">
+      <div ibmCol [columnNumbers]="{ 'lg': 2, 'md': 1, 'sm': 1}">
         <button class="button" type="submit">
           <ibm-icon-send-alt size="32"></ibm-icon-send-alt>
         </button>
       </div>
     </div>
-
   </form>
-
 </div>
+
+

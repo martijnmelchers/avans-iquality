@@ -19,6 +19,8 @@ export class AuthenticationService {
   constructor(private readonly _api: ApiService, private _cookie: CookieService) {
     this.tokenService = new JwtHelperService();
     this.encodedToken = this._cookie.get('token');
+    this.decodedToken = this.tokenService.decodeToken(this.encodedToken);
+
   }
 
 
@@ -50,7 +52,16 @@ export class AuthenticationService {
     return this.decodedToken[this.NAME];
   }
 
+  public get getRole(): string{
+    return this.decodedToken.role;
+  }
+
+
+  async getInviteLink(inviteToken: string):Promise<Invite> {
+    return this._api.get<Invite>(`/invite/${inviteToken}`);
+  }
+
   async createInviteLink(): Promise<Invite> {
-    return this._api.post<Invite>('/authorize/invite', {});
+    return this._api.post<Invite>('/invite', {});
   }
 }

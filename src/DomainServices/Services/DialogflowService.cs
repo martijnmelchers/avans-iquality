@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Google.Cloud.Dialogflow.V2;
 using Google.Protobuf.WellKnownTypes;
@@ -12,6 +14,7 @@ using IQuality.Models.Dialogflow.Exceptions;
 using IQuality.Models.Forms;
 using IQuality.Models.Helpers;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace IQuality.DomainServices.Services
 {
@@ -22,19 +25,22 @@ namespace IQuality.DomainServices.Services
 
         private readonly IMessageService _messageService;
 
-        private readonly IResponseBuilderService _responseBuilderService;
+        private readonly IDialogflowApi _dialogflowApi;
 
         private readonly IGoalIntentHandler _goalIntentHandler;
         private readonly IActionIntentHandler _actionIntentHandler;
+        private readonly IMeasurementIntentHandler _measurementIntentHandler;
 
         public DialogflowService(
-            IResponseBuilderService responseBuilderService, IChatRepository chatRepository, 
+            IDialogflowApi dialogflowApi, IChatRepository chatRepository,
             IGoalIntentHandler goalIntentHandler, IActionIntentHandler actionIntentHandler,
+            IMeasurementIntentHandler measurementIntentHandler,
             IMessageService messageService)
         {
             _goalIntentHandler = goalIntentHandler;
             _actionIntentHandler = actionIntentHandler;
-            _responseBuilderService = responseBuilderService;
+            _measurementIntentHandler = measurementIntentHandler;
+            _dialogflowApi = dialogflowApi;
 
             _chatRepository = chatRepository;
             _messageService = messageService;
@@ -45,15 +51,15 @@ namespace IQuality.DomainServices.Services
                 "dialogflow.config.json");
         }
 
-        public async Task<BotMessage> ProcessClientRequest(string text, string chatId)
+        public async Task<BotMessage> ProcessClientRequest(string text, string chatId, string patientId)
         {
             var chatContext = await _chatRepository.GetPatientChatAsync(chatId);
-            var result = await _responseBuilderService.BuildTextResponse(text, IntentNames.Default);
-            
+            var result = await _dialogflowApi.DetectClientIntent(text, IntentNames.Default);
+
             if (
                 string.IsNullOrEmpty(chatContext.Intent.Name) ||
                 result.Intent.DisplayName == IntentNames.Cancel ||
-                result.Intent.DisplayName == IntentNames.Fallback && chatContext.Intent.Name == string.Empty)
+                result.Intent.IsFallback && chatContext.Intent.Name == string.Empty)
             {
                 chatContext.Intent.Name = result.Intent.DisplayName;
 
@@ -63,10 +69,14 @@ namespace IQuality.DomainServices.Services
 
             var message = chatContext.Intent.Type switch
             {
-                IntentTypes.Goal => await _goalIntentHandler.HandleClientIntent(chatContext, text, result),
-                IntentTypes.Action => await _actionIntentHandler.HandleClientIntent(chatContext, text, result),
+                IntentTypes.Goal => await _goalIntentHandler.HandleClientIntent(chatContext, text, result, patientId),
+                IntentTypes.Action => await _actionIntentHandler.HandleClientIntent(chatContext, text, result,
+                    patientId),
+                IntentTypes.Measurement => await _measurementIntentHandler.HandleClientIntent(chatContext, text, result,
+                    patientId),
                 IntentTypes.Cancel => SendDefaultResponse(chatContext, result),
                 IntentTypes.Fallback => SendDefaultResponse(chatContext, result),
+                IntentTypes.TextResponse => SendDefaultResponse(chatContext, result),
                 _ => throw new UnknownIntentException()
             };
 
@@ -75,12 +85,28 @@ namespace IQuality.DomainServices.Services
 
         private static BotMessage SendDefaultResponse(PatientChat chat, QueryResult result)
         {
+            var suggestions = new List<Suggestion>();
+
             chat.Intent.Clear();
-            
+
+            var payload = result.FulfillmentMessages.FirstOrDefault(x => x.Payload != null);
+
+            if (payload != null)
+            {
+                var suggestionPayload = payload.Payload.Fields.FirstOrDefault(x => x.Key == "suggestions");
+                var listPayload = payload.Payload.Fields.FirstOrDefault(x => x.Key == "list");
+
+                if (suggestionPayload.Key != null)
+                    suggestions =
+                        JsonConvert.DeserializeObject<List<Suggestion>>(suggestionPayload.Value.ListValue.ToString());
+            }
+
+
             return new BotMessage
             {
                 Content = result.FulfillmentText,
-                ResponseType = ResponseType.Text
+                ResponseType = ResponseType.Text,
+                Suggestions = suggestions
             };
         }
     }

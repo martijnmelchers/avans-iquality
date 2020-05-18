@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { ChatService } from "@IQuality/core/services/chat.service";
 import { ActivatedRoute } from "@angular/router";
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-chat-instance',
@@ -13,19 +14,17 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
   public messageControl: FormControl;
 
   public scrollHeight: number;
+  public botIsTyping: boolean;
 
-  @ViewChild('chatScroll') public chatScrollContainer: ElementRef;
+  private chatId: string;
 
-  constructor(private formBuilder: FormBuilder, public chatService: ChatService, private route: ActivatedRoute) {
-  }
+  @ViewChild('chatScroll', { static: false }) public chatScrollContainer: ElementRef;
+
+  constructor(private formBuilder: FormBuilder, public chatService: ChatService, private route: ActivatedRoute, private _location: Location) { }
 
   async ngOnInit() {
-
-    this.scrollHeight = 0;
-
     this.route.params.subscribe(async (params) => {
-      let chatId = params.chatId;
-      await this.initializeChat(chatId);
+      this.chatId = params.chatId;
     });
 
     this.messageControl = new FormControl();
@@ -36,6 +35,7 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
 
   async initializeChat(chatId: string) {
     await this.chatService.selectChatWithId(chatId);
+
     this.chatService.messageSubject.subscribe(() => {
       setTimeout(() => this.scrollToBottom(), 100);
     });
@@ -48,15 +48,25 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
   async onSubmit(e): Promise<void> {
     const message = this.messageFormGroup.getRawValue().message;
     if (!message || message === "") return;
-    await this.chatService.sendMessage(message);
+
+    this.botIsTyping = this.chatService.chatWithBot;
 
     this.messageControl.setValue("");
+    await this.chatService.sendMessage(message);
+
+    this.botIsTyping = false;
+
     if (e) {
       e.preventDefault();
     }
   }
 
-  ngAfterViewInit(): void {
+  back(): void{
+    this._location.back();
+  }
+
+  async ngAfterViewInit() {
+    await this.initializeChat(this.chatId);
     setTimeout(() => this.scrollToBottom(), 100);
   }
 }

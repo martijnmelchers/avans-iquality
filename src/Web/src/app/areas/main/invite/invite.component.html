@@ -1,11 +1,25 @@
-<div class="send" *ngIf="isSend">
-  <h1>Invite Buddy</h1>
-  <input ibmText id="copyText">
-  <button ibmButton="primary" size="normal" (click)="createInvite()">Generate invite link</button>
-</div>
 
-<div class="accept" *ngIf="!isSend">
-  <h3>Invite from: Sascha</h3>
-  <button ibmButton="primary" size="normal">Accept</button>
+<div ibmGrid>
+  <div ibmRow>
+    <div ibmCol>
+      <div class="send" *ngIf="isSend">
+        <h1 *ngIf="this.role == 'Doctor'">Invite patient</h1>
+        <h1 *ngIf="this.role == 'Patient'">Invite buddy</h1>
+
+        <p>Copy the invite link and send it to the patient. With this link they will be able to register.</p>
+        <input value="{{inviteToken}}" ibmText id="copyText">
+        <button ibmButton="primary" size="normal" (click)="createInvite()">Create invite</button>
+      </div>
+
+      <div class="accept" *ngIf="this.invite">
+        <h3>Invite from: {{invite.invitedBy}}</h3>
+        <h4>To become a: {{inviteTypes[invite.inviteType]}}</h4>
+        <br>
+        <p>After accepting this invite. You will be able to register an account</p>
+        <button ibmButton="primary" size="normal">Accept</button>
+        <button ibmButton="warning" size="normal">Decline</button>
+      </div>
+    </div>
+  </div>
 </div>
 

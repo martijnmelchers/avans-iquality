@@ -1,0 +1,19 @@
+<div *ngIf="isCurrentUser" class="message-box my-message-box">
+  <p class="my-p">{{textMessage.senderName || textMessage.senderId}}</p>
+  <span class="text my-text">
+      {{textMessage.content}}
+    <div class="message-time my-time">
+        <p>{{ textMessage.sendDate | date:"HH:mm"}}</p>
+      </div>
+    </span>
+</div>
+
+<div *ngIf="!isCurrentUser" class="message-box other-message-box">
+  <p class="other-p">{{textMessage.senderName || textMessage.senderId}}</p>
+  <span class="text other-text">
+        {{textMessage.content}}
+    <div class="message-time other-time">
+        <p>{{ textMessage.sendDate | date:"HH:mm"}}</p>
+      </div>
+    </span>
+</div>

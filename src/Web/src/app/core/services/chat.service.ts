@@ -26,6 +26,7 @@ export class ChatService {
 
   //Messages zijn voor alles om te laten zien
   public messages: Array<Message> = [];
+
   public messageSubject: EventEmitter<void> = new EventEmitter<void>(false);
   //Database messages zijn de messages die opgeslagen zijn in de database
 
@@ -42,6 +43,7 @@ export class ChatService {
   public async sendMessage(content: string) {
 
     await this.connection.send("newMessage", this.selected.chat.id, content);
+
     if (this.chatWithBot) {
 
       const patientMessage = new TextMessage();
@@ -52,6 +54,7 @@ export class ChatService {
       this.messages.push(response);
       this.messageSubject.next()
     }
+
   }
 
   public async createBuddychat(name: string, isBuddyChat: boolean): Promise<ChatContext> {
@@ -96,16 +99,7 @@ export class ChatService {
     return `${time.getHours()}:${time.getMinutes()}`
   }
 
-  private createMessage(content: string) {
-    let message = new TextMessage();
-    message.chatId = this.selected.chat.id;
-    message.senderId = this.auth.getNameIdentifier;
-    message.senderName = this.auth.getName;
-    message.content = content;
-    message.sendDate = new Date(Date.now());
 
-    return message
-  }
 
   private setUpSocketConnection(auth: AuthenticationService) {
     this.connection = new signalR.HubConnectionBuilder()
@@ -114,10 +108,15 @@ export class ChatService {
         accessTokenFactory: () => auth.encodedToken
       }).configureLogging(LogLevel.Warning).build();
 
+    this.connection.onreconnecting(() => console.log('Chat is reconnecting...'))
+    this.connection.onreconnected(() => console.log('Chat is reconnected!'))
+    this.connection.onclose(() => console.log('Connection closed!'));
+
+
     this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
       if(this.selected){
         if (chatId === this.selected.chat.id) {
-          const message = this.createMessage(content);
+          const message = ChatService.createMessage(userId, userName, chatId, content);
 
           this.messages.push(message);
           this.messageSubject.next();
@@ -155,12 +154,28 @@ export class ChatService {
     })
   }
 
-  deleteGoal(message: TextMessage, data: Listable) {
+  deleteGoal(message: BotMessage, data: Listable) {
     this._api.delete(`/dialogflow/goal/${data.id}`).then(() => {
       const index = message.listData.indexOf(data, 0);
       if (index > -1) {
         message.listData.splice(index, 1);
       }
     });
+  }
+
+  getContactName(chatId: string) {
+    return this._api.get<string>(`/chats/${chatId}/contact`, null, {responseType: "text"});
+  }
+
+  private static createMessage(userId : string, userName: string, chatId: string, content: string) {
+    let message = new TextMessage();
+    message.chatId = chatId;
+    message.senderId = userId;
+    message.senderName = userName;
+    message.content = content;
+    message.type = "TextMessage";
+    message.sendDate = new Date(Date.now());
+
+    return message
   }
 }

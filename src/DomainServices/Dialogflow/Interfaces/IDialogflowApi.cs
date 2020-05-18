@@ -3,8 +3,8 @@ using Google.Cloud.Dialogflow.V2;
 
 namespace IQuality.DomainServices.Dialogflow.Interfaces
 {
-    public interface IResponseBuilderService
+    public interface IDialogflowApi
     {
-        Task<QueryResult> BuildTextResponse(string text, string context);
+        Task<QueryResult> DetectClientIntent(string text, string context);
     }
 }
