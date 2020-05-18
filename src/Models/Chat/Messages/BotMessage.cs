@@ -12,6 +12,7 @@ namespace IQuality.Models.Chat.Messages
         public List<Listable> ListData { get; set; }
         public GraphData GraphData { get; set; }
         public ResponseType ResponseType { get; set; }
+        public MatchedIntent MatchedIntent { get; set; }
 
         public BotMessage()
         {
@@ -50,5 +51,12 @@ namespace IQuality.Models.Chat.Messages
                 Selected = false
             });
         }
+    }
+
+    public class MatchedIntent
+    {
+        public string Type { get; set; }
+        public string Name { get; set; }
+        public float Confidence { get; set; }
     }
 }
