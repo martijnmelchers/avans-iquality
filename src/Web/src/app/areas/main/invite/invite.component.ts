@@ -22,7 +22,7 @@ export class InviteComponent implements OnInit, OnDestroy {
   invite: Invite;
   inviteTypes: Array<string> = ["Buddy", "Patient", "Doctor", "Admin"];
   chatId: string;
-
+  success: boolean = false;
   form: FormGroup;
   constructor(private route: ActivatedRoute, private _authService: AuthenticationService, private router: Router, private _fb: FormBuilder, private _chatService: ChatService ) { }
   ngOnInit(): void {
@@ -79,7 +79,8 @@ export class InviteComponent implements OnInit, OnDestroy {
       const chat: ChatContext = await this._chatService.createBuddychat(values.chatName, isBuddyChat);
       let link = await this._authService.createInviteLink(chat.chat.id, values.email);
       this.inviteToken = `http://localhost:4200/invite/${link.token}`;
-      console.log(this.inviteToken);
+
+      this.success = true;
     }
   }
 

@@ -5,6 +5,18 @@
       <div class="send" *ngIf="isSend">
         <h1 *ngIf="this.role == 'Doctor'">Invite patient</h1>
         <h1 *ngIf="this.role == 'Patient'">Invite buddy</h1>
+
+        <div [hidden]="!success">
+          <ibm-notification [notificationObj]="{
+				type: 'success',
+          title: 'Invite has been sent',
+          message: 'An invite has been sent to the specified email. It may be in the spambox.',
+          showClose: false,
+          lowContrast: true}">
+          </ibm-notification>
+        </div>
+
+
         <form action="" [formGroup]="form" (ngSubmit)="submit()">
           <fieldset class="mb-06">
             <ibm-label
@@ -26,7 +38,18 @@
           </fieldset>
 
 
-          <button ibmButton class="mb-04" [disabled]="!form.valid">Send invite</button>
+          <fieldset class="mb-06">
+            <div ibmRow>
+              <div ibmCol>
+                <button ibmButton class="mb-04" [disabled]="!form.valid">Send invite</button>
+              </div>
+
+              <div ibmCol>
+                <button ibmButton class="mb-04" [routerLink]="['/chat']" [disabled]="!success">Go to chats</button>
+              </div>
+            </div>
+
+          </fieldset>
         </form>
 
       </div>

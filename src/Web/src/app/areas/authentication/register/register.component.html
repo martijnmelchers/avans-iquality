@@ -9,14 +9,15 @@
         </p>
 
         <div [hidden]="!hasError">
-          <ibm-notification [notificationObj]="{
+        <ibm-notification [notificationObj]="{
 				type: 'error',
           title: 'Oops! Something went wrong...',
           message: 'Invalid username/password, please check your credentials and try again...',
           showClose: false,
           lowContrast: true}">
-          </ibm-notification>
-        </div>
+        </ibm-notification>
+      </div>
+
         <fieldset class="mb-06">
           <ibm-label>
             Email
