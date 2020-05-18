@@ -41,6 +41,7 @@ export class BotMessageComponent implements OnInit {
   }
 
   onClickSayText(data : Listable) {
+    this.chatService.chatWithBot = true;
     if(data.isClickable) this.chatService.sendMessage(data.text);
   }
 

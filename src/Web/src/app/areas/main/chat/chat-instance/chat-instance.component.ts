@@ -39,7 +39,7 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
     await this.chatService.selectChatWithId(chatId);
 
     this.chatService.messageSubject.subscribe(() => {
-      setTimeout(() => this.scrollToBottom(), 100);b
+      setTimeout(() => this.scrollToBottom(), 100);
     });
   }
 
