@@ -21,6 +21,9 @@ import {Listable} from "@IQuality/core/models/listable";
   providedIn: 'root'
 })
 export class ChatService {
+  private auth: AuthenticationService;
+  private connection: signalR.HubConnection;
+
   public chatWithBot: boolean;
   public selected: ChatContext;
 
@@ -28,16 +31,17 @@ export class ChatService {
   public messages: Array<Message> = [];
 
   public messageSubject: EventEmitter<void> = new EventEmitter<void>(false);
-  //Database messages zijn de messages die opgeslagen zijn in de database
 
   public onChatSelected: Array<() => void> = [];
 
-  private connection: signalR.HubConnection;
-
-
   private _chats: Array<ChatContext>;
-  constructor(private _api: ApiService, private auth: AuthenticationService, private _notificationService: NotificationService) {
-    this.setUpSocketConnection(auth)
+
+  constructor(private _api: ApiService, private _auth: AuthenticationService, private _notificationService: NotificationService) {
+    _auth.SetChatService = this;
+  }
+
+  public connectWithChats() {
+    this.setUpSocketConnection(this.auth);
   }
 
   public async sendMessage(content: string) {
@@ -106,7 +110,7 @@ export class ChatService {
       .withAutomaticReconnect()
       .withUrl(`${environment.endpoints.api}/hub`, {
         accessTokenFactory: () => auth.encodedToken
-      }).configureLogging(LogLevel.Warning).build();
+      }).build();
 
     this.connection.onreconnecting(() => console.log('Chat is reconnecting...'))
     this.connection.onreconnected(() => console.log('Chat is reconnected!'))
@@ -177,5 +181,9 @@ export class ChatService {
     message.sendDate = new Date(Date.now());
 
     return message
+  }
+
+  public disconnect() {
+    this.connection.stop();
   }
 }

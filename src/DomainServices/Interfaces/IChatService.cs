@@ -9,8 +9,8 @@ namespace IQuality.DomainServices.Interfaces
     public interface IChatService 
     {
         Task<ChatContext<BaseChat>> GetChatAsync(string id);
-        Task<List<ChatContext<BaseChat>>> GetChatsAsync();
-        Task<List<ChatContext<BaseChat>>> GetChatsAsync(int skip, int take);
+        Task<List<ChatContext<BaseChat>>> GetChatsAsync(string userId);
+        Task<List<ChatContext<BaseChat>>> GetChatsAsync(string userId, int skip, int take);
         Task<ChatContext<BaseChat>> CreateChatAsync(BaseChat chat);
         Task<Boolean> UserCanJoinChat(string userId, string chatId);
         void DeleteChatAsync(string id);
