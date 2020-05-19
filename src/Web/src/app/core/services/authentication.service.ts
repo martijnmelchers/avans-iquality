@@ -45,7 +45,11 @@ z
   }
 
   public get getRole(): string {
-    return this.decodedToken.role;
+    if(this.decodedToken){
+      return this.decodedToken.role;
+    }
+    else
+      return null;
   }
 
   public saveToken(token: string) {

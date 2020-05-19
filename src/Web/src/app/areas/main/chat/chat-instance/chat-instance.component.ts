@@ -16,7 +16,7 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
   public scrollHeight: number;
   public botIsTyping: boolean;
 
-  private chatId: string;
+  chatId: string;
 
   @ViewChild('chatScroll', { static: false }) public chatScrollContainer: ElementRef;
 

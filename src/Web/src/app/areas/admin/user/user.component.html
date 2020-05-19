@@ -2,6 +2,17 @@
   <div ibmRow [gutter]="false">
     <div ibmCol [offsets]="{ lg: 4 }" [columnNumbers]="{ lg: 4 }" *ngIf="user">
       <h1>Viewing user: {{user.email}}</h1>
+
+      <div [hidden]="!success">
+        <ibm-notification [notificationObj]="{
+				type: 'success',
+          title: 'Success',
+          message: successMessage,
+          showClose: false,
+          lowContrast: true}">
+        </ibm-notification>
+      </div>
+
       <hr>
       <div ibmRow>
         <div ibmCol>
