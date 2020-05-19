@@ -24,9 +24,6 @@ export class RegisterComponent implements OnInit {
     this._route.params.subscribe(async (params) => {
       const inviteToken = params.inviteToken;
       this.link = await this._auth.getInviteLink(inviteToken);
-
-
-      console.log(this.link);
       this.inviteToken = inviteToken;
     });
 
@@ -92,7 +89,6 @@ export class RegisterComponent implements OnInit {
       userData = JSON.parse(userData);
       await this._router.navigate([`/authenticate`], {queryParams: {chat_id: userData.item1}});
     } catch(e) {
-      console.log(e);
       this.hasError = true;
     }
   }

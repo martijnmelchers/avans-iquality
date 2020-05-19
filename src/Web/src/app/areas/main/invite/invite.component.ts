@@ -26,11 +26,8 @@ export class InviteComponent implements OnInit, OnDestroy {
   form: FormGroup;
   constructor(private route: ActivatedRoute, private _authService: AuthenticationService, private router: Router, private _fb: FormBuilder, private _chatService: ChatService ) { }
   ngOnInit(): void {
-
-
     this.role = this._authService.getRole;
       this.sub = this.route.params.subscribe( params => {
-        console.log(params);
         this.id = params['id'];
         this.isSend = this.id == null;
 
@@ -80,7 +77,6 @@ export class InviteComponent implements OnInit, OnDestroy {
 
     this.role = this._authService.getRole;
 
-    console.log(this.role)
   }
 
   async submit(){
@@ -95,7 +91,6 @@ export class InviteComponent implements OnInit, OnDestroy {
     const chats = await  this._chatService.getChats();
     let chat = chats.find((chat) => chat.chat.name == values.chatName);
     if(chat){
-      console.log("Name exists");
     }
     else{
 

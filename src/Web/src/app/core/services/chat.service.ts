@@ -94,7 +94,7 @@ export class ChatService {
       return;
 
     this.connection.invoke("JoinGroup", roomId).catch(err => {
-      console.log(err)
+      (err)
     });
   }
 

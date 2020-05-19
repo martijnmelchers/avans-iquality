@@ -18,9 +18,7 @@ export class AppComponent {
   ) {
     requestStatus.event.subscribe(activeRequests => {
       const progressRef: NgProgressRef = progress.ref();
-
-      //console.log(progressRef);
-
+      
       if (activeRequests === 1)
         progressRef.start();
 
