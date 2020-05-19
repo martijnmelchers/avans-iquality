@@ -26,6 +26,9 @@ export class InviteComponent implements OnInit, OnDestroy {
   form: FormGroup;
   constructor(private route: ActivatedRoute, private _authService: AuthenticationService, private router: Router, private _fb: FormBuilder, private _chatService: ChatService ) { }
   ngOnInit(): void {
+
+
+    this.role = this._authService.getRole;
       this.sub = this.route.params.subscribe( params => {
         console.log(params);
         this.id = params['id'];
@@ -37,12 +40,7 @@ export class InviteComponent implements OnInit, OnDestroy {
       });
 
     this.route.params.subscribe((params) => {
-      if(params.chatId){
-        const chatId: string = params.chatId;
-        this.chatId = chatId;
-
-
-        // Initialize the form
+      if(this._authService.getRole == "admin"){
         this.form = this._fb.group({
           email: ['', {
             validators: [Validators.required, Validators.email],
@@ -51,22 +49,37 @@ export class InviteComponent implements OnInit, OnDestroy {
         });
       }
       else{
-        // Initialize the form
-        this.form = this._fb.group({
-          email: ['', {
-            validators: [Validators.required, Validators.email],
-            updateOn: 'blur'
-          }],
-          chatName: ['',  {
-            validators: [Validators.required, Validators.minLength(6)],
-            updateOn: 'blur'
-          }],
-        });
+        if(params.chatId){
+          const chatId: string = params.chatId;
+          this.chatId = chatId;
+
+
+          // Initialize the form
+          this.form = this._fb.group({
+            email: ['', {
+              validators: [Validators.required, Validators.email],
+              updateOn: 'blur'
+            }],
+          });
+        }
+        else{
+          // Initialize the form
+          this.form = this._fb.group({
+            email: ['', {
+              validators: [Validators.required, Validators.email],
+              updateOn: 'blur'
+            }],
+            chatName: ['',  {
+              validators: [Validators.required, Validators.minLength(6)],
+              updateOn: 'blur'
+            }],
+          });
+        }
       }
     });
 
     this.role = this._authService.getRole;
-    
+
     console.log(this.role)
   }
 
@@ -85,6 +98,7 @@ export class InviteComponent implements OnInit, OnDestroy {
       console.log("Name exists");
     }
     else{
+
       let chatId: string;
       if(this.chatId){
         chatId = this.chatId;
@@ -92,6 +106,9 @@ export class InviteComponent implements OnInit, OnDestroy {
       else{
         chatId = (await this._chatService.createBuddychat(values.chatName, isBuddyChat)).chat.id;
       }
+
+      if(this._authService.getRole == "admin")
+          chatId = null;
 
       let link = await this._authService.createInviteLink(chatId, values.email);
       this.inviteToken = `http://localhost:4200/invite/${link.token}`;

@@ -194,4 +194,8 @@ export class ChatService {
   public hasConnection(): boolean{
     return this.connection != null;
   }
+
+  public getRole(){
+    return this._auth.getRole;
+  }
 }
