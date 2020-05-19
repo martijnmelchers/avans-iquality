@@ -34,14 +34,16 @@ namespace IQuality.Api.Controllers
         [HttpPut, Route("{applicationUserId}")]
         public async Task<IActionResult> Deactivate(string applicationUserId)
         {
-            return Ok(_userService.DeactivateUser(applicationUserId));
+            await _userService.DeactivateUser(applicationUserId);
+            return Ok();
         }
         
         
         [HttpDelete, Route("{applicationUserId}")]
         public async Task<IActionResult> Delete(string applicationUserId)
         {
-            return Ok(_userService.DeleteUser(applicationUserId));
+            await _userService.DeleteUser(applicationUserId);
+            return Ok();
         }
     }
 }
