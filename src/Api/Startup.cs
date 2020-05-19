@@ -142,37 +142,15 @@ namespace IQuality.Api
                     };
                 });
 
-
-
-
-            //
-            //     services.AddAuthentication(options =>
-            //     {
-            //         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //     }).AddJwtBearer(o =>
-            //     {
-            //         o.TokenValidationParameters = new TokenValidationParameters
-            //         {
-            //             ValidateIssuer = true,
-            //             ValidateAudience = true,
-            //             ValidateLifetime = true,
-            //             ValidateIssuerSigningKey = true,
-            //             ValidIssuer = Configuration["Jwt:Issuer"],
-            //             ValidAudience = Configuration["Jwt:AudienceId"],
-            //             IssuerSigningKey =
-            //                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:AudienceSecret"]))
-            //         };
-            //
-            //         
-            //     });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
+            IdentityDataInitializer.SeedRoles(roleManager);
             IdentityDataInitializer.SeedUsers(Configuration, userManager);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -183,7 +161,7 @@ namespace IQuality.Api
 
             app.UseRouting();
 
-            // global cors policy1
+            // global cors policy
             app.UseCors(x => x
                 .WithOrigins("http://localhost:4200")
                 .AllowCredentials()
@@ -217,6 +195,15 @@ namespace IQuality.Api
 
     public static class IdentityDataInitializer
     {
+        public static void SeedRoles(RoleManager<IdentityRole> roleManager)
+        {
+            foreach (var role in Roles.RoleArray)
+            {
+                if (!roleManager.RoleExistsAsync(role).Result)
+                    roleManager.CreateAsync(new IdentityRole(role)).Wait();
+            }
+        }
+
         public static void SeedUsers(IConfiguration config, UserManager<ApplicationUser> userManager)
         {
             var user = new ApplicationUser
@@ -245,9 +232,7 @@ namespace IQuality.Api
             IdentityResult result = userManager.CreateAsync(user, config["DefaultAccount:Password"]).Result;
 
             if (result.Succeeded)
-            {
                 userManager.AddToRoleAsync(user, Roles.Admin);
-            }
         }
     }
 }

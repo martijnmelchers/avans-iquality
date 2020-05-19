@@ -6,5 +6,12 @@
         public const string Buddy = "buddy";
         public const string Doctor = "doctor";
         public const string Admin = "admin";
+
+        public static string[] RoleArray = {
+            Patient,
+            Buddy,
+            Doctor,
+            Admin
+        };
     }
 }
