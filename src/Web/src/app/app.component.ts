@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NgProgress, NgProgressRef } from "ngx-progressbar";
 import { RequestStatusService } from "./core/services/request-status.service";
+import {AuthenticationService} from "@IQuality/core/services/authentication.service";
+import {CookieService} from "ngx-cookie-service";
 
 @Component({
   selector: 'app-root',
@@ -14,7 +16,9 @@ export class AppComponent {
 
   constructor(
     progress: NgProgress,
-    requestStatus: RequestStatusService
+    requestStatus: RequestStatusService,
+    public authenticationService: AuthenticationService,
+    private cookieService: CookieService
   ) {
     requestStatus.event.subscribe(activeRequests => {
       const progressRef: NgProgressRef = progress.ref();
@@ -29,11 +33,17 @@ export class AppComponent {
     });
 
     this.hasHamburger = window.innerWidth < 1055;
+    console.log(authenticationService.loggedIn);
     requestStatus.requestStart();
     setTimeout(() => requestStatus.requestFinish(), 2500);
   }
 
   onResize($event: any) {
     this.hasHamburger = window.innerWidth < 1055;
+  }
+
+  logoutOnClick(){
+    this.cookieService.deleteAll();
+    window.location.reload();
   }
 }

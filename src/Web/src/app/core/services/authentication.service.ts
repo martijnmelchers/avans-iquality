@@ -25,7 +25,7 @@ z
   }
 
   public get loggedIn(): boolean {
-    return this.encodedToken && this.tokenService.isTokenExpired(this.encodedToken);
+    return this.encodedToken && !this.tokenService.isTokenExpired(this.encodedToken);
   }
 
   public get getNameIdentifier(): string {
