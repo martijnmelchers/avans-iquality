@@ -1,13 +1,9 @@
 using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories;
 using Nancy.Json;
-using OneSignal.CSharp.SDK;
-using OneSignal.CSharp.SDK.Resources;
-using OneSignal.CSharp.SDK.Resources.Notifications;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;

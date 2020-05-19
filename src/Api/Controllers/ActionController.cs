@@ -27,7 +27,7 @@ namespace IQuality.Api.Controllers
             _actionTypesService = actionTypesService;
         }
 
-        [HttpGet, Authorize(Roles = "Patient, Doctor")]
+        [HttpGet, Authorize(Roles = "patient, doctor")]
         public IActionResult GetActionTypes()
         {
             return Ok(_actionTypesService.GetActionTypes());

@@ -77,18 +77,30 @@ namespace IQuality.Infrastructure.Database.Repositories
 
         public async Task<string> GetRandomTipIdFromPatient(string patientId)
         {
-            var patient = await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == patientId).FirstAsync();
-
-            string returnTipId = "-1";
-
-            // if tipIds is initialized and tipIds has a tip
-            if (patient.TipIds != null && patient.TipIds.Count != 0)
+            if (patientId != null)
             {
-                Random rnd = new Random();
-                returnTipId = patient.TipIds[rnd.Next(patient.TipIds.Count)];
-            }
+                try
+                {
+                    var patient = await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == patientId).FirstAsync();
 
-            return returnTipId;
+                    string returnTipId = "-1";
+
+                    // if tipIds is initialized and tipIds has a tip
+                    if (patient.TipIds != null && patient.TipIds.Count != 0)
+                    {
+                        Random rnd = new Random();
+                        returnTipId = patient.TipIds[rnd.Next(patient.TipIds.Count)];
+                    }
+
+                    return returnTipId;
+                } catch (Exception e)
+                {
+                    return "-1";
+                }
+            } else
+            {
+                return "-1";
+            }
         }
 
         public async Task<List<string>> GetNotificationIdsOfPatient(string patientId)

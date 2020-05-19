@@ -56,10 +56,16 @@ export class ChatListComponent implements OnInit {
       }
     }, err => console.log(err));
 
-    // await this._api.get<any>('/tip/getrandomtip').then(resp => {
-    //   this.notification = resp;
+    await this._api.get<any>('/tip/getrandomtip').then(resp => {
+      if (resp.name != 'HttpErrorResponse')
+        this.notification = resp;
+    });
 
-    // });
+    if (this.notification.id == null) {
+      this.notification.name = "Iquality";
+      this.notification.description = "Welcome to DiaBuddy!"
+    }
+
     let thisComponent = this;
     let OneSignal = window['OneSignal'] || [];
     OneSignal.push( () => {
@@ -67,17 +73,15 @@ export class ChatListComponent implements OnInit {
       OneSignal.push(["registerForPushNotifications"])
     });
     OneSignal.push( () => {
-      console.log("firstt");
       // Occurs when the user's subscription changes to a new value.
       OneSignal.on('subscriptionChange',  (isSubscribed) => {
-        console.log("The user's subscription state is now:", isSubscribed);
+        console.log(isSubscribed);
         OneSignal.getUserId().then(id => {
-          console.log('resp: ',id);
           thisComponent._api.post<any>(`/patient/${id}/${isSubscribed}`,{});
         });
         });
     });
-      
+
   }
 
   onChatCreate(isBuddyChat: boolean) {
