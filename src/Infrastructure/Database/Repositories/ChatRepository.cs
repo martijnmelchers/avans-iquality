@@ -70,9 +70,44 @@ namespace IQuality.Infrastructure.Database.Repositories
 
         public async Task<string> GetPatientIdFromPatientChatId(string patientChatId)
         {
-            var patientChat = await Session.Query<PatientChat>().OfType<PatientChat>().Where(x => x.Id == patientChatId).FirstAsync();
+            if (patientChatId != null && patientChatId != "")
+            {
+                try
+                {
+                    var patientChat = await Session.Query<PatientChat>().OfType<PatientChat>().Where(x => x.Id == patientChatId).FirstAsync();
 
-            return patientChat.ParticipatorIds.First();
+                    if (patientChat.ParticipatorIds.Count == 0)
+                    {
+                        return "";
+                    }
+
+                    return patientChat.ParticipatorIds.First();
+                }
+                catch (Exception e)
+                {
+                    return "";
+                }
+            }
+
+            return "";
+        }
+
+        public async Task<string> GetDoctorIdFromPatientChatId(string patientChatId)
+        {
+            if (patientChatId != null && patientChatId != "")
+            {
+                try
+                {
+                    var patientChat = await Session.Query<PatientChat>().OfType<PatientChat>().Where(x => x.Id == patientChatId).FirstAsync();
+
+                    return patientChat.InitiatorId;
+                } catch (Exception e)
+                {
+                    return "";
+                }
+            }
+
+            return "";
         }
     }
 }

@@ -4,8 +4,8 @@
   <ibm-header-navigation>
     <ibm-header-item *ngIf="!authenticationService.loggedIn" [route]="['authenticate']">Login</ibm-header-item>
     <ibm-header-item *ngIf="authenticationService.loggedIn" [route]="['authenticate']" (click)="logoutOnClick()">Logout</ibm-header-item>
-    <ibm-header-item [route]="['chat']">Chat</ibm-header-item>
-    <ibm-header-item [route]="['doctor/tips']">Tips</ibm-header-item>
+    <ibm-header-item *ngIf="authenticationService.loggedIn" [route]="['chat']">Chat</ibm-header-item>
+    <ibm-header-item *ngIf="authenticationService.loggedIn" [route]="['doctor/tips']">Tips</ibm-header-item>
   </ibm-header-navigation>
 </ibm-header>
 <ibm-sidenav *ngIf="hasHamburger" [expanded]="active">
@@ -13,15 +13,15 @@
     <svg icon ibmIconFade size="16"></svg>
     Login
   </ibm-sidenav-item>
-  <ibm-sidenav-item *ngIf="authenticationService.loggedIn" [route]="['authenticate']">
+  <ibm-sidenav-item *ngIf="authenticationService.loggedIn" [route]="['authenticate']" (click)="logoutOnClick()">
     <svg icon ibmIconFade size="16"></svg>
     Logout
   </ibm-sidenav-item>
-  <ibm-sidenav-item [route]="['chat']">
+  <ibm-sidenav-item *ngIf="authenticationService.loggedIn" [route]="['chat']">
     <svg icon ibmIconFade size="16"></svg>
     Chat
   </ibm-sidenav-item>
-  <ibm-sidenav-item [route]="['doctor/tips']">
+  <ibm-sidenav-item *ngIf="authenticationService.loggedIn" [route]="['doctor/tips']">
     <svg icon ibmIconFade size="16"></svg>
     Tips
   </ibm-sidenav-item>

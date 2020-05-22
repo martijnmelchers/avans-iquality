@@ -3,11 +3,12 @@ import { NgProgress, NgProgressRef } from "ngx-progressbar";
 import { RequestStatusService } from "./core/services/request-status.service";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {CookieService} from "ngx-cookie-service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
 
@@ -18,7 +19,8 @@ export class AppComponent {
     progress: NgProgress,
     requestStatus: RequestStatusService,
     public authenticationService: AuthenticationService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private _router: Router
   ) {
     requestStatus.event.subscribe(activeRequests => {
       const progressRef: NgProgressRef = progress.ref();
@@ -41,7 +43,7 @@ export class AppComponent {
   }
 
   logoutOnClick(){
-    this.cookieService.deleteAll();
-    window.location.reload();
+    this.authenticationService.deleteToken();
+    this._router.navigateByUrl('authenticate');
   }
 }

@@ -10,5 +10,7 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
         Task<List<BuddyChat>> GetBuddyChatsByUserId(string userId);
         Task<PatientChat> GetPatientChatAsync(string chatId);
         Task<string> GetPatientChatByPatientId(string patientId);
+        Task<string> GetDoctorIdFromPatientChatId(string patientChatId);
+        Task<string> GetPatientIdFromPatientChatId(string patientChatId);
     }
 }

@@ -46,7 +46,7 @@ namespace IQuality.Infrastructure.Database.Repositories
 
         public async Task<List<Tip>> GetTipsOfDoctorAsync(string doctorId)
         {
-            return await Session.Query<Tip>().OfType<Tip>().Where(x => x.DoctorId == doctorId).ToListAsync();
+            return await Session.Query<Tip>().OfType<Tip>().Where(t => t.DoctorId == doctorId).ToListAsync();
         }
 
         protected override Task<List<Tip>> ConvertAsync(List<Tip> storage)
@@ -57,6 +57,33 @@ namespace IQuality.Infrastructure.Database.Repositories
         public async Task<Tip> GetTipByIdAsync(string tipId)
         {
             return await Session.LoadAsync<Tip>(tipId);
+        }
+
+        public async Task<List<string>> GetTipIdsByDoctorIdAndActionTypeAsync(string doctorId, string actionType)
+        {
+            if (doctorId != null && doctorId != "" && actionType != null && actionType != "")
+            {
+                try
+                {
+                    var tipIds = new List<string>();
+
+                    var tips = await Session.Query<Tip>().OfType<Tip>().Where(t => t.DoctorId == doctorId && t.ActionType == actionType).ToListAsync();
+
+                    foreach (Tip tip in tips)
+                    {
+                        tipIds.Add(tip.Id);
+                    }
+
+                    return tipIds;
+                }
+                catch (Exception e)
+                {
+                    return new List<string>();
+                }
+            }
+
+            return new List<string>();
+
         }
     }
 }

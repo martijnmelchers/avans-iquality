@@ -3,6 +3,7 @@ import { TableHeaderItem, TableModel, TableItem, Button, TableToolbarActions } f
 import { Router } from '@angular/router';
 import { ApiService } from '@IQuality/core/services/api.service';
 import { Tip } from '@IQuality/core/models/tip';
+import { TipService } from '@IQuality/core/services/tip.service';
 
 
 
@@ -24,15 +25,14 @@ export class TipsComponent implements OnInit {
 
 
 
-  constructor(private _api: ApiService, private _route: Router) { }
+  constructor(private _api: ApiService, private _route: Router, private _tipService: TipService) { }
 
   public async ngOnInit(): Promise<any> {
     this.loadScreen();
-    await this._api.get<Array<Tip>>('/tip').then(resp => {
-      this.tips = resp;
-    });
 
-    console.log(this.tips);
+    await this._tipService.getAllTipsOfDoctor().then((response) => {
+      this.tips = response;
+    });
 
   }
 

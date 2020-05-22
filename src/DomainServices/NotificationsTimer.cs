@@ -78,7 +78,7 @@ namespace IQuality.DomainServices
                                 // it's time to remind all people with notification devices now.
                                 var patientChat = await chatRepository.GetPatientChatAsync(action.ChatId);
 
-                                var notificationIds = await patientRepository.GetNotificationIdsOfPatient(patientChat.ParticipatorIds.First());
+                                var notificationIds = await patientRepository.GetNotificationIdsOfPatientAsync(patientChat.ParticipatorIds.First());
 
                                 if (notificationIds != null)
                                 {

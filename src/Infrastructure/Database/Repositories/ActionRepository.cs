@@ -33,8 +33,6 @@ namespace IQuality.Infrastructure.Database.Repositories
         {
             var action = await Session.LoadAsync<Action>(actionId);
 
-            Console.WriteLine("reminder Interval: " + action.ReminderInterval + "    " + DateTime.Now);
-
             return action.ReminderInterval;
         }
 

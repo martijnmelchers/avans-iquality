@@ -63,6 +63,10 @@ z
     this.chatService.disconnect();
   }
 
+  public deleteToken() {
+    this._cookie.delete('token');
+  }
+
   async getInviteLink(inviteToken: string): Promise<Invite> {
     return this._api.get<Invite>(`/invite/${inviteToken}`);
   }

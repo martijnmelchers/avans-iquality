@@ -18,6 +18,23 @@ namespace IQuality.Infrastructure.Database.Repositories
             
         }
 
+        public async Task<Patient> GetPatientByIdAsync(string id)
+        {
+            if (id != null && id != "")
+            {
+                try
+                {
+                    return await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == id).FirstAsync();
+                }
+                catch (Exception e)
+                {
+                    return new Patient("", "");
+                }
+            }
+
+            return new Patient("", "");
+        }
+
         public override void Delete(Patient entity)
         {
             Session.Delete(entity);
@@ -103,7 +120,7 @@ namespace IQuality.Infrastructure.Database.Repositories
             }
         }
 
-        public async Task<List<string>> GetNotificationIdsOfPatient(string patientId)
+        public async Task<List<string>> GetNotificationIdsOfPatientAsync(string patientId)
         {
             var patient = await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == patientId).FirstAsync();
 

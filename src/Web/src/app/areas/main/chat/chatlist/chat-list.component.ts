@@ -6,6 +6,7 @@ import {ChatContext} from "@IQuality/core/models/chat-context";
 import {NotificationService} from "carbon-components-angular";
 import {Message} from "@IQuality/core/models/messages/message";
 import {DEBUG} from "@angular/compiler-cli/ngcc/src/logging/console_logger";
+import { TipService } from '@IQuality/core/services/tip.service';
 
 @Component({
   selector: 'app-chat-list',
@@ -25,7 +26,7 @@ export class ChatListComponent implements OnInit {
   searchChatName: string;
   createChatName: string;
 
-  constructor(public chatService: ChatService, private _api: ApiService) {
+  constructor(public chatService: ChatService, private _api: ApiService, private _tipService: TipService) {
   }
 
   //TODO: Verplaatsen
@@ -56,30 +57,50 @@ export class ChatListComponent implements OnInit {
       }
     }, err => console.log(err));
 
-    await this._api.get<any>('/tip/getrandomtip').then(resp => {
-      if (resp.name != 'HttpErrorResponse')
-        this.notification = resp;
+    await this._tipService.getRandomTip().then((response) => {
+      if (response.id !== null)
+        this.notification = response;
     });
 
-    if (this.notification.id == null) {
+    if (this.notification.id == null || this.notification.id === undefined) {
       this.notification.name = "Iquality";
       this.notification.description = "Welcome to DiaBuddy!"
     }
 
     let thisComponent = this;
     let OneSignal = window['OneSignal'] || [];
-    OneSignal.push( () => {
-      console.log('Register For Push');
-      OneSignal.push(["registerForPushNotifications"])
+    OneSignal.push(function() {
+      OneSignal.init({
+        appId: "83238485-a09c-4593-ae5b-0281f6495b79",
+        promptOptions: {
+          native: {
+            enabled: true,
+            autoPrompt: true,
+            timeDelay: 5,
+            pageViews: 2
+          }
+        },
+        notifyButton: {
+          enable: true,
+          showCredit: false,
+          displayPredicate: function() {
+            return OneSignal.isPushNotificationsEnabled()
+                .then(function(isPushEnabled) {
+                    return !isPushEnabled;
+                });
+          },
+        },
+        subdomainName: "iqualitydomain",
+      });
     });
     OneSignal.push( () => {
+      OneSignal.showSlidedownPrompt();
       // Occurs when the user's subscription changes to a new value.
       OneSignal.on('subscriptionChange',  (isSubscribed) => {
-        console.log(isSubscribed);
         OneSignal.getUserId().then(id => {
-          thisComponent._api.post<any>(`/patient/${id}/${isSubscribed}`,{});
+        thisComponent._api.post<any>(`/patient/${id}/${isSubscribed}`,{});
         });
-        });
+      });
     });
 
   }

@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApiService } from '@IQuality/core/services/api.service';
 import { Tip } from '@IQuality/core/models/tip';
 import { Router } from '@angular/router';
+import { TipService } from '@IQuality/core/services/tip.service';
 
 @Component({
   selector: 'app-addtip',
@@ -12,7 +13,7 @@ import { Router } from '@angular/router';
 export class AddTipComponent implements OnInit {
 
   actionTypes = [];
-  constructor(private _api: ApiService, private _route: Router) {
+  constructor(private _api: ApiService, private _route: Router, private _tipService: TipService) {
 
   }
 
@@ -49,10 +50,8 @@ export class AddTipComponent implements OnInit {
     data.Description = this.tipForm.value.description;
     data.ActionType = this.tipForm.value.selectedAction;
 
-    console.log(this.tipForm.value);
-    await this._api.post<Tip>('/tip',data);
+    await this._tipService.createTip(data);
     this._route.navigateByUrl('/doctor/tips');
-
   }
 
 }
