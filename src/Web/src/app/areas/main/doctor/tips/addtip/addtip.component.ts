@@ -37,8 +37,10 @@ export class AddTipComponent implements OnInit {
       this.actionTypes = resp;
     });
 
+  }
 
-
+  isInvalid(field: string) {
+    return !this.tipForm.get(field).valid && this.tipForm.get(field).dirty
   }
 
   async onSubmit() {

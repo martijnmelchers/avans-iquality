@@ -13,6 +13,7 @@ import { TipService } from '@IQuality/core/services/tip.service';
 export class ManageComponent implements OnInit {
 
   public tip;
+  public open;
 
   actionTypes = [];
 
@@ -38,6 +39,10 @@ export class ManageComponent implements OnInit {
       Validators.maxLength(50)
     ])
   });
+
+  isInvalid(field: string) {
+    return !this.tipForm.get(field).valid && this.tipForm.get(field).dirty
+  }
 
 
   async ngOnInit(): Promise<any> {
