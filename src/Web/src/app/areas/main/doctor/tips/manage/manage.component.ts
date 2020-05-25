@@ -57,7 +57,7 @@ export class ManageComponent implements OnInit {
       });
     })
 
-    await this._api.get<any>('/action').then(resp => {
+    await this._api.get<any>('/actiontypes').then(resp => {
       this.actionTypes = resp;
     });
 
