@@ -18,19 +18,17 @@ namespace IQuality.Api.Controllers
     {
         private readonly IAsyncDocumentSession _session;
         private readonly IActionService _actionService;
-        private readonly IActionTypesService _actionTypesService;
 
-        public ActionController(IAsyncDocumentSession session, IActionService actionService, IActionTypesService actionTypesService) : base(session)
+        public ActionController(IAsyncDocumentSession session, IActionService actionService) : base(session)
         {
             _session = session;
             _actionService = actionService;
-            _actionTypesService = actionTypesService;
         }
 
-        [HttpGet, Authorize(Roles = "patient, doctor")]
-        public IActionResult GetActionTypes()
+        [HttpGet, Authorize(Roles = Roles.Patient)]
+        public async Task<IActionResult> GetPatientsActions()
         {
-            return Ok(_actionTypesService.GetActionTypes());
+            return Ok(await _actionService.GetActionsOfPatientAsync(HttpContext.User.GetUserId()));
         }
 
         // setactionreminder duratie actionid

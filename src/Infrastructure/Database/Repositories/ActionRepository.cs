@@ -90,6 +90,23 @@ namespace IQuality.Infrastructure.Database.Repositories
             return new Action();
         }
 
+        public async Task<List<Action>> GetActionsOfGoalIds(List<string> goalIds)
+        {
+            if (goalIds != null && goalIds.Count != 0)
+            {
+                List<Action> actionsOfGoal = new List<Action>();
+
+                foreach (string goalId in goalIds)
+                {
+                    actionsOfGoal.AddRange(await Session.Query<Action>().Where(a => a.GoalId == goalId).ToListAsync());
+                }
+
+                return actionsOfGoal;
+            }
+
+            return new List<Action>();
+        }
+
         public async Task<List<string>> GetActionTypesOfGoalIds(List<string> goalIds)
         {
             List<Action> actionsOfGoal = new List<Action>();
