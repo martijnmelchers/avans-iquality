@@ -55,12 +55,39 @@ namespace IQuality.Infrastructure.Database.Repositories
             int todaysDayOfYear = DateTime.Now.DayOfYear;
             string todaysDayOfYearString = todaysDayOfYear.ToString();
 
+            // set last reminded day
             action.LastReminded = todaysDayOfYearString;
 
             // save action
             await Session.StoreAsync(action);
 
             return action;
+        }
+
+        public async Task<Action> SetLastRemindedToTodayAsync(string actionId)
+        {
+            if (actionId != null && actionId != "")
+            {
+                Action action;
+                try
+                {
+                    action = await Session.LoadAsync<Action>(actionId);
+                } catch (Exception e)
+                {
+                    return new Action();
+                }
+
+                int todaysDayOfYear = DateTime.Now.DayOfYear;
+                string todaysDayOfYearString = todaysDayOfYear.ToString();
+
+                action.LastReminded = todaysDayOfYearString;
+
+                await Session.StoreAsync(action);
+
+                return action;
+            }
+
+            return new Action();
         }
 
         public async Task<List<string>> GetActionTypesOfGoalIds(List<string> goalIds)

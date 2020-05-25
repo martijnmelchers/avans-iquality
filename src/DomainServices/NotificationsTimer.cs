@@ -75,6 +75,9 @@ namespace IQuality.DomainServices
                         {
                             if (action.LastReminded == yesterdaysDayOfYearString || action.LastReminded == lastWeeksDayOfYearString || action.LastReminded == lastMonthsDayOfYearString)
                             {
+                                // update LastReminded of action
+                                await actionRepository.SetLastRemindedToTodayAsync(action.Id);
+
                                 // it's time to remind all people with notification devices now.
                                 var patientChat = await chatRepository.GetPatientChatAsync(action.ChatId);
 
@@ -124,7 +127,6 @@ namespace IQuality.DomainServices
                                         }
 
                                         Console.WriteLine(responseContent);
-
                                     }
                                 }
                             }
