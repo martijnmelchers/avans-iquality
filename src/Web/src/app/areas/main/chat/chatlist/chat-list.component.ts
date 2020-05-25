@@ -103,6 +103,10 @@ export class ChatListComponent implements OnInit {
       });
     });
 
+    await this._api.get<any>('/action').then(resp => {
+      console.log(resp);
+    });
+
   }
 
   onChatCreate(isBuddyChat: boolean) {
