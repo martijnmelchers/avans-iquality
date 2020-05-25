@@ -12,5 +12,6 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
         Task<List<string>> InitializeTipIdsList(string patientId);
         Task<string> GetRandomTipIdFromPatient(string patientId);
         Task<List<string>> SetPatientNotificationIdAsync(string notificationId, bool isSubscribed, string patientId);
+        Task<Patient> GetPatientByIdAsync(string id);
     }
 }
