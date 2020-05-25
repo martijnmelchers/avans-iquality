@@ -54,6 +54,11 @@ namespace IQuality.Infrastructure.Database.Repositories
         {
             var patient = await Session.Query<Patient>().OfType<Patient>().Where(p => p.Id == patientId).FirstAsync();
 
+            if (patient.TipIds == null)
+            {
+                patient.TipIds = new List<string>();
+            }
+
             if (!patient.TipIds.Contains(tipId))
             {
                 patient.TipIds.Add(tipId);

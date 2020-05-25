@@ -65,6 +65,9 @@ namespace IQuality.DomainServices.Services
                     {
                         string firstAddedTip = "";
 
+                        // set tipIds list to something to avoid NullReferenceExceptions later on.
+                        await _patientRepository.InitializeTipIdsList(patient.Id);
+
                         foreach (string tipId in tipIdsOfAction)
                         {
                             await _patientRepository.AddTipIdToPatient(tipId, patient.Id);
