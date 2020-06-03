@@ -45,7 +45,7 @@ z
   }
 
   public get getRole(): string {
-    return this.decodedToken.role;
+    return this.decodedToken.role || "";
   }
 
   public saveToken(token: string) {
