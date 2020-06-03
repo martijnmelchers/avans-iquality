@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TableData, TableHeaderItem, TableItem, TableModel } from "carbon-components-angular";
+import {HeaderItem, TableData, TableHeaderItem, TableItem, TableModel} from "carbon-components-angular";
+import {ChatService} from "@IQuality/core/services/chat.service";
 
 @Component({
   selector: 'app-home',
@@ -7,24 +8,31 @@ import { TableData, TableHeaderItem, TableItem, TableModel } from "carbon-compon
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  public skeletonStateTable: boolean = true;
-  public model: TableModel = new TableModel();
-  private  dataset = [
-    { name: "Apple", type: "Fruit" },
-    { name: "Grape", type: "Fruit" },
-    { name: "Eggplant", type: "Fruit" },
-    { name: "Lettuce", type: "Vegetable" },
-    { name: "Daikon Radish", type: "Vegetable" },
-    { name: "Beef", type: "Meat" }
-  ];
 
-  constructor() { }
+  public tipTitle : string;
+  public tipDescription: string;
+
+  public actions: TableModel = new TableModel();
+  public goals: TableModel = new TableModel();
+
+
+  constructor(private chatService: ChatService) { }
 
   ngOnInit(): void {
-    this.loadScreen();
+    //this.loadScreen();
+    this.tipTitle = "Weight tip of the day:";
+    this.tipDescription = "Losing more weight is fun!";
+
+
+    this.goals.header = [new TableHeaderItem({data: "Goals"})]
+    this.goals.data = [[new TableItem({data: "Hello there how are you doing?"})],
+      [new TableItem({data: "I am doing fine! thank you very much."})]];
+
+    this.actions.header = [new TableHeaderItem({ data: "Type" }), new TableHeaderItem({ data: "Description" })]
+    this.actions.data = [[new TableItem({data:"Weight"}), new TableItem({data: "Try and run more!"})]]
   }
 
-  private loadScreen() {
+  /*private loadScreen() {
     this.model.data = this.dataset.map(datapoint => [new TableItem({}), new TableItem({})]);
 
     this.model.header = [new TableHeaderItem({ data: "" }), new TableHeaderItem({ data: "" })];
@@ -43,5 +51,6 @@ export class HomeComponent implements OnInit {
         ]
       );
     }, 4000);
-  }
+  }*/
+
 }

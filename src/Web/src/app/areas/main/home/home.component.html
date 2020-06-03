@@ -1,32 +1,26 @@
-<ibm-table-container>
-  <ibm-table
-    class="data-table"
-    [skeleton]="skeletonStateTable"
-    [model]="model"
-    size="lg"
-    [showSelectionColumn]="false">
-    <ng-content></ng-content>
-  </ibm-table>
-</ibm-table-container>
+<div>
+  <ibm-notification [notificationObj]="{
+				type: 'success',
+				title: tipTitle,
+				message: tipDescription,
+				showClose: false}">
+  </ibm-notification>
 
 
-<div ibmGrid>
-  <div ibmRow>
-    <div ibmCol [columnNumbers]="{ sm: 2, lg: 3}" [offsets]="{ sm: 2, lg: 9}">
-      <ibm-tile>
-      </ibm-tile>
-    </div>
-  </div>
-  <div ibmRow>
-    <div ibmCol [columnNumbers]="{ sm: 2, lg: 3 }">
-      <ibm-tile>
-      </ibm-tile>
-    </div>
-  </div>
-  <div ibmRow>
-    <div ibmCol [columnNumbers]="{ sm: 2, lg: 3}" [offsets]="{ sm: 2, lg: 9}">
-      <ibm-tile>
-      </ibm-tile>
-    </div>
-  </div>
+  <ibm-table-container>
+    <ibm-table-header>
+      <h4 ibmTableHeaderTitle>Your actions</h4>
+      <p ibmTableHeaderDescription>Here we store all your actions to see!</p>
+    </ibm-table-header>
+    <ibm-table [model]="actions" [showSelectionColumn]="false"></ibm-table>
+  </ibm-table-container>
+
+  <ibm-table-container>
+    <ibm-table-header>
+      <h4 ibmTableHeaderTitle>Your goals</h4>
+      <p ibmTableHeaderDescription>Here we store all your goals to see!</p>
+    </ibm-table-header>
+    <ibm-table [model]="goals" [showSelectionColumn]="false"></ibm-table>
+  </ibm-table-container>
 </div>
+
