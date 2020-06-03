@@ -26,14 +26,14 @@
   <form (ngSubmit)="onSubmit($event)" [formGroup]="messageFormGroup" class="type-bar">
     <div ibmRow gutter="true" condensed="true">
 
-      <div ibmCol [columnNumbers]="{ 'lg': 1, 'md': 1, 'sm': 1}">
+      <div ibmCol [columnNumbers]="{ 'lg': 1, 'md': 1, 'sm': 1}"  *ngIf="this.auth.getRole === 'Patient'">
         <ibm-toggle
           offText="Bot"
           onText="Bot"
           [(checked)]="chatService.chatWithBot">
         </ibm-toggle>
       </div>
-      <div ibmCol [columnNumbers]="{ 'lg': 8, 'md': 5, 'sm': 2}">
+      <div ibmCol [columnNumbers]="{ 'lg': 8, 'md': 5, 'sm': (this.auth.getRole === 'Patient') ? 2 : 3}">
         <ibm-label>
           <input aria-label="textarea" formControlName="message"
                  ibmTextArea
