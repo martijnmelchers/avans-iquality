@@ -5,6 +5,7 @@ import { ChatComponent } from "./chat/chat.component";
 import {InviteComponent} from "@IQuality/areas/main/invite/invite.component";
 import {DoctorComponent} from '@IQuality/areas/main/doctor/doctor.component';
 import {ChatInstanceComponent} from "@IQuality/areas/main/chat/chat-instance/chat-instance.component";
+import {RoleGuard} from "@IQuality/core/guards/role-guard.service";
 
 const routes: Routes = [
   {
@@ -25,19 +26,27 @@ const routes: Routes = [
   },
   {
     path: 'create-invite',
-    component: InviteComponent
+    component: InviteComponent,
+    canActivate: [RoleGuard],
+    data: {roles: ['Doctor', 'Admin']}
   },
   {
     path: 'create-invite',
-    component: InviteComponent
+    component: InviteComponent,
+    canActivate: [RoleGuard],
+    data: {roles: ['Doctor', 'Admin']}
   },
   {
     path: 'create-invite/:chatId',
-    component: InviteComponent
+    component: InviteComponent,
+    canActivate: [RoleGuard],
+    data: {roles: ['Doctor', 'Admin']}
   },
   {
     path: 'doctor',
-    component: DoctorComponent
+    component: DoctorComponent,
+    canActivate: [RoleGuard],
+    data: {roles: ['Doctor', 'Admin']}
   }
 ];
 
