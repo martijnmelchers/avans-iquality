@@ -11,10 +11,14 @@ namespace IQuality.DomainServices.Services
     public class GoalService : IGoalService
     {
         private readonly IGoalRepository _goalRepository;
+        private readonly IChatRepository _chatRepository;
+        private readonly IPatientRepository _patientRepository;
 
-        public GoalService(IGoalRepository goalRepository)
+        public GoalService(IGoalRepository goalRepository, IChatRepository chatRepository, IPatientRepository patientRepository)
         {
             _goalRepository = goalRepository;
+            _chatRepository = chatRepository;
+            _patientRepository = patientRepository;
         }
         
         public async Task CreateGoal( string chatId, string description)
@@ -32,6 +36,24 @@ namespace IQuality.DomainServices.Services
         {
             return await _goalRepository.GetGoalsOfChat(chatId);
         }
+
+        public async Task<List<Goal>> GetGoalsForPatient(string userId)
+        {
+            if (userId != null && userId != "")
+            {
+                var patient = await _patientRepository.GetPatientByIdAsync(userId);
+
+                if (patient.ApplicationUserId != null && patient.DoctorId != null && patient.ApplicationUserId != "" && patient.DoctorId != "")
+                {
+                    var patientChatId = await _chatRepository.GetPatientChatByPatientId(patient.ApplicationUserId);
+
+                    var patientGoalList = await _goalRepository.GetGoalsOfChat(patientChatId);
+                    
+                    return patientGoalList;
+                }
+            }
+
+            return new List<Goal>();        }
 
         public async Task<bool> DeleteGoal(string goalId)
         {

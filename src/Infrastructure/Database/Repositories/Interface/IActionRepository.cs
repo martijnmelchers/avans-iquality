@@ -1,4 +1,4 @@
-using IQuality.Models.Actions;
+﻿using IQuality.Models.Actions;
 using IQuality.Models;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -14,5 +14,6 @@ namespace IQuality.Infrastructure.Database.Repositories.Interface
         Task<List<Action>> GetAllReminderActionsAsync();
         Task<List<Action>> GetActionsOfGoalIds(List<string> goalIds);
         Task<List<string>> GetActionTypesOfGoalIds(List<string> goalIds);
+        void DeleteActionsForGoal(string goalId);
     }
 }
