@@ -12,7 +12,14 @@
       <h4 ibmTableHeaderTitle>Your actions</h4>
       <p ibmTableHeaderDescription>Here we store all your actions to see!</p>
     </ibm-table-header>
-    <ibm-table [model]="actions" [showSelectionColumn]="false"></ibm-table>
+    <ibm-table
+      [model]="goals"
+      [showSelectionColumn]="false"
+      [striped]="true"
+      [sortable]="true"
+      [stickyHeader]="false"
+      [skeleton]="false"
+    ></ibm-table>
   </ibm-table-container>
 
   <ibm-table-container>
@@ -25,6 +32,8 @@
       [showSelectionColumn]="false"
       [striped]="true"
       [sortable]="true"
+      [stickyHeader]="false"
+      [skeleton]="false"
     ></ibm-table>
   </ibm-table-container>
 </div>
