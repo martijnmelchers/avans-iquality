@@ -21,7 +21,7 @@
 
   </ibm-table-container>
 
-  <ibm-table-container *ngIf="this.userRole === 'patient'">
+  <!-- <ibm-table-container *ngIf="this.userRole === 'patient'">
     <ibm-table-header>
       <h4 ibmTableHeaderTitle>Your actions</h4>
       <p ibmTableHeaderDescription>Here we store all your actions to see!</p>
@@ -39,7 +39,28 @@
       <button ibmButton="primary" [routerLink]="['/chat']">Click me!</button>
     </div>
 
-  </ibm-table-container>
+  </ibm-table-container> -->
+
+  <div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Action Type</th>
+					<th>Description</th>
+					<th>Reminder</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="dropdown">
+          <th>Weight</th>
+          <th>Try to lower your weight</th>
+          <th>
+
+          </th>
+        </tr>
+			</tbody>
+		</table>
+  </div>
 
   <ibm-table-container *ngIf="this.userRole === 'patient'">
     <ibm-table-header>
@@ -64,5 +85,15 @@
     <button ibmCol ibmButton [routerLink]="['/create-invite']">
       Invite {{this.getInviteName()}}
     </button>
-</div>
 
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Dropdown button
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+    </div>
+</div>

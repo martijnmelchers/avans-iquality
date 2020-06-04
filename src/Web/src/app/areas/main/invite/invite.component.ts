@@ -20,7 +20,7 @@ export class InviteComponent implements OnInit, OnDestroy {
   role: string;
   inviteToken: string;
   invite: Invite;
-  inviteTypes: Array<string> = ["Buddy", "Patient", "Doctor", "Admin"];
+  inviteTypes: Array<string> = ["buddy", "patient", "doctor", "admin"];
   chatId: string;
   success: boolean = false;
   form: FormGroup;
