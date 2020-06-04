@@ -90,7 +90,7 @@ export class InviteComponent implements OnInit, OnDestroy {
 
     const chats = await  this._chatService.getChats();
     let chat = chats.find((chat) => chat.chat.name == values.chatName);
-    if(chat){
+    if(chat && chat.chat.initiatorId != 'ApplicationUsers-admin@iquality.nl'){
     }
     else{
 
