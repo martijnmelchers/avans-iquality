@@ -3,9 +3,6 @@ import { Tip } from '@IQuality/core/models/tip';
 import {Component, OnInit} from '@angular/core';
 import {ChatService} from "@IQuality/core/services/chat.service";
 import {ChatContext} from "@IQuality/core/models/chat-context";
-import {NotificationService} from "carbon-components-angular";
-import {Message} from "@IQuality/core/models/messages/message";
-import {DEBUG} from "@angular/compiler-cli/ngcc/src/logging/console_logger";
 import { TipService } from '@IQuality/core/services/tip.service';
 
 @Component({
@@ -27,11 +24,14 @@ export class ChatListComponent implements OnInit {
   createChatName: string;
 
   constructor(public chatService: ChatService, private _api: ApiService, private _tipService: TipService) {
+    console.log('hello');
   }
 
   //TODO: Verplaatsen
   async ngOnInit(): Promise<void> {
+    console.log('hello');
     this.chatService.getChats().then((response) => {
+
       if(response != null)
       {
 
