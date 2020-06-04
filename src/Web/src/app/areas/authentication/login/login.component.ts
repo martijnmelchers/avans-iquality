@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this._route.queryParams.subscribe((params) => {
       this.chatId = params.chat_id
+      console.log(this.chatId)
     });
 
     // Initialize the form
@@ -55,14 +56,9 @@ export class LoginComponent implements OnInit {
   navigateToUserPage(){
     const role = this._auth.getRole;
 
-    let route = "/chat";
+    let route = "/";
     if(role == "Doctor" || role == "Admin"){
       route = `/${role.toLowerCase()}`
-    }
-
-    if(this.chatId){
-      this._router.navigate(['/chat',this.chatId])
-      return;
     }
 
     this._router.navigate([route]);

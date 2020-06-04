@@ -24,12 +24,10 @@ export class ChatListComponent implements OnInit {
   createChatName: string;
 
   constructor(public chatService: ChatService, private _api: ApiService, private _tipService: TipService) {
-    console.log('hello');
   }
 
   //TODO: Verplaatsen
   async ngOnInit(): Promise<void> {
-    console.log('hello');
     this.chatService.getChats().then((response) => {
 
       if(response != null)

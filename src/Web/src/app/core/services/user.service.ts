@@ -1,13 +1,24 @@
 import { Injectable } from '@angular/core';
 import {ApiService} from "@IQuality/core/services/api.service";
 import {ApplicationUser} from "@IQuality/core/models/application-user";
+import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor(private _api: ApiService) { }
+  public async firstTime(): Promise<boolean> {
+    if (this._user === null) {
+      this._user = await this.getUser(this.authService.getNameIdentifier);
+    }
+    return this._user.firstTime;
+  }
+
+  private _user: ApplicationUser = null;
+
+  constructor(private _api: ApiService, private authService: AuthenticationService) {
+  }
 
   getUsers(){
     return this._api.get<Array<ApplicationUser>>('/users', {});
