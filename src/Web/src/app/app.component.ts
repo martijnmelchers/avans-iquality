@@ -45,4 +45,8 @@ export class AppComponent {
     this.authenticationService.deleteToken();
     this._router.navigateByUrl('authenticate');
   }
+
+  closeSideNav() {
+    this.active = false;
+  }
 }
