@@ -16,6 +16,7 @@ import {NotificationService} from "carbon-components-angular";
 import { BehaviorSubject, Observable } from "rxjs";
 import {Listable} from "@IQuality/core/models/listable";
 import {TutorialService} from "@IQuality/core/services/tutorial.service";
+import {UserService} from "@IQuality/core/services/user.service";
 
 
 @Injectable({
@@ -38,7 +39,7 @@ export class ChatService {
   private _chats: Array<ChatContext>;
 
   constructor(private _api: ApiService, private _auth: AuthenticationService, private _notificationService: NotificationService,
-  private tutorialService: TutorialService) {
+  private tutorialService: TutorialService, private userService: UserService) {
     this._auth.SetChatService = this;
   }
 
@@ -57,6 +58,18 @@ export class ChatService {
       const response = await this._api.post<BotMessage>("/dialogflow/patient", patientMessage, null, {disableRequestLoader: true});
       this.messages.push(response);
       this.messageSubject.next()
+
+      if(await this.userService.firstTime()){
+        switch(response.content){
+          case "Awesome! Goal has been created! Try adding some actions to reach your goal!":
+          case "I created a new action!":
+          case "Your weight is duly noted!":
+          case "Sure, here is your progress":
+            this.tutorialService.nextStage();
+            this.postTutorialMessage();
+            break;
+        }
+      }
     }
   }
 
@@ -80,14 +93,16 @@ export class ChatService {
   public async selectChatWithId(id: string): Promise<ChatContext> {
     this.chatWithBot = false;
     this.selected = await this._api.get<ChatContext>(`/chats/${id}`);
-
     this.messages = this.selected.messages.reverse();
+
+    if(await this.userService.firstTime())
+      this.postTutorialMessage();
+
     this.messageSubject.next();
 
     this.onChatSelected.forEach(value => {
       value();
     });
-
     return this.selected;
   }
 
@@ -119,11 +134,10 @@ export class ChatService {
     this.connection.onclose(() => console.log('Connection closed!'));
 
 
-    this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
+    this.connection.on("messageReceived", async (userId: string, userName: string, chatId: string, content: string) => {
       if(this.selected){
         if (chatId === this.selected.chat.id) {
           const message = ChatService.createMessage(userId, userName, chatId, content);
-
           this.messages.push(message);
           this.messageSubject.next();
         }
@@ -204,6 +218,7 @@ export class ChatService {
   }
 
   public postTutorialMessage() {
-    this.messages.push(this.tutorialService.getTutorialMessage());
+    this.messages.push(this.tutorialService.getTutorialMessage(this.selected.chat.id));
+    this.messageSubject.next();
   }
 }

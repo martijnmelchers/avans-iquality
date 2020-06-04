@@ -21,12 +21,12 @@
 
   </ibm-table-container>
 
-  <ibm-table-container *ngIf="this.userRole === 'patient'">
+  <ibm-table-container *ngIf="this.userRole === 'patient' || this.userRole === 'admin'">
     <ibm-table-header>
       <h4 ibmTableHeaderTitle>Your actions</h4>
       <p ibmTableHeaderDescription>Here we store all your actions to see!</p>
     </ibm-table-header>
-    <ibm-table *ngIf="actions.data.length > 0"
+    <ibm-table *ngIf="!firstTime"
       [model]="actions"
       [showSelectionColumn]="false"
       [striped]="true"
@@ -34,19 +34,19 @@
       [stickyHeader]="false"
       [skeleton]="false"
     ></ibm-table>
-    <div *ngIf="actions.data.length < 1" style="text-align: center">
+    <div *ngIf="firstTime" style="text-align: center">
       <p>Uh Oh, it looks like you don't have any actions. press the button to create some now!</p>
-      <button ibmButton="primary" [routerLink]="['/chat']">Click me!</button>
+      <button ibmButton="primary" (click)="startTutorial()">Click me!</button>
     </div>
 
   </ibm-table-container>
 
-  <ibm-table-container *ngIf="this.userRole === 'patient'">
+  <ibm-table-container *ngIf="this.userRole === 'patient' || this.userRole === 'admin'">
     <ibm-table-header>
       <h4 ibmTableHeaderTitle>Your goals</h4>
       <p ibmTableHeaderDescription>Here we store all your goals to see!</p>
     </ibm-table-header>
-    <ibm-table *ngIf="goals.data.length > 0"
+    <ibm-table *ngIf="!firstTime"
       [model]="goals"
       [showSelectionColumn]="false"
       [striped]="true"
@@ -54,20 +54,14 @@
       [stickyHeader]="false"
       [skeleton]="false"
     ></ibm-table>
-    <div *ngIf="goals.data.length < 1" style="text-align: center">
+    <div *ngIf="firstTime" style="text-align: center">
       <p>Uh Oh, it looks like you don't have any goals. press the button to create some now!</p>
-      <button ibmButton="primary" [routerLink]="['/chat']">Click me!</button>
+      <button ibmButton="primary" (click)="startTutorial()">Click me!</button>
     </div>
   </ibm-table-container>
-
 
     <button ibmCol ibmButton [routerLink]="['/create-invite']">
       Invite {{this.getInviteName()}}
     </button>
 </div>
-
-<div *ngIf="firstTime">
-  <button ibmButton="primary" (click)="startTutorial()">check</button>
-     </div>
-
 

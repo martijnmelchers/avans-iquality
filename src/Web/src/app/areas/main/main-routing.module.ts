@@ -39,12 +39,6 @@ const routes: Routes = [
     data: {roles: ['doctor', 'admin']}
   },
   {
-    path: 'create-invite',
-    component: InviteComponent,
-    canActivate: [RoleGuard],
-    data: {roles: ['doctor', 'admin']}
-  },
-  {
     path: 'create-invite/:chatId',
     component: InviteComponent,
     canActivate: [RoleGuard],

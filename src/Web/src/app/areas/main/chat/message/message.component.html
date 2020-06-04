@@ -3,7 +3,6 @@
   <app-user-message *ngSwitchCase="'TextMessage'"
     [message]="message"
     [isCurrentUser]="message.senderId == auth.getNameIdentifier"></app-user-message>
-
   <app-bot-message *ngSwitchCase="'BotMessage'"
     [message]="message"></app-bot-message>
 </div>

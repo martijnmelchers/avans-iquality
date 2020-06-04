@@ -9,10 +9,8 @@ import {AuthenticationService} from "@IQuality/core/services/authentication.serv
 export class UserService {
 
   public async firstTime(): Promise<boolean> {
-    if (this._user === null) {
-      this._user = await this.getUser(this.authService.getNameIdentifier);
-    }
-    return this._user.firstTime;
+    let user = await this.getUser(this.authService.getNameIdentifier);
+    return user.firstTime;
   }
 
   private _user: ApplicationUser = null;

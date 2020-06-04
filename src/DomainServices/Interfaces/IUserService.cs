@@ -9,6 +9,7 @@ namespace IQuality.DomainServices.Interfaces
     { 
         Task<List<ApplicationUser>> GetUsers();
         Task DeactivateUser(string applicationUserId);
+        Task FinishedTutorial(string applicationUserId);
         Task DeleteUser(string applicationUserId);
         Task<ApplicationUser> GetUser(string applicationUserId);
     }

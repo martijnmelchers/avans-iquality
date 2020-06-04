@@ -38,10 +38,6 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
 
     if(!this.chatService.hasConnection())
       this.chatService.connectWithChats();
-
-    if(await this.userService.firstTime()){
-      this.chatService.postTutorialMessage();
-    }
   }
 
   async initializeChat(chatId: string) {

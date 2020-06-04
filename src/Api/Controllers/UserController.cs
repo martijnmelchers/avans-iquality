@@ -38,6 +38,12 @@ namespace IQuality.Api.Controllers
             return Ok();
         }
         
+        [HttpPut, Route("{applicationUserId}/tutorial")]
+        public async Task<IActionResult> FinishedTutorial(string applicationUserId)
+        {
+            await _userService.FinishedTutorial(applicationUserId);
+            return Ok();
+        }
         
         [HttpDelete, Route("{applicationUserId}")]
         public async Task<IActionResult> Delete(string applicationUserId)
