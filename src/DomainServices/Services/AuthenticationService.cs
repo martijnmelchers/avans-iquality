@@ -72,7 +72,8 @@ namespace IQuality.DomainServices.Services
                 Email = invite != null ? invite.Email : register.Email,
                 Address = register.Address,
                 Name = register.Name,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                FirstTime = true
             }, register.Password);
             
             var role = invite.InviteType switch

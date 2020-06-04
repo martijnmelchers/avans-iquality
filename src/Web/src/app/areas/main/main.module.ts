@@ -4,13 +4,13 @@ import {CommonModule} from '@angular/common';
 import {MainRoutingModule} from './main-routing.module';
 import {HomeComponent} from './home/home.component';
 import {
-  ButtonModule,
-  GridModule,
-  InputModule,
-  ListModule, ModalModule, NotificationModule, PlaceholderModule, SearchModule,
-  StructuredListModule,
-  TableModule, TagModule,
-  TilesModule, ToggleModule,
+    ButtonModule, DialogModule,
+    GridModule,
+    InputModule,
+    ListModule, ModalModule, NotificationModule, PlaceholderModule, SearchModule,
+    StructuredListModule,
+    TableModule, TagModule,
+    TilesModule, ToggleModule,
 } from 'carbon-components-angular';
 import {ChatComponent} from './chat/chat.component';
 import {MessageComponent} from './chat/message/message.component';
@@ -33,6 +33,7 @@ import { ManageComponent } from './doctor/tips/manage/manage.component';
 import {BotMessageComponent} from "@IQuality/areas/main/chat/message/bot-message/bot-message.component";
 import {ChartsModule} from "@carbon/charts-angular";
 import {UserMessageComponent} from "@IQuality/areas/main/chat/message/user-message/user-message.component";
+import {OverflowMenuComponent} from "@IQuality/areas/main/overflow-menu/overflow-menu.component";
 
 @NgModule({
   declarations: [
@@ -45,37 +46,38 @@ import {UserMessageComponent} from "@IQuality/areas/main/chat/message/user-messa
     ChatInstanceComponent,
     BotMessageComponent,
     UserMessageComponent,
-	 TipsComponent, 
-	 AddTipComponent, 
-	 ManageComponent,
+    TipsComponent,
+    AddTipComponent,
+    ManageComponent, OverflowMenuComponent, OverflowMenuComponent,
   ],
-  imports: [
-    CommonModule,
-    MainRoutingModule,
-    TableModule,
-    GridModule,
-    InputModule,
-    ButtonModule,
-    ReactiveFormsModule,
-    TilesModule,
-    ListModule,
-    StructuredListModule,
-    AddModule,
-    FormsModule,
-    SendAltModule,
-    CloseModule,
-    ColumnModule,
-    TagModule,
-    ToggleModule,
-    DotMarkModule,
-    TrashCanModule,
-    DeleteModule,
-    NotificationModule,
-    ModalModule,
-    ChartsModule,
-    PlaceholderModule,
-    SearchModule,
-  ],
+    imports: [
+        CommonModule,
+        MainRoutingModule,
+        TableModule,
+        GridModule,
+        InputModule,
+        ButtonModule,
+        ReactiveFormsModule,
+        TilesModule,
+        ListModule,
+        StructuredListModule,
+        AddModule,
+        FormsModule,
+        SendAltModule,
+        CloseModule,
+        ColumnModule,
+        TagModule,
+        ToggleModule,
+        DotMarkModule,
+        TrashCanModule,
+        DeleteModule,
+        NotificationModule,
+        ModalModule,
+        ChartsModule,
+        PlaceholderModule,
+        SearchModule,
+        DialogModule,
+    ],
   providers: []
 })
 export class MainModule {

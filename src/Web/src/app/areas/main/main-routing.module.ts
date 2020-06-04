@@ -14,16 +14,19 @@ import {AuthGuard} from "@IQuality/core/guards/auth.guard";
 
 const routes: Routes = [
   {
+    path: '',
+    component: HomeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'chat',
     component: ChatComponent,
     canActivate: [AuthGuard, RoleGuard],
-    data: {roles: ['patient', 'admin']}
+    data: {roles: ['patient', 'admin', 'doctor']}
   },
   {
     path: 'chat/:chatId',
-    component: ChatInstanceComponent,
-    canActivate: [AuthGuard, RoleGuard],
-    data: {roles: ['patient', 'admin']}
+    component: ChatInstanceComponent
   },
   {
     path: 'invite/:id',
@@ -32,42 +35,41 @@ const routes: Routes = [
   {
     path: 'create-invite',
     component: InviteComponent,
-    canActivate: [AuthGuard, RoleGuard],
+    canActivate: [RoleGuard],
     data: {roles: ['doctor', 'admin']}
   },
   {
     path: 'create-invite',
     component: InviteComponent,
-    canActivate: [AuthGuard, RoleGuard],
+    canActivate: [RoleGuard],
     data: {roles: ['doctor', 'admin']}
   },
   {
     path: 'create-invite/:chatId',
     component: InviteComponent,
-    canActivate: [AuthGuard, RoleGuard],
+    canActivate: [RoleGuard],
     data: {roles: ['doctor', 'admin']}
   },
   {
     path: 'doctor',
     component: DoctorComponent,
-    canActivate: [AuthGuard, RoleGuard],
+    canActivate: [RoleGuard],
     data: {roles: ['doctor', 'admin']}
   },
   {
     path: 'doctor/tips',
     component: TipsComponent,
-    canActivate: [AuthGuard, RoleGuard],
+    canActivate: [RoleGuard],
     data: {roles: ['doctor', 'admin']}
-  },
-  {
+  },{
     path: 'doctor/tips/add',
     component: AddTipComponent,
-    canActivate: [AuthGuard, RoleGuard],
+    canActivate: [RoleGuard],
     data: {roles: ['doctor', 'admin']}
   },{
     path: 'doctor/tips/manage/:id',
     component: ManageComponent,
-    canActivate: [AuthGuard, RoleGuard],
+    canActivate: [RoleGuard],
     data: {roles: ['doctor', 'admin']}
   }
 ];

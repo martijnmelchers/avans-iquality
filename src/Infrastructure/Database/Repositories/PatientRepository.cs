@@ -20,19 +20,16 @@ namespace IQuality.Infrastructure.Database.Repositories
 
         public async Task<Patient> GetPatientByIdAsync(string id)
         {
-            if (id != null && id != "")
+            if (string.IsNullOrEmpty(id)) return new Patient("", "");
+            try
             {
-                try
-                {
-                    return await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == id).FirstAsync();
-                }
-                catch (Exception e)
-                {
-                    return new Patient("", "");
-                }
+                var patient = await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == id).FirstAsync();
+                return patient;
             }
-
-            return new Patient("", "");
+            catch (Exception e)
+            {
+                return new Patient("", "");
+            }
         }
 
         public override void Delete(Patient entity)

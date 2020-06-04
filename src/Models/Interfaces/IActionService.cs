@@ -11,5 +11,6 @@ namespace IQuality.Models.Interfaces
         Task<List<Action>> GetActions(string chatId);
         Task<Action> SetActionReminderSettingsAsync(Interval interval, string actionId);
         Task<List<Action>> GetActionsOfPatientAsync(string userId);
+        void DeleteActionsForGoal(string goalId);
     }
 }
