@@ -20,7 +20,12 @@
       <h4 ibmTableHeaderTitle>Your goals</h4>
       <p ibmTableHeaderDescription>Here we store all your goals to see!</p>
     </ibm-table-header>
-    <ibm-table [model]="goals" [showSelectionColumn]="false"></ibm-table>
+    <ibm-table
+      [model]="goals"
+      [showSelectionColumn]="false"
+      [striped]="true"
+      [sortable]="true"
+    ></ibm-table>
   </ibm-table-container>
 </div>
 
