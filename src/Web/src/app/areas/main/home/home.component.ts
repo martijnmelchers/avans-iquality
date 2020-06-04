@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import {HeaderItem, TableData, TableHeaderItem, TableItem, TableModel} from "carbon-components-angular";
 import {ChatService} from "@IQuality/core/services/chat.service";
+import {OverflowMenuComponent} from "@IQuality/areas/main/overflow-menu/overflow-menu.component";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
 
@@ -14,7 +15,6 @@ export class HomeComponent implements OnInit {
 
   public actions: TableModel = new TableModel();
   public goals: TableModel = new TableModel();
-
 
   constructor(private chatService: ChatService) { }
 

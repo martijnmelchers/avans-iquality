@@ -33,6 +33,7 @@ import { ManageComponent } from './doctor/tips/manage/manage.component';
 import {BotMessageComponent} from "@IQuality/areas/main/chat/message/bot-message/bot-message.component";
 import {ChartsModule} from "@carbon/charts-angular";
 import {UserMessageComponent} from "@IQuality/areas/main/chat/message/user-message/user-message.component";
+import {OverflowMenuComponent} from "@IQuality/areas/main/overflow-menu/overflow-menu.component";
 
 @NgModule({
   declarations: [
@@ -45,9 +46,9 @@ import {UserMessageComponent} from "@IQuality/areas/main/chat/message/user-messa
     ChatInstanceComponent,
     BotMessageComponent,
     UserMessageComponent,
-	 TipsComponent, 
-	 AddTipComponent, 
-	 ManageComponent,
+    TipsComponent,
+    AddTipComponent,
+    ManageComponent, OverflowMenuComponent, OverflowMenuComponent,
   ],
     imports: [
         CommonModule,
