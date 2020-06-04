@@ -42,15 +42,7 @@ namespace IQuality.Api.Controllers
             return Ok(await _chatService.CreateChatAsync(chat));
         }
 
-        [HttpPost("createbuddychat")]
-        public async Task<IActionResult> CreateBuddyChat([FromBody] BuddyChat chat)
-        {
-            string id = HttpContext.User.GetUserId();
-            chat.InitiatorId = id;
-            chat.CreationDate = DateTime.Now;
-
-            return Ok(await _chatService.CreateChatAsync(chat));
-        }
+        
 
         [Route("{chatId}")]
         [HttpDelete]

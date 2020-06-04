@@ -5,8 +5,12 @@ import { ChatComponent } from "./chat/chat.component";
 import {InviteComponent} from "@IQuality/areas/main/invite/invite.component";
 import {DoctorComponent} from '@IQuality/areas/main/doctor/doctor.component';
 import {ChatInstanceComponent} from "@IQuality/areas/main/chat/chat-instance/chat-instance.component";
+import { TipsComponent } from './doctor/tips/tips.component';
+import { AddTipComponent } from './doctor/tips/addtip/addtip.component';
+import { ManageComponent } from './doctor/tips/manage/manage.component';
 import {RoleGuard} from "@IQuality/core/guards/role.guard";
 import {AuthGuard} from "@IQuality/core/guards/auth.guard";
+
 
 const routes: Routes = [
   {
@@ -48,6 +52,22 @@ const routes: Routes = [
   {
     path: 'doctor',
     component: DoctorComponent,
+    canActivate: [RoleGuard],
+    data: {roles: ['Doctor', 'Admin']}
+  },
+  {
+    path: 'doctor/tips',
+    component: TipsComponent,
+    canActivate: [RoleGuard],
+    data: {roles: ['Doctor', 'Admin']}
+  },{
+    path: 'doctor/tips/add',
+    component: AddTipComponent,
+    canActivate: [RoleGuard],
+    data: {roles: ['Doctor', 'Admin']}
+  },{
+    path: 'doctor/tips/manage/:id',
+    component: ManageComponent,
     canActivate: [RoleGuard],
     data: {roles: ['Doctor', 'Admin']}
   }

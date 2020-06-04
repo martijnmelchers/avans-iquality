@@ -1,0 +1,78 @@
+<div ibmGrid class="ml-5">
+
+  <form [formGroup]="tipForm" (ngSubmit)="onSubmit()">
+
+    
+    <fieldset class="mb-06">
+      <ibm-label
+      [invalid]="isInvalid('name')"
+        helperText="Enter your tip name"
+        invalidText="the name must be between 5 and 30 characters"
+        >
+        Tip naam
+      <input ibmText formControlName="name"
+      name="name">
+      </ibm-label>
+    </fieldset>
+  
+     
+
+    <fieldset class="mb-06">
+      <ibm-label
+        helperText="Enter your tip description"
+        [invalid]="isInvalid('description')"
+        invalidText="the description must be between 5 and 50 characters"
+        >
+        Tip beschrijving
+      <input ibmText
+      formControlName="description" name="description">
+      </ibm-label> 
+    </fieldset>
+     
+   
+
+    <fieldset class="mb-06">
+      <ibm-label
+        helperText="Enter your tip description">
+        Actie type
+        <select formControlName="selectedAction" class="form-control">
+          <option *ngFor="let actionType of actionTypes">{{actionType}}</option>
+        </select>
+      </ibm-label>
+    </fieldset>
+     
+
+ 
+
+    <div class="form-group">
+      <button type="submit" ibmButton [disabled]="!tipForm.valid">Edit Tip</button>
+    </div>
+  </form>
+
+
+  <button #trigger ibmButton="primary" (click)="open = true">Delete Tip</button>
+  <ibm-modal [open]="open" [trigger]="trigger" (overlaySelected)="open = false">
+    <ibm-modal-header (closeSelect)="open = false">
+      <p class="bx--modal-header__heading bx--type-beta">Are you want to delete this tip?</p>
+    </ibm-modal-header>
+    <div class="bx--modal-content">
+      <p>Tip Name: {{tipForm.value.name}}</p>
+    </div>
+    <ibm-modal-footer>
+      <ng-container>
+        <button
+        ibmButton="secondary"
+        (click)="open = false"
+        [attr.modal-primary-focus]="true">
+        No
+      </button>
+        <button
+          ibmButton="primary"
+          (click)="deleteTip()"
+          [attr.modal-primary-focus]="true">
+          Yes
+        </button>
+      </ng-container>
+    </ibm-modal-footer>
+  </ibm-modal>
+</div>

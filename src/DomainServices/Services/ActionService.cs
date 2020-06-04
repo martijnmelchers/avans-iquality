@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using IQuality.DomainServices.Interfaces;
 using IQuality.Infrastructure.Database.Repositories.Interface;
+using IQuality.Models;
 using IQuality.Models.Actions;
-using IQuality.Models.Goals;
 using IQuality.Models.Helpers;
 using IQuality.Models.Interfaces;
 using IQuality.Models.Measurements;
@@ -15,10 +16,18 @@ namespace IQuality.DomainServices.Services
     public class ActionService : IActionService
     {
         private readonly IActionRepository _actionRepository;
+        private readonly IChatRepository _chatRepository;
+        private readonly IPatientRepository _patientRepository;
+        private readonly ITipRepository _tipRepository;
+        private readonly IGoalRepository _goalRepository;
 
-        public ActionService(IActionRepository actionRepository)
+        public ActionService(IActionRepository actionRepository, IChatRepository chatRepository, IPatientRepository patientRepository, ITipRepository tipRepository, IGoalRepository goalRepository)
         {
             _actionRepository = actionRepository;
+            _chatRepository = chatRepository;
+            _patientRepository = patientRepository;
+            _tipRepository = tipRepository;
+            _goalRepository = goalRepository;
         }
         
         public async Task<Action> CreateAction(string chatId, string goalId, string description, string actionType)
@@ -33,7 +42,43 @@ namespace IQuality.DomainServices.Services
             };
 
             await _actionRepository.SaveAsync(action);
+
+            await addTipsForActionAsync(chatId, actionType);
+
             return action;
+        }
+
+        public async Task<string> addTipsForActionAsync(string chatId, string actionType)
+        {
+            var doctorApplicationUserId = await _chatRepository.GetDoctorIdFromPatientChatId(chatId);
+            var patientApplicationUserId = await _chatRepository.GetPatientIdFromPatientChatId(chatId);
+
+            if (doctorApplicationUserId != "" && patientApplicationUserId != "")
+            {
+                var patient = await _patientRepository.GetPatientByIdAsync(patientApplicationUserId);
+
+                if (patient.ApplicationUserId != null && patient.DoctorId != null && patient.ApplicationUserId != "" && patient.DoctorId != "")
+                {
+                    var tipIdsOfAction = await _tipRepository.GetTipIdsByDoctorIdAndActionTypeAsync(doctorApplicationUserId, actionType);
+
+                    if (tipIdsOfAction != null && tipIdsOfAction.Count != 0)
+                    {
+                        string firstAddedTip = "";
+
+                        // set tipIds list to something to avoid NullReferenceExceptions later on.
+                        await _patientRepository.InitializeTipIdsList(patient.Id);
+
+                        foreach (string tipId in tipIdsOfAction)
+                        {
+                            await _patientRepository.AddTipIdToPatient(tipId, patient.Id);
+                        }
+
+                        return firstAddedTip;
+                    }
+                }
+            }
+
+            return "";
         }
 
         public async Task<List<Action>> GetActions(string chatId)
@@ -42,10 +87,32 @@ namespace IQuality.DomainServices.Services
            return results;
         }
 
-        public Task<bool> DeleteAction(string actionId)
+        public async Task<Action> SetActionReminderSettingsAsync(Interval interval, string actionId)
         {
-            throw new System.NotImplementedException();
+            var result = await _actionRepository.SetActionReminderSettingsAsync(interval, actionId);
+
+            return result;
         }
-        
+
+        public async Task<List<Action>> GetActionsOfPatientAsync(string userId)
+        {
+            if (userId != null && userId != "")
+            {
+                var patient = await _patientRepository.GetPatientByIdAsync(userId);
+
+                if (patient.ApplicationUserId != null && patient.DoctorId != null && patient.ApplicationUserId != "" && patient.DoctorId != "")
+                {
+                    var patientChatId = await _chatRepository.GetPatientChatByPatientId(patient.ApplicationUserId);
+
+                    var patientGoalIdsList = await _goalRepository.GetGoalIdsOfPatientByChatId(patientChatId);
+
+                    var patientActionsList = await _actionRepository.GetActionsOfGoalIds(patientGoalIdsList);
+
+                    return patientActionsList;
+                }
+            }
+
+            return new List<Action>();
+        }
     }
 }

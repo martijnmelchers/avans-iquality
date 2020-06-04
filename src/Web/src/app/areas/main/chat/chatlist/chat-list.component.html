@@ -1,6 +1,13 @@
 <div ibmGrid>
   <div ibmRow [gutter]="false">
     <div ibmCol>
+	  <ibm-notification [notificationObj]="{
+		  type: 'info',
+		  title: notification?.name,
+		  message: notification?.description,
+		  showClose: false
+		}">
+	  </ibm-notification>
       <ibm-search
         theme="dark"
         placeholder="Search"
@@ -54,15 +61,10 @@
     </div>
   </div>
   <div ibmRow>
-    <button ibmCol ibmButton (click)="onChatCreate(true)">
-      Create Buddychat
-    </button>
-    <button ibmCol ibmButton (click)="onChatCreate(false)">
-      Create Patientchat
-    </button>
-    <label>
-      Name
-      <input ibmText [(ngModel)]="createChatName">
-    </label>
+    <div ibmCol>
+      <button ibmCol ibmButton [routerLink]="['/create-invite']">
+        Invite
+      </button>
+    </div>
   </div>
 </div>

@@ -45,7 +45,7 @@ export class AuthenticationService {
   }
 
   public get getRole(): string {
-    return (this.decodedToken) ? this.decodedToken.role : "";
+    return (this.decodedToken) ? this.decodedToken.role : null;
   }
 
   public saveToken(token: string) {
@@ -57,6 +57,10 @@ export class AuthenticationService {
       return;
 
     this.chatService.disconnect();
+  }
+
+  public deleteToken() {
+    this._cookie.delete('token');
   }
 
   async getInviteLink(inviteToken: string): Promise<Invite> {

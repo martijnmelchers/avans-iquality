@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -43,6 +43,20 @@ namespace IQuality.Infrastructure.Database.Repositories
         protected override async Task<List<Goal>> ConvertAsync(List<Goal> storage)
         {
             return await Task.FromResult(storage);
+        }
+
+        public async Task<List<string>> GetGoalIdsOfPatientByChatId(string chatId)
+        {
+            var goalIds = new List<string>();
+
+            var goalsOfPatient = await Session.Query<Goal>().OfType<Goal>().Where(g => g.ChatId == chatId).ToListAsync();
+
+            foreach (Goal goal in goalsOfPatient)
+            {
+                goalIds.Add(goal.Id);
+            }
+
+            return goalIds;
         }
     }
 }

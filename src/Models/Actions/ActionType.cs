@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using IQuality.Models.Chat.Messages;
 using IQuality.Models.Interfaces;
 
@@ -20,6 +20,11 @@ namespace IQuality.Models.Actions
         public ActionTypes(ActionType actionType)
         {
             _actionType = actionType.ToString();
+        }
+
+        public string GetActionType()
+        {
+            return _actionType;
         }
 
         public Listable ToListable(bool clickable = false, bool removable = false)

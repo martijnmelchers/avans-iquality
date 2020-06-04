@@ -94,7 +94,7 @@ export class ChatService {
       return;
 
     this.connection.invoke("JoinGroup", roomId).catch(err => {
-      console.log(err)
+      (err)
     });
   }
 
@@ -195,5 +195,9 @@ export class ChatService {
 
   public hasConnection(): boolean{
     return this.connection != null;
+  }
+
+  public getRole(){
+    return this._auth.getRole;
   }
 }

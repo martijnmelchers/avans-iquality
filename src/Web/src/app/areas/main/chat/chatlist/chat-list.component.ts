@@ -1,9 +1,12 @@
+import { ApiService } from '@IQuality/core/services/api.service';
+import { Tip } from '@IQuality/core/models/tip';
 import {Component, OnInit} from '@angular/core';
 import {ChatService} from "@IQuality/core/services/chat.service";
 import {ChatContext} from "@IQuality/core/models/chat-context";
 import {NotificationService} from "carbon-components-angular";
 import {Message} from "@IQuality/core/models/messages/message";
 import {DEBUG} from "@angular/compiler-cli/ngcc/src/logging/console_logger";
+import { TipService } from '@IQuality/core/services/tip.service';
 
 @Component({
   selector: 'app-chat-list',
@@ -12,6 +15,7 @@ import {DEBUG} from "@angular/compiler-cli/ngcc/src/logging/console_logger";
   providers: []
 })
 export class ChatListComponent implements OnInit {
+  notification: any = {};
   buddyChats: Array<ChatContext> = [];
   patientChats: Array<ChatContext> = [];
 
@@ -22,10 +26,11 @@ export class ChatListComponent implements OnInit {
   searchChatName: string;
   createChatName: string;
 
-  constructor(public chatService: ChatService) {
+  constructor(public chatService: ChatService, private _api: ApiService, private _tipService: TipService) {
   }
 
-  ngOnInit(): void {
+  //TODO: Verplaatsen
+  async ngOnInit(): Promise<void> {
     this.chatService.getChats().then((response) => {
       if(response != null)
       {
@@ -51,6 +56,57 @@ export class ChatListComponent implements OnInit {
         this.filteredBuddyChats = this.buddyChats;
       }
     }, err => console.log(err));
+
+    await this._tipService.getRandomTip().then((response) => {
+      if (response.id !== null)
+        this.notification = response;
+    });
+
+    if (this.notification.id == null || this.notification.id === undefined) {
+      this.notification.name = "Iquality";
+      this.notification.description = "Welcome to DiaBuddy!"
+    }
+
+    let thisComponent = this;
+    let OneSignal = window['OneSignal'] || [];
+    OneSignal.push(function() {
+      OneSignal.init({
+        appId: "83238485-a09c-4593-ae5b-0281f6495b79",
+        promptOptions: {
+          native: {
+            enabled: true,
+            autoPrompt: true,
+            timeDelay: 5,
+            pageViews: 2
+          }
+        },
+        notifyButton: {
+          enable: true,
+          showCredit: false,
+          displayPredicate: function() {
+            return OneSignal.isPushNotificationsEnabled()
+                .then(function(isPushEnabled) {
+                    return !isPushEnabled;
+                });
+          },
+        },
+        subdomainName: "iqualitydomain",
+      });
+    });
+    OneSignal.push( () => {
+      OneSignal.showSlidedownPrompt();
+      // Occurs when the user's subscription changes to a new value.
+      OneSignal.on('subscriptionChange',  (isSubscribed) => {
+        OneSignal.getUserId().then(id => {
+        thisComponent._api.post<any>(`/patient/${id}/${isSubscribed}`,{});
+        });
+      });
+    });
+
+    await this._api.get<any>('/action').then(resp => {
+      console.log(resp);
+    });
+
   }
 
   onChatCreate(isBuddyChat: boolean) {
