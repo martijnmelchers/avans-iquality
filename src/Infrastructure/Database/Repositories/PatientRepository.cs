@@ -23,14 +23,13 @@ namespace IQuality.Infrastructure.Database.Repositories
             if (string.IsNullOrEmpty(id)) return new Patient("", "");
             try
             {
-                return await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == id).FirstAsync();
+                var patient = await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == id).FirstAsync();
+                return patient;
             }
             catch (Exception e)
             {
                 return new Patient("", "");
             }
-
-            return new Patient("", "");
         }
 
         public override void Delete(Patient entity)

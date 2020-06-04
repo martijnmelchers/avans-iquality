@@ -61,7 +61,7 @@ export class ChatListComponent implements OnInit {
         this.notification = response;
     });
 
-    if (this.notification.id == null || this.notification.id === undefined) {
+    if (this.notification.id == null) {
       this.notification.name = "Iquality";
       this.notification.description = "Welcome to DiaBuddy!"
     }
