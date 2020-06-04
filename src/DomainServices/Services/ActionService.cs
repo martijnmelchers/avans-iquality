@@ -114,5 +114,10 @@ namespace IQuality.DomainServices.Services
 
             return new List<Action>();
         }
+
+        public void DeleteActionsForGoal(string goalId)
+        {
+            _actionRepository.DeleteActionsForGoal(goalId);
+        }
     }
 }
