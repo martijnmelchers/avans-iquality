@@ -26,13 +26,12 @@ namespace IQuality.Api.Controllers
         {
             return Ok(await _goalService.GetGoalsForPatient(HttpContext.User.GetUserId()));
         }
-        
+
         [HttpDelete("{goalId}"), Authorize(Roles = Roles.Patient)]
         public async Task<IActionResult> SetActionReminderSettings([FromRoute] string goalId)
         {
             var result = await _goalService.DeleteGoal(goalId);
             return Ok(result);
         }
-        
     }
 }
