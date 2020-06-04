@@ -10,7 +10,7 @@ import {ChatContext} from "@IQuality/core/models/chat-context";
   providedIn: 'root'
 })
 export class AuthenticationService {
-z
+
   public encodedToken: string;
   public decodedToken: any;
   private tokenService: JwtHelperService;
