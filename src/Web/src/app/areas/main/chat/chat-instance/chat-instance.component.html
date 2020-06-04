@@ -2,6 +2,10 @@
   <div ibmRow>
     <div ibmCol>
       <ibm-icon-close size="32" (click)="this.back()"></ibm-icon-close>
+
+      <button ibmCol ibmButton [routerLink]="['/create-invite', this.chatId]" *ngIf="chatService.getRole() == 'buddy'">
+        Invite
+      </button>
     </div>
   </div>
 

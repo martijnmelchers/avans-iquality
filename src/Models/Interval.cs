@@ -1,4 +1,4 @@
-﻿namespace IQuality.Models
+namespace IQuality.Models
 {
     public enum Interval
     {

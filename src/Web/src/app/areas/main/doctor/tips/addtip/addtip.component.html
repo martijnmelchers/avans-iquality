@@ -1,0 +1,52 @@
+<div ibmGrid class="ml-5">
+
+  <form [formGroup]="tipForm" (ngSubmit)="onSubmit()">
+
+    
+    <fieldset class="mb-06">
+      <ibm-label
+      [invalid]="isInvalid('name')"
+        helperText="Enter your tip name"
+        invalidText="the name must be between 5 and 30 characters"
+        >
+        Tip naam
+      <input ibmText formControlName="name"
+      name="name">
+      </ibm-label>
+    </fieldset>
+  
+     
+
+    <fieldset class="mb-06">
+      <ibm-label
+        helperText="Enter your tip description"
+        [invalid]="isInvalid('description')"
+        invalidText="the description must be between 5 and 50 characters"
+        >
+        Tip beschrijving
+      <input ibmText
+      formControlName="description" name="description">
+      </ibm-label> 
+    </fieldset>
+     
+   
+
+    <fieldset class="mb-06">
+      <ibm-label
+        helperText="Enter your tip description">
+        Actie type
+        <select formControlName="selectedAction" class="form-control">
+          <option *ngFor="let actionType of actionTypes">{{actionType}}</option>
+        </select>
+      </ibm-label>
+    </fieldset>
+     
+
+ 
+
+    <div class="form-group">
+      <button type="submit" ibmButton [disabled]="!tipForm.valid">Create Tip</button>
+    </div>
+  </form>
+
+</div>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {UserService} from "@IQuality/core/services/user.service";
 import {ApplicationUser} from "@IQuality/core/models/application-user";
 import {TableHeaderItem, TableItem, TableModel} from "carbon-components-angular";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-user',
@@ -12,7 +12,9 @@ import {ActivatedRoute} from "@angular/router";
 export class UserComponent implements OnInit {
   public user: ApplicationUser;
   private open: boolean = false;
-  constructor(private _userService: UserService, private _route: ActivatedRoute) { }
+  success: boolean;
+  successMessage: string;
+  constructor(private _userService: UserService, private _route: ActivatedRoute, private _router: Router) { }
 
   ngOnInit(): void {
     this._route.params.subscribe((params) => {
@@ -26,15 +28,20 @@ export class UserComponent implements OnInit {
 
   deactivateUser(){
     this._userService.deactivateUser(this.user.id).then((res) => {
+      this.successMessage = "User has been deactivated and cannot login anymore. Contact a system administrator to reactivate."
+      this.success = true;
+
 
     }).catch((err) => {
-
     });
   }
 
-  removeUser(){
-    this._userService.deleteUser(this.user.id).then((res) => {
+  async removeUser(){
+    this._userService.deleteUser(this.user.id).then( async(res) => {
+      this.successMessage = "User has been deleted, you will be redirected.";
+      this.success = true;
 
+      await this._router.navigate(['/admin', 'users']);
     }).catch((err) => {
 
     })

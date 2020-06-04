@@ -47,7 +47,6 @@ export class LoginComponent implements OnInit {
       this._auth.saveToken(token);
       this.navigateToUserPage()
     } catch(e) {
-      console.log(e);
       this.hasError = true;
     }
   }
@@ -56,7 +55,6 @@ export class LoginComponent implements OnInit {
   navigateToUserPage(){
     const role = this._auth.getRole;
 
-    console.log(role);
     let route = "/chat";
     if(role == "Doctor" || role == "Admin"){
       route = `/${role.toLowerCase()}`

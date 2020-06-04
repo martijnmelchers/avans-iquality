@@ -27,6 +27,9 @@ import {
 } from "@carbon/icons-angular";
 import {DoctorComponent} from "@IQuality/areas/main/doctor/doctor.component";
 import { ChatInstanceComponent } from './chat/chat-instance/chat-instance.component';
+import { TipsComponent } from './doctor/tips/tips.component';
+import { AddTipComponent } from './doctor/tips/addtip/addtip.component';
+import { ManageComponent } from './doctor/tips/manage/manage.component';
 import {BotMessageComponent} from "@IQuality/areas/main/chat/message/bot-message/bot-message.component";
 import {ChartsModule} from "@carbon/charts-angular";
 import {UserMessageComponent} from "@IQuality/areas/main/chat/message/user-message/user-message.component";
@@ -42,6 +45,9 @@ import {UserMessageComponent} from "@IQuality/areas/main/chat/message/user-messa
     ChatInstanceComponent,
     BotMessageComponent,
     UserMessageComponent,
+	 TipsComponent, 
+	 AddTipComponent, 
+	 ManageComponent,
   ],
   imports: [
     CommonModule,

@@ -3,8 +3,9 @@
   <div ibmRow>
     <div ibmCol [offsets]="{ lg: 4 }" [columnNumbers]="{ lg: 4 }">
       <div class="send" *ngIf="isSend">
-        <h1 *ngIf="this.role == 'Doctor'">Invite patient</h1>
-        <h1 *ngIf="this.role == 'Patient'">Invite buddy</h1>
+        <h1 *ngIf="this.role == 'doctor'">Invite patient</h1>
+        <h1 *ngIf="this.role == 'patient'">Invite buddy</h1>
+        <h1 *ngIf="this.role == 'admin'">Invite doctor</h1>
 
         <div [hidden]="!success">
           <ibm-notification [notificationObj]="{
@@ -18,7 +19,7 @@
 
 
         <form action="" [formGroup]="form" (ngSubmit)="submit()">
-          <fieldset class="mb-06">
+          <fieldset class="mb-06" *ngIf="!chatId && role != 'admin'">
             <ibm-label
               helperText="How do you want to call the chat?"
               invalidText="Please enter a valid chat name" [invalid]="isInvalid('chatName')">
