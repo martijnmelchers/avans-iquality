@@ -36,8 +36,14 @@ namespace IQuality.Api.Controllers
         public async Task<IActionResult> SetActionReminderSettings([FromRoute] Interval interval, [FromRoute] string actionId)
         {
             var result = await _actionService.SetActionReminderSettingsAsync(interval, actionId);
-
             return Ok(result);
+        }
+
+        [HttpDelete("{goalId}"), Authorize(Roles = Roles.Patient)]
+        public async Task<IActionResult> SetActionReminderSettings([FromRoute] string goalId)
+        {
+            _actionService.DeleteActionsForGoal(goalId);
+            return Ok();
         }
     }
 }
