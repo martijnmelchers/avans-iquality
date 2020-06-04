@@ -28,8 +28,10 @@ export class HomeComponent implements OnInit {
     this.goals.data = [[new TableItem({data: "Hello there how are you doing?"})],
       [new TableItem({data: "I am doing fine! thank you very much."})]];
 
-    this.actions.header = [new TableHeaderItem({ data: "Type" }), new TableHeaderItem({ data: "Description" })]
-    this.actions.data = [[new TableItem({data:"Weight"}), new TableItem({data: "Try and run more!"})]]
+    this.actions.header = [new TableHeaderItem({ data: "Type" }), new TableHeaderItem({ data: "Description" })];
+    this.actions.data = []
+
+    console.log(this.actions.data.length);
   }
 
   /*private loadScreen() {

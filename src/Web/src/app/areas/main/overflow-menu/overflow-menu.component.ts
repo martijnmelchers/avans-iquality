@@ -50,7 +50,7 @@ export class OverflowMenuComponent implements OnInit {
 
 
     this.model.data = [
-      [new TableItem({ data: "Name 1" }), new TableItem({ data: { id: "1" }, template:  this.overflowMenuItemTemplate})],
+      //[new TableItem({ data: "Name 1" }), new TableItem({ data: { id: "1" }, template:  this.overflowMenuItemTemplate})],
     ];
     this.model.header = [
       new TableHeaderItem({ data: "Name" }),
