@@ -1,11 +1,14 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
+import {AuthGuard} from "@IQuality/core/guards/auth.guard";
+import {RoleGuard} from "@IQuality/core/guards/role.guard";
 
 
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./areas/main/main.module').then(m => m.MainModule)
+    loadChildren: () => import('./areas/main/main.module').then(m => m.MainModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'authenticate',
@@ -13,7 +16,13 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    loadChildren: () => import('./areas/admin/admin.module').then(m => m.AdminModule)
+    loadChildren: () => import('./areas/admin/admin.module').then(m => m.AdminModule),
+    canActivate: [AuthGuard, RoleGuard],
+    data: {roles: ["admin"]}
+  },
+  {
+    path: "**",
+    redirectTo:""
   }
 ];
 

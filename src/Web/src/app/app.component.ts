@@ -33,7 +33,6 @@ export class AppComponent {
     });
 
     this.hasHamburger = window.innerWidth < 1055;
-    console.log(authenticationService.loggedIn);
     requestStatus.requestStart();
     setTimeout(() => requestStatus.requestFinish(), 2500);
   }

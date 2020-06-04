@@ -35,7 +35,6 @@ export class ChatListComponent implements OnInit {
       if(response != null)
       {
 
-        console.log(response);
         response.forEach(e => {
           if(e.chat.type === "BuddyChat")
           {
@@ -101,10 +100,6 @@ export class ChatListComponent implements OnInit {
         thisComponent._api.post<any>(`/patient/${id}/${isSubscribed}`,{});
         });
       });
-    });
-
-    await this._api.get<any>('/action').then(resp => {
-      console.log(resp);
     });
 
   }
