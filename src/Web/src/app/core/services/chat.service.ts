@@ -15,6 +15,7 @@ import {DEBUG} from "@angular/compiler-cli/ngcc/src/logging/console_logger";
 import {NotificationService} from "carbon-components-angular";
 import { BehaviorSubject, Observable } from "rxjs";
 import {Listable} from "@IQuality/core/models/listable";
+import {TutorialService} from "@IQuality/core/services/tutorial.service";
 
 
 @Injectable({
@@ -36,7 +37,8 @@ export class ChatService {
 
   private _chats: Array<ChatContext>;
 
-  constructor(private _api: ApiService, private _auth: AuthenticationService, private _notificationService: NotificationService) {
+  constructor(private _api: ApiService, private _auth: AuthenticationService, private _notificationService: NotificationService,
+  private tutorialService: TutorialService) {
     this._auth.SetChatService = this;
   }
 
@@ -199,5 +201,9 @@ export class ChatService {
 
   public getRole(){
     return this._auth.getRole;
+  }
+
+  public postTutorialMessage() {
+    this.messages.push(this.tutorialService.getTutorialMessage());
   }
 }
