@@ -1,7 +1,8 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
 import {HeaderItem, TableData, TableHeaderItem, TableItem, TableModel} from "carbon-components-angular";
-import {ChatService} from "@IQuality/core/services/chat.service";
-import {OverflowMenuComponent} from "@IQuality/areas/main/overflow-menu/overflow-menu.component";
+import {GoalService} from "@IQuality/core/services/goal.service";
+import {AuthenticationService} from "@IQuality/core/services/authentication.service";
+
 
 @Component({
   selector: 'app-home',
@@ -16,13 +17,15 @@ export class HomeComponent implements OnInit {
   public actions: TableModel = new TableModel();
   public goals: TableModel = new TableModel();
 
-  constructor(private chatService: ChatService) { }
+  constructor(private goalService: GoalService, private authService: AuthenticationService) { }
 
   ngOnInit(): void {
     //this.loadScreen();
     this.tipTitle = "Weight tip of the day:";
     this.tipDescription = "Losing more weight is fun!";
 
+
+    this.getGoals();
 
     this.goals.header = [new TableHeaderItem({data: "Goals"})]
     this.goals.data = [[new TableItem({data: "Hello there how are you doing?"})],
@@ -32,6 +35,15 @@ export class HomeComponent implements OnInit {
     this.actions.data = []
 
     console.log(this.actions.data.length);
+  }
+
+  private async getGoals(){
+    let userId = this.authService.getNameIdentifier
+    let goals = await this.goalService.getGoalsFromUser(userId);
+    console.log(goals);
+    /*for (let goal in goals){
+      this.goals.data.push([new TableItem({data: goal.description })])
+    }*/
   }
 
   /*private loadScreen() {

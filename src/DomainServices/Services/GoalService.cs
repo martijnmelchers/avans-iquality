@@ -39,21 +39,21 @@ namespace IQuality.DomainServices.Services
 
         public async Task<List<Goal>> GetGoalsForPatient(string userId)
         {
-            if (userId != null && userId != "")
-            {
-                var patient = await _patientRepository.GetPatientByIdAsync(userId);
+            if (string.IsNullOrEmpty(userId)) return new List<Goal>();
+            
+            
+            var patient = await _patientRepository.GetPatientByIdAsync(userId);
 
-                if (patient.ApplicationUserId != null && patient.DoctorId != null && patient.ApplicationUserId != "" && patient.DoctorId != "")
-                {
-                    var patientChatId = await _chatRepository.GetPatientChatByPatientId(patient.ApplicationUserId);
+            if (patient.ApplicationUserId == null || patient.DoctorId == null || patient.ApplicationUserId == "" ||
+                patient.DoctorId == "") return new List<Goal>();
+            
+            string patientChatId = await _chatRepository.GetPatientChatByPatientId(patient.ApplicationUserId);
 
-                    var patientGoalList = await _goalRepository.GetGoalsOfChat(patientChatId);
+            List<Goal> patientGoalList = await _goalRepository.GetGoalsOfChat(patientChatId);
                     
-                    return patientGoalList;
-                }
-            }
+            return patientGoalList;
 
-            return new List<Goal>();        }
+        }
 
         public async Task<bool> DeleteGoal(string goalId)
         {

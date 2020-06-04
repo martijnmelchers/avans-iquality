@@ -8,7 +8,7 @@ using Raven.Client.Documents.Session;
 
 namespace IQuality.Api.Controllers
 {
-    [Route("/goal")]
+    [Route("/goals")]
     public class GoalController : RavenApiController
     {
         
@@ -21,14 +21,14 @@ namespace IQuality.Api.Controllers
             _goalService = goalService;
         }
         
-        [HttpGet, Authorize(Roles = Roles.Patient)]
+        [HttpGet]
         public async Task<IActionResult> GetPatientsGoals()
         {
             return Ok(await _goalService.GetGoalsForPatient(HttpContext.User.GetUserId()));
         }
 
         [HttpDelete("{goalId}"), Authorize(Roles = Roles.Patient)]
-        public async Task<IActionResult> SetActionReminderSettings([FromRoute] string goalId)
+        public async Task<IActionResult> DeleteGoalByPatientId([FromRoute] string goalId)
         {
             var result = await _goalService.DeleteGoal(goalId);
             return Ok(result);

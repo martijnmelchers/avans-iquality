@@ -13,7 +13,7 @@ using Raven.Client.Documents.Session;
 
 namespace IQuality.Api.Controllers
 {
-    [Route("/action")]
+    [Route("/actions")]
     public class ActionController : RavenApiController
     {
         private readonly IAsyncDocumentSession _session;
@@ -40,7 +40,7 @@ namespace IQuality.Api.Controllers
         }
 
         [HttpDelete("{goalId}"), Authorize(Roles = Roles.Patient)]
-        public async Task<IActionResult> SetActionReminderSettings([FromRoute] string goalId)
+        public async Task<IActionResult> DeleteActionsForGoal([FromRoute] string goalId)
         {
             _actionService.DeleteActionsForGoal(goalId);
             return Ok();
