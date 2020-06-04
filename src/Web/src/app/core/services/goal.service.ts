@@ -9,9 +9,9 @@ export class GoalService{
 
   constructor(private _api: ApiService) { }
 
-  public async getGoalsFromUser(userId: string) : Promise<Array<Goal>> {
+  public async getGoalsFromUser(userId: string) : Promise<[Goal]> {
     console.log(userId);
-    return await this._api.get<Array<Goal>>(`/goals`)
+    return await this._api.get<[Goal]>(`/goals`)
   }
   public async getActionsFromUser(applicationUserId: string){
 

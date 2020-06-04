@@ -64,7 +64,7 @@ export class ChatService {
     let chat;
 
     if (isBuddyChat) {
-      chat = await this._api.post<BaseChat>('/chats/createbuddychat', {name});
+      chat = await this._api.post<BaseChat>('/buddy', {name});
     } else {
       chat = await this._api.post<BaseChat>('/chats', {name});
     }

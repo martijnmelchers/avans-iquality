@@ -22,7 +22,7 @@ const routes: Routes = [
     path: 'chat',
     component: ChatComponent,
     canActivate: [AuthGuard, RoleGuard],
-    data: {roles: ['patient', 'admin']}
+    data: {roles: ['patient', 'admin', 'doctor']}
   },
   {
     path: 'chat/:chatId',
