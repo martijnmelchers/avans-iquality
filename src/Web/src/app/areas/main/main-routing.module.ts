@@ -14,18 +14,16 @@ import {AuthGuard} from "@IQuality/core/guards/auth.guard";
 
 const routes: Routes = [
   {
-    path: '',
-    component: HomeComponent
-  },
-  {
     path: 'chat',
     component: ChatComponent,
     canActivate: [AuthGuard, RoleGuard],
-    data: {roles: ['Patient', 'Admin']}
+    data: {roles: ['patient', 'admin']}
   },
   {
     path: 'chat/:chatId',
-    component: ChatInstanceComponent
+    component: ChatInstanceComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: {roles: ['patient', 'admin']}
   },
   {
     path: 'invite/:id',
@@ -34,42 +32,43 @@ const routes: Routes = [
   {
     path: 'create-invite',
     component: InviteComponent,
-    canActivate: [RoleGuard],
-    data: {roles: ['Doctor', 'Admin']}
+    canActivate: [AuthGuard, RoleGuard],
+    data: {roles: ['doctor', 'admin']}
   },
   {
     path: 'create-invite',
     component: InviteComponent,
-    canActivate: [RoleGuard],
-    data: {roles: ['Doctor', 'Admin']}
+    canActivate: [AuthGuard, RoleGuard],
+    data: {roles: ['doctor', 'admin']}
   },
   {
     path: 'create-invite/:chatId',
     component: InviteComponent,
-    canActivate: [RoleGuard],
-    data: {roles: ['Doctor', 'Admin']}
+    canActivate: [AuthGuard, RoleGuard],
+    data: {roles: ['doctor', 'admin']}
   },
   {
     path: 'doctor',
     component: DoctorComponent,
-    canActivate: [RoleGuard],
-    data: {roles: ['Doctor', 'Admin']}
+    canActivate: [AuthGuard, RoleGuard],
+    data: {roles: ['doctor', 'admin']}
   },
   {
     path: 'doctor/tips',
     component: TipsComponent,
-    canActivate: [RoleGuard],
-    data: {roles: ['Doctor', 'Admin']}
-  },{
+    canActivate: [AuthGuard, RoleGuard],
+    data: {roles: ['doctor', 'admin']}
+  },
+  {
     path: 'doctor/tips/add',
     component: AddTipComponent,
-    canActivate: [RoleGuard],
-    data: {roles: ['Doctor', 'Admin']}
+    canActivate: [AuthGuard, RoleGuard],
+    data: {roles: ['doctor', 'admin']}
   },{
     path: 'doctor/tips/manage/:id',
     component: ManageComponent,
-    canActivate: [RoleGuard],
-    data: {roles: ['Doctor', 'Admin']}
+    canActivate: [AuthGuard, RoleGuard],
+    data: {roles: ['doctor', 'admin']}
   }
 ];
 
