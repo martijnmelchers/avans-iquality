@@ -168,7 +168,9 @@ export class ChatService {
   }
 
   getContactName(chatId: string) {
-    return this._api.get<string>(`/chats/${chatId}/contact`, null, {responseType: "text"});
+    return this._api.get<string>(`/chats/${chatId}/contact`, null, {responseType: "text"}).catch(e => {
+      return "No Contact";
+    });
   }
 
   private static createMessage(userId : string, userName: string, chatId: string, content: string) {

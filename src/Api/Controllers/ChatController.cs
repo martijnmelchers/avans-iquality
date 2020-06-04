@@ -100,8 +100,15 @@ namespace IQuality.Api.Controllers
             ChatContext<BaseChat> chatContext = await _chatService.GetChatAsync(chatId);
             string userId = HttpContext.User.GetUserId();
 
-            string contactName = await _chatService.GetContactName(userId, chatContext.Chat);
-            return Ok(contactName);
+            try
+            {
+                string contactName = await _chatService.GetContactName(userId, chatContext.Chat);
+                return Ok(contactName);
+            }
+            catch (Exception e)
+            {
+                return Ok("No Contact");
+            }
         }
     }
 }

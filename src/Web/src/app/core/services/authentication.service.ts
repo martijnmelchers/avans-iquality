@@ -10,7 +10,7 @@ import {ChatContext} from "@IQuality/core/models/chat-context";
   providedIn: 'root'
 })
 export class AuthenticationService {
-z
+
   public encodedToken: string;
   public decodedToken: any;
   private tokenService: JwtHelperService;
@@ -45,11 +45,7 @@ z
   }
 
   public get getRole(): string {
-    if(this.decodedToken){
-      return this.decodedToken.role;
-    }
-    else
-      return null;
+    return (this.decodedToken) ? this.decodedToken.role : null;
   }
 
   public saveToken(token: string) {

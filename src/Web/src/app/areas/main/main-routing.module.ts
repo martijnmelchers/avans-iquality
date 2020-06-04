@@ -8,6 +8,9 @@ import {ChatInstanceComponent} from "@IQuality/areas/main/chat/chat-instance/cha
 import { TipsComponent } from './doctor/tips/tips.component';
 import { AddTipComponent } from './doctor/tips/addtip/addtip.component';
 import { ManageComponent } from './doctor/tips/manage/manage.component';
+import {RoleGuard} from "@IQuality/core/guards/role.guard";
+import {AuthGuard} from "@IQuality/core/guards/auth.guard";
+
 
 const routes: Routes = [
   {
@@ -16,7 +19,9 @@ const routes: Routes = [
   },
   {
     path: 'chat',
-    component: ChatComponent
+    component: ChatComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: {roles: ['Patient', 'Admin']}
   },
   {
     path: 'chat/:chatId',
@@ -24,33 +29,47 @@ const routes: Routes = [
   },
   {
     path: 'invite/:id',
-    component: InviteComponent
+    component: InviteComponent,
   },
   {
     path: 'create-invite',
-    component: InviteComponent
+    component: InviteComponent,
+    canActivate: [RoleGuard],
+    data: {roles: ['Doctor', 'Admin']}
   },
   {
     path: 'create-invite',
-    component: InviteComponent
+    component: InviteComponent,
+    canActivate: [RoleGuard],
+    data: {roles: ['Doctor', 'Admin']}
   },
   {
     path: 'create-invite/:chatId',
-    component: InviteComponent
+    component: InviteComponent,
+    canActivate: [RoleGuard],
+    data: {roles: ['Doctor', 'Admin']}
   },
   {
     path: 'doctor',
-    component: DoctorComponent
+    component: DoctorComponent,
+    canActivate: [RoleGuard],
+    data: {roles: ['Doctor', 'Admin']}
   },
   {
     path: 'doctor/tips',
-    component: TipsComponent
+    component: TipsComponent,
+    canActivate: [RoleGuard],
+    data: {roles: ['Doctor', 'Admin']}
   },{
     path: 'doctor/tips/add',
-    component: AddTipComponent
+    component: AddTipComponent,
+    canActivate: [RoleGuard],
+    data: {roles: ['Doctor', 'Admin']}
   },{
     path: 'doctor/tips/manage/:id',
-    component: ManageComponent
+    component: ManageComponent,
+    canActivate: [RoleGuard],
+    data: {roles: ['Doctor', 'Admin']}
   }
 ];
 
