@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
   public actionTypes: any
   public userInformation = new TableModel();
   public reminderIntervals = []
+  public intervalText = "Set Interval"
 
 
   constructor(private goalService: GoalService, private actionService: ActionService, private authService: AuthenticationService) { }
@@ -93,16 +94,17 @@ export class HomeComponent implements OnInit {
   }
 
   public setReminderIntervals() {
-    this.reminderIntervals.push("None")
+    this.reminderIntervals.push("Never")
     this.reminderIntervals.push("Daily")
     this.reminderIntervals.push("Weekly")
     this.reminderIntervals.push("Monthly")
   }
 
-  clickedhaha(actionId, index) {
-    // works, tested
-    console.log(actionId)
-    console.log(index)
+  async setReminderInterval(actionId, index) {
+    this.intervalText = this.reminderIntervals[index];
+    await this.actionService.setReminderInterval(actionId,index);
+
+
   }
 
 }

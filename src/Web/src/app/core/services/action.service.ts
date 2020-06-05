@@ -22,4 +22,8 @@ export class ActionService{
     return await this._api.get<[string]>('/actiontypes')
   }
 
+  public async setReminderInterval(id,interval):Promise<any>{
+    await this._api.post<any>(`/actions/${id}/intervals/${interval}`,{});
+  }
+
 }

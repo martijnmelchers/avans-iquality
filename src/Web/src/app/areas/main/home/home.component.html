@@ -37,10 +37,10 @@
           <th>{{action.description}}</th>
           <th>
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Set Interval
+            {{intervalText}}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" *ngFor="let reminderInterval of reminderIntervals; let i = index;" (click)="clickedhaha(action.id, i)">
+              <a class="dropdown-item" *ngFor="let reminderInterval of reminderIntervals; let i = index;" (click)="setReminderInterval(action.id, i)">
                 {{reminderInterval}}
               </a>
             </div>
