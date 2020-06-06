@@ -26,13 +26,13 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th>Action Type</th>
-					<th>Description</th>
-					<th>Reminder</th>
+					<th class="th-dark">Action Type</th>
+					<th class="th-dark">Description</th>
+					<th class="th-dark">Reminder</th>
 				</tr>
 			</thead>
 			<tbody>
-        <tr id="actionsremindersrow" class="dropdown" *ngFor="let action of actions">
+        <tr id="actionsremindersrow" class="dropdown th-white" *ngFor="let action of actions">
           <th>{{getActionTypeFromNumber(action.type)}}</th>
           <th>{{action.description}}</th>
           <th>
