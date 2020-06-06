@@ -6,52 +6,58 @@ import {
   ButtonModule,
   GridModule,
   InputModule,
-  ListModule, ModalModule, NotificationModule, NotificationService, PlaceholderService,
+  ListModule,
+  ModalModule,
+  NotificationModule,
   StructuredListModule,
-  TableModule, TagModule,
-  TilesModule, ToggleModule,
+  TableModule,
+  TagModule,
+  TilesModule,
+  ToggleModule
 } from 'carbon-components-angular';
-import {MainRoutingModule} from "@IQuality/areas/main/main-routing.module";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { MainRoutingModule } from "@IQuality/areas/main/main-routing.module";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   AddModule,
   CloseModule,
-  ColumnModule, DeleteModule,
+  ColumnModule,
+  DeleteModule,
   DotMarkModule,
   SendAltModule,
   TrashCanModule
 } from "@carbon/icons-angular";
-import {ChartsModule} from "@carbon/charts-angular";
-import {UserComponent} from "@IQuality/areas/admin/user/user.component";
+import { ChartsModule } from "@carbon/charts-angular";
+import { UserComponent } from "@IQuality/areas/admin/user/user.component";
 
 
 @NgModule({
   declarations: [UsersComponent, UserComponent],
-    imports: [
-        AdminRoutingModule,
-        CommonModule,
-        MainRoutingModule,
-        TableModule,
-        GridModule,
-        InputModule,
-        ButtonModule,
-        ReactiveFormsModule,
-        TilesModule,
-        ListModule,
-        StructuredListModule,
-        AddModule,
-        FormsModule,
-        SendAltModule,
-        CloseModule,
-        ColumnModule,
-        TagModule,
-        ToggleModule,
-        DotMarkModule,
-        TrashCanModule,
-        DeleteModule,
-        NotificationModule,
-        ModalModule,
-        ChartsModule,
-    ]
+  imports: [
+    AdminRoutingModule,
+    CommonModule,
+    MainRoutingModule,
+    TableModule,
+    GridModule,
+    InputModule,
+    ButtonModule,
+    ReactiveFormsModule,
+    TilesModule,
+    ListModule,
+    StructuredListModule,
+    AddModule,
+    FormsModule,
+    SendAltModule,
+    CloseModule,
+    ColumnModule,
+    TagModule,
+    ToggleModule,
+    DotMarkModule,
+    TrashCanModule,
+    DeleteModule,
+    NotificationModule,
+    ModalModule,
+    ChartsModule,
+  ]
 })
-export class AdminModule { }
+export class AdminModule {
+}

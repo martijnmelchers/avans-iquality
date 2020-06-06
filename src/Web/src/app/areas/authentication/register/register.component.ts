@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
-import {ApiService} from "@IQuality/core/services/api.service";
-import {AuthenticationService} from "@IQuality/core/services/authentication.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Invite} from "@IQuality/core/models/invite";
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
+import { ApiService } from "@IQuality/core/services/api.service";
+import { AuthenticationService } from "@IQuality/core/services/authentication.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Invite } from "@IQuality/core/models/invite";
 
 @Component({
   selector: 'app-register',
@@ -16,6 +16,7 @@ export class RegisterComponent implements OnInit {
   link: Invite;
   private inviteTypes: Array<string> = ["buddy", "patient", "doctor", "admin"];
   private inviteToken: string;
+
   constructor(private _route: ActivatedRoute, private _fb: FormBuilder, private _api: ApiService, private _auth: AuthenticationService, private _router: Router) {
   }
 
@@ -41,7 +42,7 @@ export class RegisterComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(3)],
         updateOn: 'blur'
       }],
-      password: ['',  {
+      password: ['', {
         validators: [Validators.required, Validators.minLength(6)],
         updateOn: 'blur'
       }],
@@ -85,10 +86,14 @@ export class RegisterComponent implements OnInit {
         }
       };
 
-      let userData: any = await this._api.post<any>(`/authorize/register/${this.inviteToken}`, postData, null, { disableAuthentication: true, responseType: 'text', headers: {} });
+      let userData: any = await this._api.post<any>(`/authorize/register/${this.inviteToken}`, postData, null, {
+        disableAuthentication: true,
+        responseType: 'text',
+        headers: {}
+      });
       userData = JSON.parse(userData);
-      await this._router.navigate([`/authenticate`], {queryParams: {chat_id: userData.item1}});
-    } catch(e) {
+      await this._router.navigate([`/authenticate`], { queryParams: { chat_id: userData.item1 } });
+    } catch (e) {
       this.hasError = true;
     }
   }

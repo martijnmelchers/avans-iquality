@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {UserService} from "@IQuality/core/services/user.service";
-import {ApplicationUser} from "@IQuality/core/models/application-user";
-import {TableHeaderItem, TableItem, TableModel} from "carbon-components-angular";
+import { UserService } from "@IQuality/core/services/user.service";
+import { ApplicationUser } from "@IQuality/core/models/application-user";
+import { TableHeaderItem, TableItem, TableModel } from "carbon-components-angular";
 
 @Component({
   selector: 'app-users',
@@ -10,7 +10,9 @@ import {TableHeaderItem, TableItem, TableModel} from "carbon-components-angular"
 })
 export class UsersComponent implements OnInit {
   public users: Array<ApplicationUser>;
-  constructor(private _userService: UserService) { }
+
+  constructor(private _userService: UserService) {
+  }
 
   ngOnInit(): void {
     this._userService.getUsers().then(users => {
