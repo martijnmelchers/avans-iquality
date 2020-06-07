@@ -76,6 +76,7 @@ namespace IQuality.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+        
             services.AddControllers().AddNewtonsoftJson(o => { o.SerializerSettings.CheckAdditionalContent = true; });
             services.AddSignalR();
 
@@ -163,7 +164,7 @@ namespace IQuality.Api
 
             // global cors policy
             app.UseCors(x => x
-                .WithOrigins("http://localhost:4200")
+                .WithOrigins("http://8c599bfd60fe.ngrok.io")
                 .AllowCredentials()
                 .AllowAnyMethod()
                 .AllowAnyHeader());
