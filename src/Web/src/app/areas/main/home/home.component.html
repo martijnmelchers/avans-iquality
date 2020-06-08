@@ -81,7 +81,7 @@
       [stickyHeader]="false"
       [skeleton]="false"
     ></ibm-table>
-    <div *ngIf="firstTime && goals.data.length < 2 && goals.data != null && goals.data[0][0] != null && goals.data[0][0].data == ''" style="text-align: center">
+    <div *ngIf="firstTime" style="text-align: center">
       <p>Uh Oh, it looks like you don't have any goals. press the button to create some now!</p>
       <button ibmButton="primary" (click)="startTutorial()">Click me!</button>
     </div>
