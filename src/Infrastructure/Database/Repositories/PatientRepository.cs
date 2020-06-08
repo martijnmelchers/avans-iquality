@@ -134,7 +134,7 @@ namespace IQuality.Infrastructure.Database.Repositories
             var patient = new Patient("", "");
             try
             {
-                patient = await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == patientId).FirstAsync();
+                patient = await Session.Query<Patient>().Where(p => p.ApplicationUserId == patientId).FirstAsync();
             } catch (Exception e)
             {
                 return new List<string>();
