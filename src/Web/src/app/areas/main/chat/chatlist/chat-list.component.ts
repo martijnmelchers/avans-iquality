@@ -4,6 +4,7 @@ import {Component, OnInit} from '@angular/core';
 import {ChatService} from "@IQuality/core/services/chat.service";
 import {ChatContext} from "@IQuality/core/models/chat-context";
 import { TipService } from '@IQuality/core/services/tip.service';
+import { AuthenticationService } from '@IQuality/core/services/authentication.service';
 
 @Component({
   selector: 'app-chat-list',
@@ -23,7 +24,7 @@ export class ChatListComponent implements OnInit {
   searchChatName: string;
   createChatName: string;
 
-  constructor(public chatService: ChatService, private _api: ApiService, private _tipService: TipService) {
+  constructor(public chatService: ChatService, private _api: ApiService, private _tipService: TipService, private _authService: AuthenticationService) {
     console.log('hello');
   }
 
@@ -66,6 +67,13 @@ export class ChatListComponent implements OnInit {
       this.notification.description = "Welcome to DiaBuddy!"
     }
 
+    if (this._authService.getRole == 'patient') {
+      this.setOneSignalSettings();
+    }
+
+  }
+
+  setOneSignalSettings() {
     let thisComponent = this;
     let OneSignal = window['OneSignal'] || [];
     OneSignal.push(function() {
@@ -103,7 +111,6 @@ export class ChatListComponent implements OnInit {
         });
       });
     });
-
   }
 
   onChatCreate(isBuddyChat: boolean) {
