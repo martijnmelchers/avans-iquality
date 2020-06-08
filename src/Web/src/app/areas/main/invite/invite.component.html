@@ -7,7 +7,7 @@
         <h1 *ngIf="this.role == 'patient'">Invite buddy</h1>
         <h1 *ngIf="this.role == 'admin'">Invite doctor</h1>
 
-        <div [hidden]="!success">
+        <div [hidden]="success === false || success === null">
           <ibm-notification [notificationObj]="{
 				type: 'success',
           title: 'Invite has been sent',
@@ -16,6 +16,18 @@
           lowContrast: true}">
           </ibm-notification>
         </div>
+
+
+        <div [hidden]="success === true || success === null">
+          <ibm-notification [notificationObj]="{
+				type: 'error',
+          title: 'There was ann error sending the invite.',
+          message: errorMessage,
+          showClose: false,
+          lowContrast: true}">
+          </ibm-notification>
+        </div>
+
 
 
         <form action="" [formGroup]="form" (ngSubmit)="submit()">
@@ -56,12 +68,31 @@
       </div>
 
       <div class="accept" *ngIf="this.invite">
-        <h3>Invite from: {{invite.invitedBy}}</h3>
-        <h4>To become a: {{inviteTypes[invite.inviteType]}}</h4>
-        <br>
-        <p>After accepting this invite. You will be able to register an account</p>
-        <button ibmButton="primary" size="normal" (click)="acceptInvite()">Accept</button>
-        <button ibmButton="warning" size="normal" (click)="declineInvite()">Decline</button>
+        <form action="">
+          <fieldset class="mb-06">
+            <h3>Invitation</h3>
+
+            <p>Welcome! <strong>{{invite.invitedBy}}</strong> has invited you to the Diabuddy community, this application is meant
+              to help people with diabetes.</p>
+
+             <p>You will be assigned the <strong>{{inviteTypes[invite.inviteType]}} role.</strong></p>
+             <p>After accepting this invite. You will be able to register an account</p>
+          </fieldset>
+
+
+          <fieldset class="mb-06">
+            <div ibmRow>
+              <div ibmCol>
+                <button ibmButton="primary" size="normal" (click)="acceptInvite()">Accept</button>
+              </div>
+
+              <div ibmCol>
+                <button ibmButton="warning" size="normal" (click)="declineInvite()">Decline</button>
+              </div>
+            </div>
+
+          </fieldset>
+        </form>
       </div>
     </div>
   </div>

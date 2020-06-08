@@ -109,6 +109,12 @@ namespace IQuality.DomainServices.Services
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
             return jwtToken;
         }
+        
+        public async Task<bool> ApplicationUserExists(string email)
+        {
+            var foundUser = await _userManager.FindByEmailAsync(email);
+            return (foundUser != null);
+        } 
 
         #region Privates
 

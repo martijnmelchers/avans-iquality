@@ -22,7 +22,7 @@ const routes: Routes = [
     path: 'chat',
     component: ChatComponent,
     canActivate: [AuthGuard, RoleGuard],
-    data: {roles: ['patient', 'admin', 'doctor']}
+    data: {roles: ['patient', 'admin', 'doctor', 'buddy']}
   },
   {
     path: 'chat/:chatId',
@@ -36,19 +36,13 @@ const routes: Routes = [
     path: 'create-invite',
     component: InviteComponent,
     canActivate: [RoleGuard],
-    data: {roles: ['doctor', 'admin']}
-  },
-  {
-    path: 'create-invite',
-    component: InviteComponent,
-    canActivate: [RoleGuard],
-    data: {roles: ['doctor', 'admin']}
+    data: {roles: ['doctor', 'admin', 'patient']}
   },
   {
     path: 'create-invite/:chatId',
     component: InviteComponent,
     canActivate: [RoleGuard],
-    data: {roles: ['doctor', 'admin']}
+    data: {roles: ['doctor', 'admin', 'patient']}
   },
   {
     path: 'doctor',
