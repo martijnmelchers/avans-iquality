@@ -1,4 +1,5 @@
 <div>
+
   <ibm-notification [notificationObj]="{
 				type: 'success',
 				title: tipTitle,
@@ -21,6 +22,33 @@
 
   </ibm-table-container>
 
+  <div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th class="th-dark">Action Type</th>
+					<th class="th-dark">Description</th>
+					<th class="th-dark">Reminder</th>
+				</tr>
+			</thead>
+			<tbody>
+        <tr id="actionsremindersrow" class="dropdown th-white" *ngFor="let action of actions">
+          <th>{{getActionTypeFromNumber(action.type)}}</th>
+          <th>{{action.description}}</th>
+          <th>
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{intervalText}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" *ngFor="let reminderInterval of reminderIntervals; let i = index;" (click)="setReminderInterval(action.id, i)">
+                {{reminderInterval}}
+              </a>
+            </div>
+          </th>
+        </tr>
+			</tbody>
+		</table>
+  </div>
   <ibm-table-container *ngIf="this.userRole === 'patient' || this.userRole === 'admin'">
     <ibm-table-header>
       <h4 ibmTableHeaderTitle>Your actions</h4>
@@ -63,5 +91,5 @@
     <button ibmCol ibmButton [routerLink]="['/create-invite']">
       Invite {{this.getInviteName()}}
     </button>
-</div>
 
+</div>

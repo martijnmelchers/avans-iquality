@@ -1,4 +1,4 @@
-﻿import {ActionType} from "@IQuality/core/models/ActionType";
+﻿import { ActionType } from './ActionType';
 
 export class Action{
 
