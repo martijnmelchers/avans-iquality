@@ -24,8 +24,8 @@ export class AuthenticationService {
     this.decodedToken = this.tokenService.decodeToken(this.encodedToken);
   }
 
-  public get loggedIn(): boolean {
-    return this.encodedToken && !this.tokenService.isTokenExpired(this.encodedToken);
+  public loggedIn(): boolean {
+    return (this.encodedToken != null && !this.tokenService.isTokenExpired(this.encodedToken));
   }
 
   public get getNameIdentifier(): string {
@@ -61,6 +61,11 @@ export class AuthenticationService {
 
   public deleteToken() {
     this._cookie.delete('token');
+    this.decodedToken = null;
+    this.encodedToken = null;
+    if (this.chatService) {
+      this.chatService.disconnect();
+    }
   }
 
   async getInviteLink(inviteToken: string): Promise<Invite> {

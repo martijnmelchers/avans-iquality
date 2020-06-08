@@ -100,7 +100,7 @@ export class ChatService {
 
   public getTime(date: string): string {
     const time = new Date(date);
-    return `${time.getHours()}:${time.getMinutes()}`
+    return `${time.getHours()}:${time.getMinutes()}`;
   }
 
 
@@ -117,7 +117,7 @@ export class ChatService {
     this.connection.onclose(() => console.log('Connection closed!'));
 
 
-    this.connection.on("messageReceived", (userId: string, userName: string, chatId: string, content: string) => {
+    this.connection.on('messageReceived', (userId: string, userName: string, chatId: string, content: string) => {
       if(this.selected){
         if (chatId === this.selected.chat.id) {
           const message = ChatService.createMessage(userId, userName, chatId, content);

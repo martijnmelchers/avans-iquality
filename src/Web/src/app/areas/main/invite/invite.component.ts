@@ -20,11 +20,12 @@ export class InviteComponent implements OnInit, OnDestroy {
   role: string;
   inviteToken: string;
   invite: Invite;
-  inviteTypes: Array<string> = ['Buddy', 'Patient', 'Doctor', 'Admin'];
+  inviteTypes: Array<string> = ['buddy', 'patient', 'doctor', 'admin'];
   chatId: string;
   success = null;
   errorMessage = 'There was an unknown error, please try again at a later time';
   form: FormGroup;
+
   constructor(
     private _route: ActivatedRoute,
     private _authService: AuthenticationService,
