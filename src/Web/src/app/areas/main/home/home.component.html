@@ -5,10 +5,10 @@
 
 <div>
   <ibm-notification [notificationObj]="{
-				type: 'success',
-				title: tipTitle,
-				message: tipDescription,
-				showClose: false}">
+    type: 'success',
+    title: retrievedTip?.name,
+    message: retrievedTip?.description,
+    showClose: false}">
   </ibm-notification>
 
   <ibm-table-container>
@@ -26,7 +26,21 @@
 
   </ibm-table-container>
 
-  <div class="table-responsive">
+  <ibm-table-container class="actions-header" *ngIf="this.userRole === 'patient'">
+    <ibm-table-header>
+      <h4 ibmTableHeaderTitle>Your actions</h4>
+      <p ibmTableHeaderDescription>Here we store all your actions to see!</p>
+    </ibm-table-header>
+  </ibm-table-container>
+
+  <ibm-table-container *ngIf="actions != null && actions.length < 1 && this.userRole === 'patient'">
+    <div *ngIf="actions != null && actions.length < 1 && this.userRole === 'patient'" style="text-align: center">
+      <p>Uh Oh, it looks like you don't have any actions. Press the button to create some now!</p>
+      <button ibmButton="primary" [routerLink]="['/chat']">Click me!</button>
+    </div>
+  </ibm-table-container>
+
+  <div *ngIf="actions != null && actions.length > 0">
 		<table class="table">
 			<thead>
 				<tr>
@@ -41,7 +55,7 @@
           <th>{{action.description}}</th>
           <th>
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{intervalText}}
+            Select Interval
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" *ngFor="let reminderInterval of reminderIntervals; let i = index;" (click)="setReminderInterval(action.id, i)">
@@ -59,7 +73,7 @@
       <h4 ibmTableHeaderTitle>Your goals</h4>
       <p ibmTableHeaderDescription>Here we store all your goals to see!</p>
     </ibm-table-header>
-    <ibm-table *ngIf="!firstTime && goals.data.length > 0"
+    <ibm-table *ngIf="!firstTime && goals.data.length > 0 && goals.data != null && goals.data[0][0] != null && goals.data[0][0].data != ''"
       [model]="goals"
       [showSelectionColumn]="false"
       [striped]="true"
@@ -67,7 +81,7 @@
       [stickyHeader]="false"
       [skeleton]="false"
     ></ibm-table>
-    <div *ngIf="firstTime" style="text-align: center">
+    <div *ngIf="firstTime && goals.data.length < 2 && goals.data != null && goals.data[0][0] != null && goals.data[0][0].data == ''" style="text-align: center">
       <p>Uh Oh, it looks like you don't have any goals. press the button to create some now!</p>
       <button ibmButton="primary" (click)="startTutorial()">Click me!</button>
     </div>

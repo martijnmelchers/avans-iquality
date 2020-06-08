@@ -32,6 +32,8 @@ export class ChatService {
   public chatWithBot: boolean;
   public selected: ChatContext;
 
+  public isBuddyChat: boolean;
+
   // Messages zijn voor alles om te laten zien
   public messages: Array<Message> = [];
 
@@ -111,6 +113,8 @@ export class ChatService {
       this.postTutorialMessage();
 
     this.messageSubject.next();
+
+    this.isBuddyChat = this.selected.chat.type == 'BuddyChat'
 
     this.onChatSelected.forEach(value => {
       value();

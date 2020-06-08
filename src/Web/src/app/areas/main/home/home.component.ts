@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {TableHeaderItem, TableItem, TableModel} from "carbon-components-angular";
+import {TableHeaderItem, TableItem, TableModel, TableHead} from "carbon-components-angular";
 import {GoalService} from "@IQuality/core/services/goal.service";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {UserService} from "@IQuality/core/services/user.service";
@@ -8,6 +8,8 @@ import {ChatService} from "@IQuality/core/services/chat.service";
 import {ChatContext} from "@IQuality/core/models/chat-context";
 import {BaseChat} from "@IQuality/core/models/base-chat";
 import {ActionService} from "@IQuality/core/services/action.service";
+import { TipService } from '@IQuality/core/services/tip.service';
+import { Tip } from '@IQuality/core/models/tip';
 
 
 @Component({
@@ -19,6 +21,7 @@ export class HomeComponent implements OnInit {
 
   public tipTitle: string;
   public tipDescription: string;
+  public retrievedTip: any = {};
 
   public userName: string;
   public userRole: string;
@@ -31,7 +34,7 @@ export class HomeComponent implements OnInit {
   public reminderIntervals = []
   public intervalText = "Set Interval"
 
-  constructor(private goalService: GoalService, private actionService: ActionService, private userService: UserService,
+  constructor(private goalService: GoalService, private actionService: ActionService, private tipService: TipService, private userService: UserService,
               private authService: AuthenticationService, private router: Router, private chatService: ChatService) {
   }
 
@@ -40,15 +43,20 @@ export class HomeComponent implements OnInit {
     this.tipTitle = "Weight tip of the day:";
     this.tipDescription = "Losing more weight is fun!";
 
+    await this.retrieveTipForPatient();
+
     this.firstTime = await this.userService.firstTime();
     let userId = this.authService.getNameIdentifier;
     this.userRole = this.authService.getRole;
     this.userName = this.authService.getName;
 
     let goals = await this.getGoals(userId);
-    this.setActions(userId);
-    this.setActionTypes();
-    this.setReminderIntervals();
+
+    if (this.authService.getRole == 'patient') {
+      this.setActions(userId);
+      this.setActionTypes();
+      this.setReminderIntervals();
+    }
 
     this.goals.header = [new TableHeaderItem({data: "Goals"})];
 
@@ -56,11 +64,12 @@ export class HomeComponent implements OnInit {
     this.userInformation.data = [[new TableItem({data: userId}), new TableItem({data: this.userRole})]];
 
     //Moet eerste element meteen meegeven anders geeft de table een rare space in het midden
-    if(this.goals.data.length < 1)
-      this.goals.data = [[new TableItem({data: goals[0].description ?? ""})]]
-    for (let i = 1; i < goals.length; i++) {
+
+    this.goals.data = [[new TableItem({data: goals[0]?.description ?? ""})]]
+    for (let i = 1; i < goals.length; i++){
       this.goals.data.push([new TableItem({data: goals[i].description})]);
     }
+
   }
 
   async startTutorial() {
@@ -110,6 +119,18 @@ export class HomeComponent implements OnInit {
         return "Cholesterol"
       case 4:
         return "General"
+    }
+  }
+
+  public async retrieveTipForPatient() {
+    await this.tipService.getRandomTip().then((response) => {
+      if (response.id !== null)
+        this.retrievedTip = response;
+    });
+
+    if (this.retrievedTip.id == null) {
+      this.retrievedTip.name = this.tipTitle;
+      this.retrievedTip.description = this.tipDescription;
     }
   }
 
