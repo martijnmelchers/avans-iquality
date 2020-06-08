@@ -21,12 +21,12 @@ const routes: Routes = [
   {
     path: 'chat',
     component: ChatComponent,
-    canActivate: [AuthGuard, RoleGuard],
-    data: {roles: ['patient', 'admin', 'doctor', 'buddy']}
+    canActivate: [AuthGuard],
   },
   {
     path: 'chat/:chatId',
-    component: ChatInstanceComponent
+    component: ChatInstanceComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'invite/:id',
@@ -35,35 +35,35 @@ const routes: Routes = [
   {
     path: 'create-invite',
     component: InviteComponent,
-    canActivate: [RoleGuard],
+    canActivate: [RoleGuard, AuthGuard],
     data: {roles: ['doctor', 'admin', 'patient']}
   },
   {
     path: 'create-invite/:chatId',
     component: InviteComponent,
-    canActivate: [RoleGuard],
+    canActivate: [RoleGuard, AuthGuard],
     data: {roles: ['doctor', 'admin', 'patient']}
   },
   {
     path: 'doctor',
     component: DoctorComponent,
-    canActivate: [RoleGuard],
+    canActivate: [RoleGuard, AuthGuard],
     data: {roles: ['doctor', 'admin']}
   },
   {
     path: 'doctor/tips',
     component: TipsComponent,
-    canActivate: [RoleGuard],
+    canActivate: [RoleGuard, AuthGuard],
     data: {roles: ['doctor', 'admin']}
   },{
     path: 'doctor/tips/add',
     component: AddTipComponent,
-    canActivate: [RoleGuard],
+    canActivate: [RoleGuard, AuthGuard],
     data: {roles: ['doctor', 'admin']}
   },{
     path: 'doctor/tips/manage/:id',
     component: ManageComponent,
-    canActivate: [RoleGuard],
+    canActivate: [RoleGuard, AuthGuard],
     data: {roles: ['doctor', 'admin']}
   }
 ];

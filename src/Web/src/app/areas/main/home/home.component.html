@@ -53,25 +53,6 @@
 			</tbody>
 		</table>
   </div>
-  <ibm-table-container *ngIf="this.userRole === 'patient' || this.userRole === 'admin'">
-    <ibm-table-header>
-      <h4 ibmTableHeaderTitle>Your actions</h4>
-      <p ibmTableHeaderDescription>Here we store all your actions to see!</p>
-    </ibm-table-header>
-    <ibm-table *ngIf="!firstTime"
-      [model]="actions"
-      [showSelectionColumn]="false"
-      [striped]="true"
-      [sortable]="true"
-      [stickyHeader]="false"
-      [skeleton]="false"
-    ></ibm-table>
-    <div *ngIf="firstTime" style="text-align: center">
-      <p>Uh Oh, it looks like you don't have any actions. press the button to create some now!</p>
-      <button ibmButton="primary" (click)="startTutorial()">Click me!</button>
-    </div>
-
-  </ibm-table-container>
 
   <ibm-table-container *ngIf="this.userRole === 'patient' || this.userRole === 'admin'">
     <ibm-table-header>

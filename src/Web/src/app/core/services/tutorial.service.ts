@@ -5,18 +5,20 @@ import {ResponseType} from "@IQuality/core/models/messages/response-type";
 import {ApiService} from "@IQuality/core/services/api.service";
 import {UserService} from "@IQuality/core/services/user.service";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
+import {ChatService} from "@IQuality/core/services/chat.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TutorialService {
-
   public currentStage: TutorialStage = TutorialStage.Goal;
 
   public goalText: string = "Hi there, I noticed that you haven't created any goals yet. A goal is a personal long term milestone. A goal can be almost anything For example I want to be able to visit a festival. Click the Create Goal button below to create your first goal";
   public actionText: string = "Congratulations, you just created your first goal! Let's create some actions. An action is a task that helps you progress towards your goal. For example: Walk for 10 minutes";
   public weightText: string = "Great! You have everything you need to get started. To keep track of your progress, you can provide your weight, bloodpressure and cholesterol. Just ask me to write it down for you.";
-  public graphText: string = "Duly noted! You can ask me for a graph of your weight so you can see your progress.";
+  public graphText: string = "You can ask me for a graph of your weight so you can see your progress.";
+
+  public tutorialDone: string = "You are now done with the introduction! Good luck!";
 
   constructor(private api: ApiService, private auth: AuthenticationService) { }
 
@@ -40,9 +42,14 @@ export class TutorialService {
       case TutorialStage.Graph:
         botMessage.content = this.graphText;
         botMessage.suggestions = [new Suggestion("Weight Graph", "Weight graph")];
+
+        break;
+      case TutorialStage.Suggestion:
+        botMessage.content = this.tutorialDone;
         this.api.put(`/users/${this.auth.getNameIdentifier}/tutorial`, {});
         break;
     }
+
     return {content: botMessage.content, suggestions: botMessage.suggestions,
       chatId: chatId, listData: [], type: "BotMessage"};
   }
@@ -56,5 +63,6 @@ enum TutorialStage {
   Goal ,
   Action,
   Weight,
-  Graph
+  Graph,
+  Suggestion
 }
