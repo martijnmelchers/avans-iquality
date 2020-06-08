@@ -42,7 +42,7 @@ import { environment } from '../environments/environment';
     FadeModule,
     PanelModule,
     PlaceholderModule,
-    ServiceWorkerModule.register('/OneSignalSDKWorker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtHttpInterceptor, multi: true },

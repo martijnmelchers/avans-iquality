@@ -70,7 +70,7 @@ export class ChatListComponent implements OnInit {
     let OneSignal = window['OneSignal'] || [];
     OneSignal.push(function() {
       OneSignal.init({
-        appId: "bd44fdb0-68ba-49b0-9736-9e86a8bb76dd",
+        appId: "83238485-a09c-4593-ae5b-0281f6495b79",
         promptOptions: {
           /* These prompt options values configure both the HTTP prompt and the HTTP popup. */
           /* actionMessage limited to 90 characters */
@@ -95,9 +95,7 @@ export class ChatListComponent implements OnInit {
     });
 
     OneSignal.push(() => {
-      console.log('about to show slidedown prompt')
       OneSignal.showSlidedownPrompt();
-      console.log('shouldve shown slidedown prompt')
       // Occurs when the user's subscription changes to a new value.
       OneSignal.on('subscriptionChange',  (isSubscribed) => {
         OneSignal.getUserId().then(id => {
