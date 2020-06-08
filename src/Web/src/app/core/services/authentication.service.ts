@@ -67,8 +67,8 @@ export class AuthenticationService {
     return this._api.get<Invite>(`/invite/${inviteToken}`);
   }
 
-  async createInviteLink(chatId:string = null, email:string): Promise<Invite> {
-    let body: object = {ChatId: chatId, Email: email};
+  async createInviteLink(chatId:string = null, email:string, chatName: string): Promise<Invite> {
+    let body: object = {ChatId: chatId, Email: email, ChatName: chatName};
 
     return this._api.post<Invite>('/invite', body);
   }
