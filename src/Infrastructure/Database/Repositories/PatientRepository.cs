@@ -131,7 +131,14 @@ namespace IQuality.Infrastructure.Database.Repositories
 
         public async Task<List<string>> SetPatientNotificationIdAsync(string notificationId, bool isSubscribed, string patientId)
         {
-            var patient = await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == patientId).FirstAsync();
+            var patient = new Patient("", "");
+            try
+            {
+                patient = await Session.Query<Patient>().OfType<Patient>().Where(p => p.ApplicationUserId == patientId).FirstAsync();
+            } catch (Exception e)
+            {
+                return new List<string>();
+            }
 
             if (patient.NotificationIds == null)
             {

@@ -1,10 +1,10 @@
 <div>
 
   <ibm-notification [notificationObj]="{
-				type: 'success',
-				title: tipTitle,
-				message: tipDescription,
-				showClose: false}">
+    type: 'success',
+    title: retrievedTip?.name,
+    message: retrievedTip?.description,
+    showClose: false}">
   </ibm-notification>
 
   <ibm-table-container>
@@ -22,7 +22,14 @@
 
   </ibm-table-container>
 
-  <div class="table-responsive">
+  <ibm-table-container class="actions-header" *ngIf="actions != null && actions.length > 0">
+    <ibm-table-header>
+      <h4 ibmTableHeaderTitle>Your actions</h4>
+      <p ibmTableHeaderDescription>Here we store all your actions to see!</p>
+    </ibm-table-header>
+  </ibm-table-container>
+
+  <div class="table-responsive" *ngIf="actions != null && actions.length > 0">
 		<table class="table">
 			<thead>
 				<tr>
@@ -37,7 +44,7 @@
           <th>{{action.description}}</th>
           <th>
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{intervalText}}
+            Select Interval
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" *ngFor="let reminderInterval of reminderIntervals; let i = index;" (click)="setReminderInterval(action.id, i)">

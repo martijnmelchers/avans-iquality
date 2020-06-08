@@ -4,6 +4,8 @@ import {GoalService} from "@IQuality/core/services/goal.service";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {Goal} from "@IQuality/core/models/goal";
 import {ActionService} from "@IQuality/core/services/action.service";
+import { TipService } from '@IQuality/core/services/tip.service';
+import { Tip } from '@IQuality/core/models/tip';
 
 
 @Component({
@@ -15,6 +17,7 @@ export class HomeComponent implements OnInit {
 
   public tipTitle : string;
   public tipDescription: string;
+  public retrievedTip: any = {};
 
   public userName : string;
   public userRole: string;
@@ -27,12 +30,22 @@ export class HomeComponent implements OnInit {
   public intervalText = "Set Interval"
 
 
-  constructor(private goalService: GoalService, private actionService: ActionService, private authService: AuthenticationService) { }
+  constructor(private goalService: GoalService, private actionService: ActionService, private tipService: TipService, private authService: AuthenticationService) { }
 
   async ngOnInit() {
     //this.loadScreen();
     this.tipTitle = "Weight tip of the day:";
     this.tipDescription = "Losing more weight is fun!";
+
+    await this.tipService.getRandomTip().then((response) => {
+      if (response.id !== null)
+        this.retrievedTip = response;
+    });
+
+    if (this.retrievedTip.id == null) {
+      this.retrievedTip.name = this.tipTitle;
+      this.retrievedTip.description = this.tipDescription;
+    }
 
     let userId = this.authService.getNameIdentifier;
     this.userRole = this.authService.getRole;
