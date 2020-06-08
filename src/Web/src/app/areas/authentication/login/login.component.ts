@@ -66,8 +66,8 @@ export class LoginComponent implements OnInit {
     }
 
     if (this.chatId) {
-      this._router.navigate(['/chat', this.chatId]);
-      return;
+      //this._router.navigate(['/chat', this.chatId]);
+      //return;
     }
 
     this._router.navigate([route]);
