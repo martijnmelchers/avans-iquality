@@ -20,7 +20,7 @@ export class AuthenticationService {
 
   constructor(private readonly _api: ApiService, private _cookie: CookieService) {
     this.tokenService = new JwtHelperService();
-    this.encodedToken = this._cookie.get('token');
+    this.encodedToken = localStorage.getItem('token');
     this.decodedToken = this.tokenService.decodeToken(this.encodedToken);
   }
 
@@ -49,7 +49,7 @@ export class AuthenticationService {
   }
 
   public saveToken(token: string) {
-    this._cookie.set('token', token);
+    localStorage.setItem('token', token);
     this.encodedToken = token;
     this.decodedToken = this.tokenService.decodeToken(token);
 
@@ -60,7 +60,7 @@ export class AuthenticationService {
   }
 
   public deleteToken() {
-    this._cookie.delete('token');
+    localStorage.removeItem('token');
     this.decodedToken = null;
     this.encodedToken = null;
     if (this.chatService) {
@@ -74,7 +74,6 @@ export class AuthenticationService {
 
   async createInviteLink(chatId:string = null, email:string, chatName: string): Promise<Invite> {
     let body: object = {ChatId: chatId, Email: email, ChatName: chatName};
-
     return this._api.post<Invite>('/invite', body);
   }
 

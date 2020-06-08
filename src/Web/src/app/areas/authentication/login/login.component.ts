@@ -54,16 +54,15 @@ export class LoginComponent implements OnInit {
 
   logout() {
     this.auth.deleteToken();
-    window.location.reload();
   }
 
   // Decide which page belongs to the current role and navigate to the page.
   navigateToUserPage() {
     const role = this.auth.getRole;
 
-    let route = '/chat';
-    if (role == 'Doctor' || role == 'Admin') {
-      route = `/${role.toLowerCase()}`;
+    let route = '/home';
+    if (role === 'doctor' || role === 'admin') {
+      route = `/home`;
     }
 
     if (this.chatId) {
