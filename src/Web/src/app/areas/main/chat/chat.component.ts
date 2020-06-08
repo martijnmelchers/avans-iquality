@@ -18,7 +18,6 @@ export class ChatComponent implements OnInit {
   ngOnInit(){
     this.route.params.subscribe((params) => {
       let chatName = params.chatName;
-      console.log("Connected to:" + chatName);
     });
 
     this.chatService.connectWithChats()

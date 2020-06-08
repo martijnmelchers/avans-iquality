@@ -126,7 +126,7 @@ namespace IQuality.DomainServices
                                             Console.WriteLine(new StreamReader(ex.Response.GetResponseStream()).ReadToEnd());
                                         }
 
-                                        Console.WriteLine(responseContent);
+                                        //Console.WriteLine(responseContent);
                                     }
                                 }
                             }

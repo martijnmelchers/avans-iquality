@@ -57,6 +57,7 @@ namespace IQuality.Api.Controllers
         [HttpDelete, Route("{tipId}"), Authorize(Roles = Roles.Doctor)]
         public async Task<IActionResult> DeleteTip(string tipId)
         {
+            await _tipService.DeleteTipFromPatients(tipId, HttpContext.User.GetUserId());
             return Ok(await _tipService.DeleteTipAsync(tipId));
         }
     }

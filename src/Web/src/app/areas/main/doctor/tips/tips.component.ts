@@ -46,7 +46,7 @@ export class TipsComponent implements OnInit {
     }, 1000);
 
     setTimeout(() => {
-      this.model.header = [new TableHeaderItem({ data: "Tip naam" }), new TableHeaderItem({ data: "Beschrijving" }), new TableHeaderItem({ data: "Actie Type" })];
+      this.model.header = [new TableHeaderItem({ data: "Tip Name" }), new TableHeaderItem({ data: "Description" }), new TableHeaderItem({ data: "Action Type" })];
 
       this.model.data = this.tips.map(datapoint =>
         [
