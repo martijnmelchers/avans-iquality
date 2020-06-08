@@ -2,7 +2,6 @@ import { EventEmitter, Injectable } from '@angular/core';
 import {ApiService} from '@IQuality/core/services/api.service';
 import {BaseChat} from '@IQuality/core/models/base-chat';
 import * as signalR from '@microsoft/signalr';
-import {LogLevel} from '@microsoft/signalr';
 
 import {Message} from '@IQuality/core/models/messages/message';
 import {TextMessage} from '@IQuality/core/models/messages/text-message';
@@ -11,9 +10,8 @@ import {AuthenticationService} from "@IQuality/core/services/authentication.serv
 import {environment} from "../../../environments/environment";
 import {BotMessage} from "@IQuality/core/models/messages/bot-message";
 import {ChatContext} from "@IQuality/core/models/chat-context";
-import {DEBUG} from "@angular/compiler-cli/ngcc/src/logging/console_logger";
 import {NotificationService} from "carbon-components-angular";
-import { BehaviorSubject, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import {Listable} from "@IQuality/core/models/listable";
 import {TutorialService} from "@IQuality/core/services/tutorial.service";
 import {UserService} from "@IQuality/core/services/user.service";
