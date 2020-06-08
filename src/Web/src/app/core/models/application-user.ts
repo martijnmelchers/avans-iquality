@@ -6,4 +6,5 @@ export class ApplicationUser {
     address: Address;
     name: FullName;
     email: string;
+    firstTime: boolean;
 }

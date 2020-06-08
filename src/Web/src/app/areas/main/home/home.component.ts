@@ -2,7 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {TableHeaderItem, TableItem, TableModel, TableHead} from "carbon-components-angular";
 import {GoalService} from "@IQuality/core/services/goal.service";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
-import {Goal} from "@IQuality/core/models/goal";
+import {UserService} from "@IQuality/core/services/user.service";
+import {Router} from "@angular/router";
+import {ChatService} from "@IQuality/core/services/chat.service";
+import {ChatContext} from "@IQuality/core/models/chat-context";
+import {BaseChat} from "@IQuality/core/models/base-chat";
 import {ActionService} from "@IQuality/core/services/action.service";
 import { TipService } from '@IQuality/core/services/tip.service';
 import { Tip } from '@IQuality/core/models/tip';
@@ -15,13 +19,14 @@ import { Tip } from '@IQuality/core/models/tip';
 })
 export class HomeComponent implements OnInit {
 
-  public tipTitle : string;
+  public tipTitle: string;
   public tipDescription: string;
   public retrievedTip: any = {};
 
-  public userName : string;
+  public userName: string;
   public userRole: string;
 
+  public firstTime: boolean;
   public actions: any;
   public goals: TableModel = new TableModel();
   public actionTypes: any
@@ -29,16 +34,18 @@ export class HomeComponent implements OnInit {
   public reminderIntervals = []
   public intervalText = "Set Interval"
 
+  constructor(private goalService: GoalService, private actionService: ActionService, private tipService: TipService, private userService: UserService,
+              private authService: AuthenticationService, private router: Router, private chatService: ChatService) {
+  }
 
-  constructor(private goalService: GoalService, private actionService: ActionService, private tipService: TipService, private authService: AuthenticationService) { }
-
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     //this.loadScreen();
     this.tipTitle = "Weight tip of the day:";
     this.tipDescription = "Losing more weight is fun!";
 
     await this.retrieveTipForPatient();
 
+    this.firstTime = await this.userService.firstTime();
     let userId = this.authService.getNameIdentifier;
     this.userRole = this.authService.getRole;
     this.userName = this.authService.getName;
@@ -65,7 +72,19 @@ export class HomeComponent implements OnInit {
 
   }
 
-  public getInviteName(){
+  async startTutorial() {
+    let patientChat: BaseChat;
+    let chats: Array<ChatContext> = await this.chatService.getChats();
+    for (let chat of chats) {
+      if (chat.chat.type === "PatientChat") {
+        patientChat = chat.chat;
+        break;
+      }
+    }
+    this.router.navigate(["/chat", patientChat.id]);
+  }
+
+  public getInviteName() {
     switch (this.userRole) {
       case 'doctor':
         return 'patient'

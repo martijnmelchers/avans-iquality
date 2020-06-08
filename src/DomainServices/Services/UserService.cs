@@ -44,7 +44,14 @@ namespace IQuality.DomainServices.Services
             user.LockoutEnabled = true;
             await _userRepository.SaveAsync(user);
         }
-        
+
+        public async Task FinishedTutorial(string applicationUserId)
+        {
+            ApplicationUser user = await _userRepository.GetByIdAsync(applicationUserId);
+            user.FirstTime = false;
+            await _userRepository.SaveAsync(user);
+        }
+
         public async Task DeleteUser(string applicationUserId)
         {
             ApplicationUser user = await _userRepository.GetByIdAsync(applicationUserId);
