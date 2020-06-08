@@ -19,9 +19,12 @@ export class HomeComponent implements OnInit {
   public userName : string;
   public userRole: string;
 
-  public actions: TableModel = new TableModel();
+  public actions: any;
   public goals: TableModel = new TableModel();
+  public actionTypes: any
   public userInformation = new TableModel();
+  public reminderIntervals = []
+  public intervalText = "Set Interval"
 
 
   constructor(private goalService: GoalService, private actionService: ActionService, private authService: AuthenticationService) { }
@@ -36,7 +39,9 @@ export class HomeComponent implements OnInit {
     this.userName = this.authService.getName;
 
     let goals = await this.getGoals(userId);
-    let actions = await this.getActions(userId);
+    this.setActions(userId);
+    this.setActionTypes();
+    this.setReminderIntervals();
 
     this.goals.header = [new TableHeaderItem({data: "Goals"})];
 
@@ -47,14 +52,6 @@ export class HomeComponent implements OnInit {
     this.goals.data = [[new TableItem({data: goals[0].description ?? ""})]]
     for (let i = 1; i < goals.length; i++){
       this.goals.data.push([new TableItem({data: goals[i].description})]);
-    }
-    this.actions.header = [new TableHeaderItem({ data: "Type" }), new TableHeaderItem({ data: "Description" })];
-
-    this.actions.data = [[new TableItem({data: HomeComponent.getActionTypeFromNumber(actions[0].type ?? 0)}), new TableItem({data: actions[0].description ?? ""})]]
-    for (let i = 1; i < actions.length; i++){
-
-      let actionType = HomeComponent.getActionTypeFromNumber(actions[i].type);
-      this.actions.data.push([new TableItem({data: actionType.toString()}), new TableItem({data: actions[i].description})]);
     }
   }
 
@@ -73,11 +70,15 @@ export class HomeComponent implements OnInit {
     return await this.goalService.getGoalsFromUser(userId);
   }
 
-  private async getActions(userId: string){
-    return await this.actionService.getActionsFromUser(userId);
+  private async setActions(userId: string){
+    this.actions = await this.actionService.getActionsFromUser(userId);
   }
 
-  private static getActionTypeFromNumber(actionType: number){
+  private async setActionTypes() {
+    this.actionTypes = await this.actionService.getActionTypes();
+  }
+
+  public getActionTypeFromNumber(actionType: number){
     switch (actionType) {
       case 0:
         return "Weight"
@@ -92,25 +93,18 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  /*private loadScreen() {
-    this.model.data = this.dataset.map(datapoint => [new TableItem({}), new TableItem({})]);
+  public setReminderIntervals() {
+    this.reminderIntervals.push("Never")
+    this.reminderIntervals.push("Daily")
+    this.reminderIntervals.push("Weekly")
+    this.reminderIntervals.push("Monthly")
+  }
 
-    this.model.header = [new TableHeaderItem({ data: "" }), new TableHeaderItem({ data: "" })];
+  async setReminderInterval(actionId, index) {
+    this.intervalText = this.reminderIntervals[index];
+    await this.actionService.setReminderInterval(actionId,index);
 
-    setTimeout(() => {
-      this.skeletonStateTable = false;
-    }, 4000);
 
-    setTimeout(() => {
-      this.model.header = [new TableHeaderItem({ data: "Name" }), new TableHeaderItem({ data: "Description" })];
-
-      this.model.data = this.dataset.map(datapoint =>
-        [
-          new TableItem({ data: datapoint.name }),
-          new TableItem({ data: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." })
-        ]
-      );
-    }, 4000);
-  }*/
+  }
 
 }

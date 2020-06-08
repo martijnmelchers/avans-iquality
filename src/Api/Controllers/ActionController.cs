@@ -32,7 +32,7 @@ namespace IQuality.Api.Controllers
         }
 
         // setactionreminder duratie actionid
-        [HttpPost("{actionId}/{interval}"), Authorize(Roles = Roles.Patient)]
+        [HttpPost("{actionId}/intervals/{interval}"), Authorize(Roles = Roles.Patient)]
         public async Task<IActionResult> SetActionReminderSettings([FromRoute] Interval interval, [FromRoute] string actionId)
         {
             var result = await _actionService.SetActionReminderSettingsAsync(interval, actionId);
