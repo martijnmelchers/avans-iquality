@@ -70,15 +70,16 @@ export class ChatListComponent implements OnInit {
       OneSignal.init({
         appId: "83238485-a09c-4593-ae5b-0281f6495b79",
         promptOptions: {
-          native: {
-            enabled: true,
-            autoPrompt: true,
-            timeDelay: 5,
-            pageViews: 2
-          }
+          /* These prompt options values configure both the HTTP prompt and the HTTP popup. */
+          /* actionMessage limited to 90 characters */
+          actionMessage: "We'd like to show you notifications for the latest news and updates.",
+          /* acceptButtonText limited to 15 characters */
+          acceptButtonText: "ALLOW",
+          /* cancelButtonText limited to 15 characters */
+          cancelButtonText: "NO THANKS"
         },
         notifyButton: {
-          enable: true,
+          enable: false,
           showCredit: false,
           displayPredicate: function() {
             return OneSignal.isPushNotificationsEnabled()
@@ -90,12 +91,13 @@ export class ChatListComponent implements OnInit {
         subdomainName: "iqualitydomain",
       });
     });
-    OneSignal.push( () => {
+
+    OneSignal.push(() => {
       OneSignal.showSlidedownPrompt();
       // Occurs when the user's subscription changes to a new value.
       OneSignal.on('subscriptionChange',  (isSubscribed) => {
         OneSignal.getUserId().then(id => {
-        thisComponent._api.post<any>(`/patient/${id}/${isSubscribed}`,{});
+          thisComponent._api.post<any>(`/patient/${id}/${isSubscribed}`,{});
         });
       });
     });
