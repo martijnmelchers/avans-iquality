@@ -26,7 +26,7 @@
 
   </ibm-table-container>
 
-  <ibm-table-container class="actions-header">
+  <ibm-table-container class="actions-header" *ngIf="this.userRole === 'patient'">
     <ibm-table-header>
       <h4 ibmTableHeaderTitle>Your actions</h4>
       <p ibmTableHeaderDescription>Here we store all your actions to see!</p>
@@ -73,7 +73,7 @@
       <h4 ibmTableHeaderTitle>Your goals</h4>
       <p ibmTableHeaderDescription>Here we store all your goals to see!</p>
     </ibm-table-header>
-    <ibm-table *ngIf="goals.data.length > 0 && goals.data[0][0].data != ''"
+    <ibm-table *ngIf="goals.data.length > 0 && goals.data != null && goals.data[0][0] != null && goals.data[0][0].data != ''"
       [model]="goals"
       [showSelectionColumn]="false"
       [striped]="true"
@@ -81,7 +81,7 @@
       [stickyHeader]="false"
       [skeleton]="false"
     ></ibm-table>
-    <div *ngIf="goals.data.length < 2 && goals.data[0][0].data == ''" style="text-align: center">
+    <div *ngIf="goals.data.length < 2 && goals.data != null && goals.data[0][0] != null && goals.data[0][0].data == ''" style="text-align: center">
       <p>Uh Oh, it looks like you don't have any goals. press the button to create some now!</p>
       <button ibmButton="primary" [routerLink]="['/chat']">Click me!</button>
     </div>

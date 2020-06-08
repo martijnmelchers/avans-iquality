@@ -37,24 +37,19 @@ export class HomeComponent implements OnInit {
     this.tipTitle = "Weight tip of the day:";
     this.tipDescription = "Losing more weight is fun!";
 
-    await this.tipService.getRandomTip().then((response) => {
-      if (response.id !== null)
-        this.retrievedTip = response;
-    });
-
-    if (this.retrievedTip.id == null) {
-      this.retrievedTip.name = this.tipTitle;
-      this.retrievedTip.description = this.tipDescription;
-    }
+    await this.retrieveTipForPatient();
 
     let userId = this.authService.getNameIdentifier;
     this.userRole = this.authService.getRole;
     this.userName = this.authService.getName;
 
     let goals = await this.getGoals(userId);
-    this.setActions(userId);
-    this.setActionTypes();
-    this.setReminderIntervals();
+
+    if (this.authService.getRole == 'patient') {
+      this.setActions(userId);
+      this.setActionTypes();
+      this.setReminderIntervals();
+    }
 
     this.goals.header = [new TableHeaderItem({data: "Goals"})];
 
@@ -105,6 +100,18 @@ export class HomeComponent implements OnInit {
         return "Cholesterol"
       case 4:
         return "General"
+    }
+  }
+
+  public async retrieveTipForPatient() {
+    await this.tipService.getRandomTip().then((response) => {
+      if (response.id !== null)
+        this.retrievedTip = response;
+    });
+
+    if (this.retrievedTip.id == null) {
+      this.retrievedTip.name = this.tipTitle;
+      this.retrievedTip.description = this.tipDescription;
     }
   }
 

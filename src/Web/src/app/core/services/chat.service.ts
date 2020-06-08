@@ -96,7 +96,7 @@ export class ChatService {
     this.messages = this.selected.messages.reverse();
     this.messageSubject.next();
 
-    this.isBuddyChat = this.selected.chat.type == 'buddy'
+    this.isBuddyChat = this.selected.chat.type == 'BuddyChat'
 
     this.onChatSelected.forEach(value => {
       value();

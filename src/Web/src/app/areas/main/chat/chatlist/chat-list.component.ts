@@ -25,19 +25,13 @@ export class ChatListComponent implements OnInit {
   createChatName: string;
 
   constructor(public chatService: ChatService, private _api: ApiService, private _tipService: TipService, private _authService: AuthenticationService) {
-    console.log('hello');
-  }
-
-  //TODO: Verplaatsen
-  async ngOnInit(): Promise<void> {
-    console.log('hello');
     this.chatService.getChats().then((response) => {
 
       if(response != null)
       {
 
         response.forEach(e => {
-          if(e.chat.type === "BuddyChat")
+          if(this.chatService.isBuddyChat)
           {
             this.buddyChats.push(e);
           }
@@ -56,6 +50,10 @@ export class ChatListComponent implements OnInit {
         this.filteredBuddyChats = this.buddyChats;
       }
     }, err => console.log(err));
+  }
+
+  //TODO: Verplaatsen
+  async ngOnInit(): Promise<void> {
 
     await this._tipService.getRandomTip().then((response) => {
       if (response.id !== null)
