@@ -212,6 +212,7 @@ namespace IQuality.Api
                 UserName = config["DefaultAccount:Email"],
                 Email = config["DefaultAccount:Email"],
                 EmailConfirmed = true,
+                FirstTime = true,
                 Address = new Address
                 {
                     City = config["DefaultAccount:Address:City"],

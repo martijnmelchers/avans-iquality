@@ -1,7 +1,7 @@
 <div ibmGrid>
   <div ibmRow>
     <div ibmCol [offsets]="{ lg: 4 }" [columnNumbers]="{ lg: 4 }">
-      <form [formGroup]="form" (ngSubmit)="submit()">
+      <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="!auth.loggedIn()">
         <h1 class="mb-01">Login</h1>
 
         <p class="mb-07">
@@ -55,6 +55,19 @@
           <a routerLink="forgot-password">Reset it here!</a>
 
         </p>
+      </form>
+
+
+      <form *ngIf="auth.loggedIn()" (ngSubmit)="logout()">
+        <h1 class="mb-01">You are already logged in as {{auth.getName}}</h1>
+
+        <p class="mb-07">
+          You need to sign out before trying to login. Please press the button below to logout.
+        </p>
+
+        <fieldset class="mb-07">
+          <button type="submit" ibmButton class="mb-04">Logout</button>
+        </fieldset>
       </form>
     </div>
   </div>

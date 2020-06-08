@@ -4,6 +4,7 @@ import { ChatService } from "@IQuality/core/services/chat.service";
 import { ActivatedRoute } from "@angular/router";
 import { Location } from '@angular/common';
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
+import {UserService} from "@IQuality/core/services/user.service";
 
 @Component({
   selector: 'app-chat-instance',
@@ -21,7 +22,8 @@ export class ChatInstanceComponent implements OnInit, AfterViewInit {
 
   @ViewChild('chatScroll', { static: false }) public chatScrollContainer: ElementRef;
 
-  constructor(public auth: AuthenticationService, private formBuilder: FormBuilder, public chatService: ChatService, private route: ActivatedRoute, private _location: Location) {
+  constructor(public auth: AuthenticationService, private formBuilder: FormBuilder, public chatService: ChatService, private route: ActivatedRoute,
+              private _location: Location, private userService: UserService) {
   }
 
   async ngOnInit() {
