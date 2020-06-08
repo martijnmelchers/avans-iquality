@@ -3,7 +3,7 @@
     <div ibmCol>
       <ibm-icon-close size="32" [routerLink]="['/chat']"></ibm-icon-close>
 
-      <button ibmCol ibmButton [routerLink]="['/create-invite', this.chatId]" *ngIf="chatService.getRole() == 'patient'">
+      <button ibmCol ibmButton [routerLink]="['/create-invite', this.chatId]" *ngIf="chatService.getRole() == 'patient' && chatService.isBuddyChat">
         Invite
       </button>
     </div>

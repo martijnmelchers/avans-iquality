@@ -23,7 +23,6 @@ export class HomeComponent implements OnInit {
   public userRole: string;
 
   public actions: any;
-  public actionsCarbonTable: TableModel = new TableModel();
   public goals: TableModel = new TableModel();
   public actionTypes: any
   public userInformation = new TableModel();
@@ -57,19 +56,18 @@ export class HomeComponent implements OnInit {
     this.setActionTypes();
     this.setReminderIntervals();
 
-    console.log(goals.length);
-
     this.goals.header = [new TableHeaderItem({data: "Goals"})];
-    this.actionsCarbonTable.header = [new TableHeaderItem({data: "Action Type"}), new TableHeaderItem({data: "Description"}), new TableHeaderItem({data: "Reminder"})];
 
     this.userInformation.header = [new TableHeaderItem({data: "ID"}), new TableHeaderItem({data: "Role"})];
     this.userInformation.data = [[new TableItem({data: userId}), new TableItem({data: this.userRole})]];
 
     //Moet eerste element meteen meegeven anders geeft de table een rare space in het midden
-    this.goals.data = [[new TableItem({data: goals[0].description ?? ""})]]
+
+    this.goals.data = [[new TableItem({data: goals[0]?.description ?? ""})]]
     for (let i = 1; i < goals.length; i++){
       this.goals.data.push([new TableItem({data: goals[i].description})]);
     }
+
   }
 
   public getInviteName(){
