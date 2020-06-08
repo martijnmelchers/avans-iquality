@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {TableHeaderItem, TableItem, TableModel} from "carbon-components-angular";
+import {TableHeaderItem, TableItem, TableModel, TableHead} from "carbon-components-angular";
 import {GoalService} from "@IQuality/core/services/goal.service";
 import {AuthenticationService} from "@IQuality/core/services/authentication.service";
 import {Goal} from "@IQuality/core/models/goal";
@@ -23,6 +23,7 @@ export class HomeComponent implements OnInit {
   public userRole: string;
 
   public actions: any;
+  public actionsCarbonTable: TableModel = new TableModel();
   public goals: TableModel = new TableModel();
   public actionTypes: any
   public userInformation = new TableModel();
@@ -56,7 +57,10 @@ export class HomeComponent implements OnInit {
     this.setActionTypes();
     this.setReminderIntervals();
 
+    console.log(goals.length);
+
     this.goals.header = [new TableHeaderItem({data: "Goals"})];
+    this.actionsCarbonTable.header = [new TableHeaderItem({data: "Action Type"}), new TableHeaderItem({data: "Description"}), new TableHeaderItem({data: "Reminder"})];
 
     this.userInformation.header = [new TableHeaderItem({data: "ID"}), new TableHeaderItem({data: "Role"})];
     this.userInformation.data = [[new TableItem({data: userId}), new TableItem({data: this.userRole})]];
