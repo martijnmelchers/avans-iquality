@@ -12,7 +12,7 @@ import {
   NotificationModule,
   TilesModule
 } from "carbon-components-angular";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
 
 
@@ -27,6 +27,7 @@ import { RegisterComponent } from './register/register.component';
     InputModule,
     ButtonModule,
     CheckboxModule,
+    FormsModule,
     ReactiveFormsModule,
     NotificationModule
   ]

@@ -1,6 +1,6 @@
-﻿import { ActionType } from './ActionType';
+﻿import {ActionType} from '@IQuality/core/models/ActionType';
 
-export class Action{
+export class Action {
 
   public id : string;
   public chatId: string;

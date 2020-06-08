@@ -17,5 +17,6 @@ namespace IQuality.DomainServices.Interfaces
         public Task AddUserToChat(string applicationUserId, string chatId);
 
         Task<string> GetContactName(string userId, BaseChat chat);
+        
     }
 }
