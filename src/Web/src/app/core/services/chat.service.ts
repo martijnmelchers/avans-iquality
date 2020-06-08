@@ -23,10 +23,11 @@ import {UserService} from "@IQuality/core/services/user.service";
   providedIn: 'root'
 })
 export class ChatService {
-
-  constructor(private _api: ApiService, private _auth: AuthenticationService, private _notificationService: NotificationService) {
+  constructor(private _api: ApiService, private _auth: AuthenticationService, private _notificationService: NotificationService,
+              private tutorialService: TutorialService, private userService: UserService) {
     this._auth.SetChatService = this;
   }
+
   private auth: AuthenticationService;
   private connection: signalR.HubConnection;
 
@@ -42,11 +43,8 @@ export class ChatService {
 
   private _chats: Array<ChatContext>;
 
-  constructor(private _api: ApiService, private _auth: AuthenticationService, private _notificationService: NotificationService,
-  private tutorialService: TutorialService, private userService: UserService) {
-    this._auth.SetChatService = this;
-  }
-  
+
+
   private static createMessage(userId: string, userName: string, chatId: string, content: string) {
     const message = new TextMessage();
     message.chatId = chatId;

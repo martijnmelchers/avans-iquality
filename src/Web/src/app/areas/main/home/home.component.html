@@ -78,7 +78,7 @@
       <h4 ibmTableHeaderTitle>Your goals</h4>
       <p ibmTableHeaderDescription>Here we store all your goals to see!</p>
     </ibm-table-header>
-    <ibm-table *ngIf="!firstTime"
+    <ibm-table *ngIf="!firstTime && goals.data.length > 0"
       [model]="goals"
       [showSelectionColumn]="false"
       [striped]="true"
