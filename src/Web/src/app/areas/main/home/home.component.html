@@ -1,5 +1,9 @@
-<div>
 
+<div ibmGrid>
+  <div ibmRow>
+    <div ibmCol [offsets]="{ sm: 4 }" [columnNumbers]="{ lg: 12 }">
+
+<div>
   <ibm-notification [notificationObj]="{
 				type: 'success',
 				title: tipTitle,
@@ -74,4 +78,7 @@
       Invite {{this.getInviteName()}}
     </button>
 
+    </div>
+    </div>
+  </div>
 </div>
