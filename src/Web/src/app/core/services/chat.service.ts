@@ -73,7 +73,7 @@ export class ChatService {
       this.messages.push(response);
       this.messageSubject.next()
 
-      if(await this.userService.firstTime()){
+      if(await this.userService.firstTime() && this.auth.getRole === "patient"){
         switch(response.content){
           case "Awesome! Goal has been created! Try adding some actions to reach your goal!":
           case "I created a new action!":
@@ -109,7 +109,7 @@ export class ChatService {
     this.selected = await this._api.get<ChatContext>(`/chats/${id}`);
     this.messages = this.selected.messages.reverse();
 
-    if(await this.userService.firstTime())
+    if(await this.userService.firstTime() && this.auth.getRole === 'patient')
       this.postTutorialMessage();
 
     this.messageSubject.next();
