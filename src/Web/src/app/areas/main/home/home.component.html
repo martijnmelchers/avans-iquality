@@ -4,7 +4,7 @@
     <div ibmCol [offsets]="{ sm: 4 }" [columnNumbers]="{ lg: 12 }">
 
 <div>
-  <ibm-notification [notificationObj]="{
+  <ibm-notification *ngIf="this.userRole == 'patient'" [notificationObj]="{
     type: 'success',
     title: retrievedTip?.name,
     message: retrievedTip?.description,
@@ -29,7 +29,7 @@
   <ibm-table-container class="actions-header" *ngIf="this.userRole === 'patient'">
     <ibm-table-header>
       <h4 ibmTableHeaderTitle>Your actions</h4>
-      <p ibmTableHeaderDescription>Here we store all your actions to see!</p>
+      <p ibmTableHeaderDescription>Actions help you reach your goals and can be used to track your progress.</p>
     </ibm-table-header>
   </ibm-table-container>
 
@@ -71,7 +71,7 @@
   <ibm-table-container *ngIf="this.userRole === 'patient'">
     <ibm-table-header>
       <h4 ibmTableHeaderTitle>Your goals</h4>
-      <p ibmTableHeaderDescription>Here we store all your goals to see!</p>
+      <p ibmTableHeaderDescription>Goals are long term milestones and can be almost anything</p>
     </ibm-table-header>
     <ibm-table *ngIf="!firstTime && goals.data.length > 0 && goals.data != null && goals.data[0][0] != null && goals.data[0][0].data != ''"
       [model]="goals"
