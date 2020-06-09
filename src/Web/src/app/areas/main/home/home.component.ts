@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
   public intervalText = "Set Interval"
 
   constructor(private goalService: GoalService, private actionService: ActionService, private tipService: TipService, private userService: UserService,
-              private authService: AuthenticationService, private router: Router, private chatService: ChatService) {
+              private authService: AuthenticationService, private router: Router, public chatService: ChatService) {
   }
 
   async ngOnInit(): Promise<void> {
