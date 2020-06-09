@@ -124,7 +124,6 @@ export class HomeComponent implements OnInit {
 
   public async retrieveTipForPatient() {
     await this.tipService.getRandomTip().then((response) => {
-      console.log(response);
       if (response.id !== null)
         this.retrievedTip = response;
     });
