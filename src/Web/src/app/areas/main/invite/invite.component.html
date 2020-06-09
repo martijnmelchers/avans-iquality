@@ -57,7 +57,7 @@
                 <button ibmButton class="mb-04" [disabled]="!form.valid">Send invite</button>
               </div>
 
-              <div ibmCol>
+              <div *ngIf="role != 'admin'" ibmCol>
                 <button ibmButton class="mb-04" [routerLink]="['/chat']" [disabled]="!success">Go to chats</button>
               </div>
             </div>
