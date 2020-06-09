@@ -40,8 +40,8 @@ export class HomeComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     //this.loadScreen();
-    this.tipTitle = "Weight tip of the day:";
-    this.tipDescription = "Losing more weight is fun!";
+    this.tipTitle = "Tip of the day:";
+    this.tipDescription = "No tips yet! please come back here when you have some actions!";
 
     await this.retrieveTipForPatient();
 
@@ -53,8 +53,8 @@ export class HomeComponent implements OnInit {
     let goals = await this.getGoals(userId);
 
     if (this.authService.getRole == 'patient') {
-      this.setActions(userId);
-      this.setActionTypes();
+      await this.setActions(userId);
+      await this.setActionTypes();
       this.setReminderIntervals();
     }
 
@@ -124,6 +124,7 @@ export class HomeComponent implements OnInit {
 
   public async retrieveTipForPatient() {
     await this.tipService.getRandomTip().then((response) => {
+      console.log(response);
       if (response.id !== null)
         this.retrievedTip = response;
     });
