@@ -36,7 +36,7 @@
   <ibm-table-container *ngIf="actions != null && actions.length < 1 && this.userRole === 'patient'">
     <div *ngIf="actions != null && actions.length < 1 && this.userRole === 'patient'" style="text-align: center">
       <p>Uh Oh, it looks like you don't have any actions. Press the button to create some now!</p>
-      <button ibmButton="primary" [routerLink]="['/chat']">Click me!</button>
+      <button ibmButton="primary" (click)="this.startTutorial()">Click me!</button>
     </div>
   </ibm-table-container>
 
